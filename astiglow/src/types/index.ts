@@ -11,6 +11,7 @@ export interface Service {
     price: number;
     duration: number; // minutes
     popular?: boolean;
+    addon?: boolean;
   }
   
   export type ServiceCategory = 'face' | 'body' | 'brazilian';

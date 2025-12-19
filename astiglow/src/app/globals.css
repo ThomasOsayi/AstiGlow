@@ -262,7 +262,6 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-cormorant), Georgia, serif;
   font-weight: 400;
-  color: var(--text-primary);
 }
 
 /* Focus styles for accessibility */
@@ -386,6 +385,26 @@ textarea::placeholder {
 .animate-delay-400 { animation-delay: 0.4s; }
 .animate-delay-450 { animation-delay: 0.45s; }
 .animate-delay-500 { animation-delay: 0.5s; }
+
+/* ============================================
+   ANIMATION UTILITY CLASSES
+   ============================================ */
+
+.animate-fade-in {
+  animation: fade-in-up 0.6s var(--ease-smooth) forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s var(--ease-smooth) forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s var(--ease-smooth) forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s var(--ease-smooth) forwards;
+}
 
 /* Animation initial state (for JS-triggered animations) */
 .animate-init {

@@ -79,3 +79,17 @@ export const reviews: Review[] = [
 // ===========================================
 
 export { businessInfo, shortHours, navLinks };
+
+// ===========================================
+// Re-export services data
+// ===========================================
+
+export {
+  services,
+  serviceCategories,
+  getServicesByCategory,
+  getPopularServices,
+  getServiceById,
+  formatPrice,
+  formatDuration,
+} from "./services";

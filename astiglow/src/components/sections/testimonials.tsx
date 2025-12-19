@@ -3,7 +3,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { SectionHeader, StarFilled } from "@/components/ui";
+import { StarFilled } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
 // ===========================================
@@ -21,8 +21,6 @@ interface TestimonialsSectionProps {
   testimonials: Testimonial[];
   /** Auto-rotate interval in ms (default: 6000) */
   autoRotateInterval?: number;
-  /** Total review count for "Based on X reviews" text */
-  totalReviews?: number;
 }
 
 // ===========================================
@@ -32,7 +30,6 @@ interface TestimonialsSectionProps {
 export function TestimonialsSection({
   testimonials,
   autoRotateInterval = 6000,
-  totalReviews = 11,
 }: TestimonialsSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -60,14 +57,17 @@ export function TestimonialsSection({
       <div className="max-w-[900px] mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="w-10 h-0.5 bg-gold mx-auto mb-5" />
-          <h2 className="font-display text-4xl lg:text-[40px] font-normal">
-            Client Love<span className="text-gold">_</span>
+          {/* Accent Line */}
+          <div className="w-10 h-0.5 bg-gold mx-auto mb-6" />
+          
+          {/* Heading */}
+          <h2 className="font-display text-4xl lg:text-[42px] font-normal text-cream">
+            Client Love
           </h2>
         </div>
 
         {/* Testimonial Container */}
-        <div className="relative min-h-[280px] flex flex-col items-center">
+        <div className="relative min-h-[280px] flex flex-col items-center justify-center">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
@@ -87,7 +87,7 @@ export function TestimonialsSection({
               </div>
 
               {/* Quote */}
-              <blockquote className="font-display text-[24px] lg:text-[26px] font-light italic leading-[1.6] mb-7">
+              <blockquote className="font-display text-[24px] lg:text-[26px] font-light italic leading-[1.6] mb-7 text-cream">
                 "{testimonial.text}"
               </blockquote>
 
@@ -122,9 +122,9 @@ export function TestimonialsSection({
           ))}
         </div>
 
-        {/* Review Count */}
-        <p className="text-center mt-8 text-[13px] text-cream/50 tracking-[0.05em]">
-          Based on {totalReviews} verified reviews
+        {/* Replaced "Based on X reviews" with something more compelling */}
+        <p className="text-center mt-8 text-[13px] text-cream/40 tracking-[0.08em] uppercase">
+          5-Star Rated on Google
         </p>
       </div>
     </section>
