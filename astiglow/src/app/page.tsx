@@ -1,39 +1,36 @@
-import { Navbar, Footer } from "@/components/layout";
-import { TestimonialCarousel } from "@/components/ui";
+// src/app/page.tsx
+
 import {
   Hero,
   ServicesPreview,
   AboutPreview,
+  TestimonialsSection,
   CTASection,
+  homeTestimonials,
 } from "@/components/sections";
-import { reviews } from "@/lib/data";
-
-// Select 3 testimonials for the carousel
-const homeTestimonials = reviews.slice(0, 3);
+import { stats } from "@/lib/data";
 
 export default function HomePage() {
   return (
     <>
-      <Navbar />
+      {/* Hero Section */}
+      <Hero />
 
-      <main>
-        {/* Hero Section */}
-        <Hero />
+      {/* Services Preview */}
+      <ServicesPreview />
 
-        {/* Services Preview */}
-        <ServicesPreview />
+      {/* About Preview */}
+      <AboutPreview />
 
-        {/* About Preview */}
-        <AboutPreview />
+      {/* Testimonials Carousel */}
+      <TestimonialsSection
+        testimonials={homeTestimonials}
+        totalReviews={stats.verifiedReviews || 11}
+        autoRotateInterval={6000}
+      />
 
-        {/* Testimonials Carousel */}
-        <TestimonialCarousel testimonials={homeTestimonials} />
-
-        {/* Final CTA */}
-        <CTASection />
-      </main>
-
-      <Footer />
+      {/* Final CTA */}
+      <CTASection />
     </>
   );
 }
