@@ -16,22 +16,19 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           // Base styles
-          "relative inline-flex items-center justify-center font-medium uppercase tracking-[0.12em] transition-all duration-300 ease-smooth overflow-hidden group",
+          "relative inline-flex items-center justify-center font-medium uppercase tracking-[0.12em] transition-all duration-300 overflow-hidden group",
           
           // Size variants
           size === "default" && "px-8 py-3.5 text-xs",
           size === "lg" && "px-12 py-[18px] text-xs",
           size === "sm" && "px-6 py-3 text-[11px]",
           
-          // Style variants
-          variant === "primary" && [
-            "bg-charcoal text-cream",
-            // Hover state handled by pseudo-element
-          ],
+          // Style variants with explicit colors for reliability
+          variant === "primary" && "bg-charcoal text-white",
           
           variant === "secondary" && [
             "bg-transparent text-charcoal border border-charcoal",
-            "hover:bg-charcoal hover:text-cream",
+            "hover:bg-charcoal hover:text-white",
           ],
           
           variant === "ghost" && [
@@ -40,10 +37,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ],
           
           // Disabled state
-          "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-charcoal",
+          "disabled:opacity-50 disabled:cursor-not-allowed",
           
           className
         )}
+        style={{
+          // Fallback inline styles to guarantee visibility
+          ...(variant === "primary" && {
+            backgroundColor: "#2D2A26",
+            color: "#FFFFFF",
+          }),
+        }}
         {...props}
       >
         {/* Text content - needs z-index to stay above the hover fill */}
@@ -52,7 +56,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {/* Animated background fill for primary variant */}
         {variant === "primary" && (
           <span 
-            className="absolute inset-0 bg-gold -translate-x-full group-hover:translate-x-0 transition-transform duration-400 ease-smooth group-disabled:translate-x-full" 
+            className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-400"
+            style={{ backgroundColor: "#C4A484" }}
             aria-hidden="true"
           />
         )}
@@ -63,7 +68,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = "Button";
 
-// Link-styled button for use with Next.js Link
+// Export ButtonLink for use inside Next.js Link components
 interface ButtonLinkProps {
   variant?: "primary" | "secondary" | "ghost";
   size?: "default" | "lg" | "sm";
@@ -81,7 +86,7 @@ export function ButtonLink({
     <span
       className={cn(
         // Base styles
-        "relative inline-flex items-center justify-center font-medium uppercase tracking-[0.12em] transition-all duration-300 ease-smooth overflow-hidden group cursor-pointer",
+        "relative inline-flex items-center justify-center font-medium uppercase tracking-[0.12em] transition-all duration-300 overflow-hidden group cursor-pointer",
         
         // Size variants
         size === "default" && "px-8 py-3.5 text-xs",
@@ -89,17 +94,24 @@ export function ButtonLink({
         size === "sm" && "px-6 py-3 text-[11px]",
         
         // Style variants
-        variant === "primary" && "bg-charcoal text-cream",
-        variant === "secondary" && "bg-transparent text-charcoal border border-charcoal hover:bg-charcoal hover:text-cream",
+        variant === "primary" && "text-white",
+        variant === "secondary" && "bg-transparent text-charcoal border border-charcoal hover:bg-charcoal hover:text-white",
         variant === "ghost" && "bg-transparent text-charcoal hover:text-gold",
         
         className
       )}
+      style={{
+        ...(variant === "primary" && {
+          backgroundColor: "#2D2A26",
+          color: "#FFFFFF",
+        }),
+      }}
     >
       <span className="relative z-10">{children}</span>
       {variant === "primary" && (
         <span 
-          className="absolute inset-0 bg-gold -translate-x-full group-hover:translate-x-0 transition-transform duration-400 ease-smooth" 
+          className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-400"
+          style={{ backgroundColor: "#C4A484" }}
           aria-hidden="true"
         />
       )}

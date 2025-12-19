@@ -4,20 +4,34 @@
 
 /* Tailwind v4 Theme Configuration */
 @theme {
-  /* Colors */
-  --color-cream: #FAFAF8;
-  --color-cream-dark: #F0EDE8;
-  --color-charcoal: #2D2A26;
-  --color-charcoal-light: #6B6560;
-  --color-gold: #C9A27C;
-  --color-gold-light: rgba(201, 162, 124, 0.15);
-  --color-border: #E8E6E1;
+  /* ============================================
+     UPDATED COLOR PALETTE - Warm Blush + Rose Gold
+     Matching the Astiglow logo aesthetic
+     ============================================ */
+  
+  /* Warm Cream/Blush Backgrounds */
+  --color-cream: #FAF6F3;          /* Warm cream with subtle blush undertone */
+  --color-cream-dark: #EDE5DC;     /* Warm nude/blush - matches logo background */
+  
+  /* Text Colors - keeping charcoal for contrast */
+  --color-charcoal: #2D2A26;       /* Deep charcoal - unchanged */
+  --color-charcoal-light: #6B6560; /* Muted charcoal - unchanged */
+  
+  /* Rose Gold Accent - warmer, richer than before */
+  --color-gold: #C4A484;           /* Warm rose gold - matches logo metallic */
+  --color-gold-light: rgba(196, 164, 132, 0.15);
+  
+  /* Warm Border */
+  --color-border: #E5DED6;         /* Warm taupe border */
+  
+  /* White stays white */
+  --color-white: #FFFFFF;
   
   /* Font Families */
   --font-family-display: var(--font-cormorant), serif;
   --font-family-body: var(--font-dm-sans), sans-serif;
   
-  /* Font Sizes with Line Heights (Tailwind v4 uses slash separator) */
+  /* Font Sizes with Line Heights */
   --font-size-display-xl: clamp(48px, 5vw, 72px) / 1.1;
   --font-size-display-lg: clamp(40px, 4vw, 56px) / 1.2;
   --font-size-display-md: 42px / 1.2;
@@ -44,9 +58,9 @@
   --radius-curve-sm: 80px;
   --radius-curve-xs: 60px;
   
-  /* Box Shadows */
+  /* Box Shadows - slightly warmer */
   --shadow-card: 0 20px 40px rgba(45, 42, 38, 0.08);
-  --shadow-card-hover: 0 20px 60px rgba(45, 42, 38, 0.1);
+  --shadow-card-hover: 0 20px 60px rgba(45, 42, 38, 0.12);
   --shadow-float: 0 10px 30px rgba(45, 42, 38, 0.06);
   
   /* Transition Timing */
@@ -78,16 +92,25 @@
   }
 }
 
-/* CSS Custom Properties for easy access in inline styles if needed */
+/* ============================================
+   CSS Custom Properties (Synced with @theme)
+   ============================================ */
 :root {
-  --bg-primary: #FAFAF8;
-  --bg-secondary: #F0EDE8;
+  /* Backgrounds - Warm Blush */
+  --bg-primary: #FAF6F3;
+  --bg-secondary: #EDE5DC;
   --bg-white: #FFFFFF;
+  
+  /* Text */
   --text-primary: #2D2A26;
   --text-secondary: #6B6560;
-  --accent: #C9A27C;
-  --accent-light: rgba(201, 162, 124, 0.15);
-  --border: #E8E6E1;
+  
+  /* Accent - Rose Gold */
+  --accent: #C4A484;
+  --accent-light: rgba(196, 164, 132, 0.15);
+  
+  /* Border - Warm Taupe */
+  --border: #E5DED6;
   
   /* Animation durations */
   --transition-fast: 0.3s;
@@ -126,7 +149,7 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
-/* Scrollbar styling (optional - webkit browsers) */
+/* Scrollbar styling (webkit browsers) */
 ::-webkit-scrollbar {
   width: 8px;
 }

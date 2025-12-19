@@ -1,5 +1,3 @@
-// src/components/sections/about-preview.tsx
-
 import Image from "next/image";
 import Link from "next/link";
 import { Button, SectionHeader } from "@/components/ui";
@@ -11,15 +9,18 @@ export function AboutPreview() {
       <div className="relative">
         <div className="w-full lg:w-[80%] aspect-[4/5] bg-cream-dark rounded-tr-[60px] lg:rounded-tr-[80px] overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1595475884562-073c30d45670?w=600&q=80"
-            alt="Aster Ambaw - Founder of Astiglow"
+            src="https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=600&q=80"
+            alt="Serene spa environment"
             fill
             className="object-cover"
           />
         </div>
 
-        {/* Decorative border element */}
-        <div className="hidden lg:block absolute -bottom-5 right-0 w-[200px] h-[200px] border border-gold rounded-bl-[60px]" />
+        {/* Decorative border element - positioned better */}
+        <div 
+          className="hidden lg:block absolute -bottom-5 right-0 w-[180px] h-[180px] rounded-bl-[60px] pointer-events-none"
+          style={{ border: "1px solid #C4A484" }}
+        />
       </div>
 
       {/* Content Side */}

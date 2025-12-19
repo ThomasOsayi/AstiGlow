@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { navLinks } from "@/lib/data/business";
+import { Button } from "@/components/ui";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -58,11 +59,7 @@ export function Navbar() {
 
       {/* CTA Button */}
       <Link href="/book" className="hidden sm:block">
-        <button className="btn-primary group relative overflow-hidden bg-charcoal text-cream px-6 lg:px-8 py-3.5 text-xs tracking-[0.12em] font-medium uppercase">
-          <span className="relative z-10">Book Now</span>
-          {/* Hover fill effect */}
-          <span className="absolute inset-0 bg-gold transform -translate-x-full group-hover:translate-x-0 transition-transform duration-400 ease-smooth" />
-        </button>
+        <Button>Book Now</Button>
       </Link>
 
       {/* Mobile Menu Button - Show on small screens */}
