@@ -1,7 +1,7 @@
 // src/components/layout/footer.tsx
 
 import Link from "next/link";
-import { businessInfo, shortHours } from "@/lib/data";
+import { businessInfo, shortHours } from "@/lib/data/business";
 
 export function Footer() {
   return (

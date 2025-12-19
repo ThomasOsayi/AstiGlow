@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { navLinks } from "@/lib/data";
+import { navLinks } from "@/lib/data/business";
 
 export function Navbar() {
   const pathname = usePathname();

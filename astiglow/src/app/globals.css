@@ -1,4 +1,82 @@
+/* src/app/globals.css */
+
 @import "tailwindcss";
+
+/* Tailwind v4 Theme Configuration */
+@theme {
+  /* Colors */
+  --color-cream: #FAFAF8;
+  --color-cream-dark: #F0EDE8;
+  --color-charcoal: #2D2A26;
+  --color-charcoal-light: #6B6560;
+  --color-gold: #C9A27C;
+  --color-gold-light: rgba(201, 162, 124, 0.15);
+  --color-border: #E8E6E1;
+  
+  /* Font Families */
+  --font-family-display: var(--font-cormorant), serif;
+  --font-family-body: var(--font-dm-sans), sans-serif;
+  
+  /* Font Sizes with Line Heights (Tailwind v4 uses slash separator) */
+  --font-size-display-xl: clamp(48px, 5vw, 72px) / 1.1;
+  --font-size-display-lg: clamp(40px, 4vw, 56px) / 1.2;
+  --font-size-display-md: 42px / 1.2;
+  --font-size-display-sm: 32px / 1.3;
+  --font-size-body-lg: 16px / 1.8;
+  --font-size-body-md: 15px / 1.7;
+  --font-size-body-sm: 14px / 1.6;
+  --font-size-caption: 13px / 1.5;
+  --font-size-label: 12px / 1.5;
+  --font-size-label-sm: 11px / 1.5;
+  
+  /* Letter Spacing */
+  --letter-spacing-caps: 0.08em;
+  --letter-spacing-caps-wide: 0.1em;
+  --letter-spacing-caps-wider: 0.15em;
+  --letter-spacing-caps-widest: 0.2em;
+  
+  /* Custom Spacing */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  
+  /* Border Radius */
+  --radius-curve: 120px;
+  --radius-curve-sm: 80px;
+  --radius-curve-xs: 60px;
+  
+  /* Box Shadows */
+  --shadow-card: 0 20px 40px rgba(45, 42, 38, 0.08);
+  --shadow-card-hover: 0 20px 60px rgba(45, 42, 38, 0.1);
+  --shadow-float: 0 10px 30px rgba(45, 42, 38, 0.06);
+  
+  /* Transition Timing */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Animations */
+  --animate-fade-in-up: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  --animate-fade-in: fade-in 0.5s ease forwards;
+}
+
+/* Keyframes */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 /* CSS Custom Properties for easy access in inline styles if needed */
 :root {
