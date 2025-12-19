@@ -2,123 +2,250 @@
 
 @import "tailwindcss";
 
-/* Tailwind v4 Theme Configuration */
+/* ============================================
+   Tailwind v4 Theme Configuration
+   Astiglow Design System - V2 Aligned
+   ============================================ */
+
 @theme {
   /* ============================================
-     UPDATED COLOR PALETTE - Warm Blush + Rose Gold
-     Matching the Astiglow logo aesthetic
+     COLOR PALETTE
+     Aligned with approved V2 mockups
      ============================================ */
   
-  /* Warm Cream/Blush Backgrounds */
-  --color-cream: #FAF6F3;          /* Warm cream with subtle blush undertone */
-  --color-cream-dark: #EDE5DC;     /* Warm nude/blush - matches logo background */
+  /* Cream Backgrounds */
+  --color-cream: #FAFAF8;          /* Primary background */
+  --color-cream-dark: #F0EDE8;     /* Secondary/card background */
   
-  /* Text Colors - keeping charcoal for contrast */
-  --color-charcoal: #2D2A26;       /* Deep charcoal - unchanged */
-  --color-charcoal-light: #6B6560; /* Muted charcoal - unchanged */
+  /* Text Colors */
+  --color-charcoal: #2D2A26;       /* Primary text, headings */
+  --color-charcoal-light: #6B6560; /* Secondary text, captions */
   
-  /* Rose Gold Accent - warmer, richer than before */
-  --color-gold: #C4A484;           /* Warm rose gold - matches logo metallic */
-  --color-gold-light: rgba(196, 164, 132, 0.15);
+  /* Rose Gold Accent */
+  --color-gold: #C9A27C;           /* Primary accent - CTAs, highlights, underscore */
+  --color-gold-light: rgba(201, 162, 124, 0.15); /* Accent backgrounds */
+  --color-gold-muted: rgba(201, 162, 124, 0.08); /* Subtle accent backgrounds */
   
-  /* Warm Border */
-  --color-border: #E5DED6;         /* Warm taupe border */
+  /* Borders */
+  --color-border: #E8E6E1;         /* Default border color */
+  --color-border-light: rgba(232, 230, 225, 0.5); /* Subtle borders */
   
-  /* White stays white */
+  /* Utility Colors */
   --color-white: #FFFFFF;
+  --color-error: #D64545;          /* Form validation errors */
+  --color-success: #4CAF50;        /* Success states */
+  
+  /* BNPL Brand Colors */
+  --color-klarna: #FFB3C7;
+  --color-affirm: #0FA0EA;
+  --color-afterpay: #00C2A0;
+  
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
   
   /* Font Families */
-  --font-family-display: var(--font-cormorant), serif;
-  --font-family-body: var(--font-dm-sans), sans-serif;
+  --font-family-display: var(--font-cormorant), Georgia, serif;
+  --font-family-body: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, sans-serif;
   
   /* Font Sizes with Line Heights */
   --font-size-display-xl: clamp(48px, 5vw, 72px) / 1.1;
   --font-size-display-lg: clamp(40px, 4vw, 56px) / 1.2;
   --font-size-display-md: 42px / 1.2;
   --font-size-display-sm: 32px / 1.3;
+  --font-size-display-xs: 28px / 1.3;
   --font-size-body-lg: 16px / 1.8;
   --font-size-body-md: 15px / 1.7;
   --font-size-body-sm: 14px / 1.6;
   --font-size-caption: 13px / 1.5;
   --font-size-label: 12px / 1.5;
   --font-size-label-sm: 11px / 1.5;
+  --font-size-label-xs: 10px / 1.4;
   
   /* Letter Spacing */
+  --letter-spacing-tight: 0.02em;
   --letter-spacing-caps: 0.08em;
   --letter-spacing-caps-wide: 0.1em;
-  --letter-spacing-caps-wider: 0.15em;
-  --letter-spacing-caps-widest: 0.2em;
+  --letter-spacing-caps-wider: 0.12em;
+  --letter-spacing-caps-widest: 0.15em;
+  --letter-spacing-caps-ultra: 0.2em;
   
-  /* Custom Spacing */
-  --spacing-18: 4.5rem;
-  --spacing-22: 5.5rem;
+  /* ============================================
+     SPACING
+     ============================================ */
   
-  /* Border Radius */
+  --spacing-18: 4.5rem;   /* 72px */
+  --spacing-22: 5.5rem;   /* 88px */
+  --spacing-30: 7.5rem;   /* 120px */
+  
+  /* ============================================
+     BORDERS & RADIUS
+     ============================================ */
+  
   --radius-curve: 120px;
   --radius-curve-sm: 80px;
   --radius-curve-xs: 60px;
   
-  /* Box Shadows - slightly warmer */
+  /* ============================================
+     SHADOWS
+     ============================================ */
+  
   --shadow-card: 0 20px 40px rgba(45, 42, 38, 0.08);
   --shadow-card-hover: 0 20px 60px rgba(45, 42, 38, 0.12);
   --shadow-float: 0 10px 30px rgba(45, 42, 38, 0.06);
+  --shadow-nav: 0 4px 20px rgba(45, 42, 38, 0.04);
+  --shadow-toast: 0 10px 40px rgba(45, 42, 38, 0.15);
   
-  /* Transition Timing */
+  /* ============================================
+     TRANSITIONS
+     ============================================ */
+  
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
   
-  /* Animations */
-  --animate-fade-in-up: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  /* ============================================
+     ANIMATIONS
+     ============================================ */
+  
+  --animate-fade-in-up: fade-in-up 0.6s var(--ease-smooth) forwards;
   --animate-fade-in: fade-in 0.5s ease forwards;
+  --animate-slide-in: slide-in 0.3s var(--ease-smooth) forwards;
+  --animate-scale-in: scale-in 0.4s var(--ease-smooth) forwards;
+  --animate-spin: spin 0.8s linear infinite;
+  --animate-pulse: pulse 2s ease-in-out infinite;
+  --animate-pulse-slow: pulse 3s ease-in-out infinite;
 }
 
-/* Keyframes */
+/* ============================================
+   KEYFRAME ANIMATIONS
+   ============================================ */
+
 @keyframes fade-in-up {
-  0% {
+  from {
     opacity: 0;
     transform: translateY(20px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 @keyframes fade-in {
-  0% {
+  from {
     opacity: 0;
   }
-  100% {
+  to {
     opacity: 1;
   }
 }
 
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes count-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ============================================
-   CSS Custom Properties (Synced with @theme)
+   CSS CUSTOM PROPERTIES
+   (Synced with @theme for JS access)
    ============================================ */
+
 :root {
-  /* Backgrounds - Warm Blush */
-  --bg-primary: #FAF6F3;
-  --bg-secondary: #EDE5DC;
+  /* Backgrounds */
+  --bg-primary: #FAFAF8;
+  --bg-secondary: #F0EDE8;
   --bg-white: #FFFFFF;
   
   /* Text */
   --text-primary: #2D2A26;
   --text-secondary: #6B6560;
+  --text-muted: #A0A0A0;
   
-  /* Accent - Rose Gold */
-  --accent: #C4A484;
-  --accent-light: rgba(196, 164, 132, 0.15);
+  /* Accent */
+  --accent: #C9A27C;
+  --accent-light: rgba(201, 162, 124, 0.15);
+  --accent-muted: rgba(201, 162, 124, 0.08);
   
-  /* Border - Warm Taupe */
-  --border: #E5DED6;
+  /* Borders */
+  --border: #E8E6E1;
+  --border-light: rgba(232, 230, 225, 0.5);
   
-  /* Animation durations */
-  --transition-fast: 0.3s;
-  --transition-base: 0.4s;
-  --transition-slow: 0.6s;
+  /* Status */
+  --error: #D64545;
+  --success: #4CAF50;
+  
+  /* BNPL */
+  --klarna: #FFB3C7;
+  --affirm: #0FA0EA;
+  --afterpay: #00C2A0;
+  
+  /* Transitions */
+  --transition-fast: 0.2s;
+  --transition-base: 0.3s;
+  --transition-slow: 0.4s;
+  --transition-slower: 0.6s;
 }
 
-/* Base styles */
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
 html {
   scroll-behavior: smooth;
 }
@@ -135,6 +262,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-cormorant), Georgia, serif;
   font-weight: 400;
+  color: var(--text-primary);
 }
 
 /* Focus styles for accessibility */
@@ -152,6 +280,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Scrollbar styling (webkit browsers) */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -167,36 +296,28 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--text-secondary);
 }
 
-/* Utility classes */
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Accent line (used in section headers) */
 .accent-line {
   width: 40px;
   height: 2px;
   background-color: var(--accent);
 }
 
+/* Brand underscore */
+.brand-underscore {
+  color: var(--accent);
+}
+
+/* Text utilities */
 .text-balance {
   text-wrap: balance;
 }
 
-/* Button base transitions */
-button, a {
-  transition: all var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Remove default button styles */
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-/* Image defaults */
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Container utility */
+/* Container */
 .container-site {
   max-width: 1440px;
   margin: 0 auto;
@@ -218,9 +339,385 @@ img {
   }
 }
 
-/* Animation delay utilities */
+/* ============================================
+   BUTTON BASE STYLES
+   ============================================ */
+
+button, 
+[role="button"] {
+  cursor: pointer;
+  transition: all var(--transition-base) var(--ease-smooth);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Link transitions */
+a {
+  transition: color var(--transition-fast) ease;
+}
+
+/* ============================================
+   FORM INPUT BASE STYLES
+   ============================================ */
+
+input, textarea, select {
+  font-family: inherit;
+  transition: border-color var(--transition-fast) ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================
+   ANIMATION DELAY UTILITIES
+   ============================================ */
+
 .animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-150 { animation-delay: 0.15s; }
 .animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-250 { animation-delay: 0.25s; }
 .animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-350 { animation-delay: 0.35s; }
 .animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-450 { animation-delay: 0.45s; }
 .animate-delay-500 { animation-delay: 0.5s; }
+
+/* Animation initial state (for JS-triggered animations) */
+.animate-init {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.animate-init.animated {
+  animation: fade-in-up 0.6s var(--ease-smooth) forwards;
+}
+
+/* ============================================
+   CARD HOVER EFFECTS
+   ============================================ */
+
+.card-hover {
+  transition: all var(--transition-base) var(--ease-smooth);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--accent);
+}
+
+/* Card with bottom accent line */
+.card-accent-bottom {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-accent-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform var(--transition-base) var(--ease-smooth);
+}
+
+.card-accent-bottom:hover::after {
+  transform: scaleX(1);
+}
+
+/* ============================================
+   NAV LINK UNDERLINE EFFECT
+   ============================================ */
+
+.nav-link-underline {
+  position: relative;
+}
+
+.nav-link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width var(--transition-base) ease;
+}
+
+.nav-link-underline:hover::after {
+  width: 100%;
+}
+
+/* ============================================
+   BUTTON VARIANTS
+   ============================================ */
+
+/* Primary button with slide effect */
+.btn-primary-slide {
+  position: relative;
+  overflow: hidden;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+.btn-primary-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transition: left var(--transition-base) var(--ease-smooth);
+  z-index: 0;
+}
+
+.btn-primary-slide:hover::before {
+  left: 0;
+}
+
+.btn-primary-slide > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Secondary button */
+.btn-secondary-outline {
+  background: transparent;
+  border: 1px solid var(--text-primary);
+  color: var(--text-primary);
+}
+
+.btn-secondary-outline:hover {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+/* ============================================
+   FORM VALIDATION STATES
+   ============================================ */
+
+.input-error {
+  border-color: var(--error) !important;
+}
+
+.input-success {
+  border-color: var(--success) !important;
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* ============================================
+   BADGE STYLES
+   ============================================ */
+
+.badge-popular {
+  background: var(--accent);
+  color: white;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  font-weight: 500;
+}
+
+.badge-savings {
+  display: inline-block;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  font-weight: 500;
+}
+
+/* ============================================
+   BNPL BADGE STYLES
+   ============================================ */
+
+.badge-klarna {
+  background: rgba(255, 179, 199, 0.15);
+  color: var(--klarna);
+}
+
+.badge-affirm {
+  background: rgba(15, 160, 234, 0.15);
+  color: var(--affirm);
+}
+
+.badge-afterpay {
+  background: rgba(0, 194, 160, 0.15);
+  color: var(--afterpay);
+}
+
+/* ============================================
+   SKELETON LOADING
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    var(--bg-secondary) 50%,
+    var(--border) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================
+   RESPONSIVE VISIBILITY
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 641px) {
+  .show-mobile-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .show-tablet-only {
+    display: none !important;
+  }
+}
+
+/* ===========================================
+   Layout Component Styles
+   =========================================== */
+
+/* Navbar shadow on scroll */
+.shadow-nav {
+  box-shadow: 0 1px 3px 0 rgba(45, 42, 38, 0.04),
+              0 1px 2px -1px rgba(45, 42, 38, 0.04);
+}
+
+/* Nav link hover underline animation */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-gold, #C9A27C);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Mobile menu animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.mobile-menu-enter {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+.mobile-menu-exit {
+  animation: slideOutRight 0.3s ease-out forwards;
+}
+
+/* Backdrop fade */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.backdrop-enter {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.backdrop-exit {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Screen reader only utility (if not already defined) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus,
+.not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
