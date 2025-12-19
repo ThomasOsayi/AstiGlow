@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/* CSS Custom Properties for easy access in inline styles if needed */
+:root {
+  --bg-primary: #FAFAF8;
+  --bg-secondary: #F0EDE8;
+  --bg-white: #FFFFFF;
+  --text-primary: #2D2A26;
+  --text-secondary: #6B6560;
+  --accent: #C9A27C;
+  --accent-light: rgba(201, 162, 124, 0.15);
+  --border: #E8E6E1;
+  
+  /* Animation durations */
+  --transition-fast: 0.3s;
+  --transition-base: 0.4s;
+  --transition-slow: 0.6s;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography defaults */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 400;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Selection styling */
+::selection {
+  background-color: var(--accent);
+  color: white;
+}
+
+/* Scrollbar styling (optional - webkit browsers) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Utility classes */
+.accent-line {
+  width: 40px;
+  height: 2px;
+  background-color: var(--accent);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Button base transitions */
+button, a {
+  transition: all var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Remove default button styles */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Image defaults */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Container utility */
+.container-site {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+@media (max-width: 1024px) {
+  .container-site {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container-site {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* Animation delay utilities */
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-500 { animation-delay: 0.5s; }
