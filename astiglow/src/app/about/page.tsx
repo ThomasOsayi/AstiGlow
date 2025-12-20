@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Navbar, Footer } from "@/components/layout";
+import { Navbar } from "@/components/layout";
 import { Button } from "@/components/ui";
 import { reviews, businessInfo } from "@/lib/data";
 
@@ -756,8 +756,6 @@ export default function AboutPage() {
           </p>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

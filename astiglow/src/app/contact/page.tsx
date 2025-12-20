@@ -4,7 +4,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Navbar, Footer } from "@/components/layout";
+import { Navbar } from "@/components/layout";
 import { businessInfo } from "@/lib/data/business";
 
 // ===========================================
@@ -923,8 +923,6 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
     </>
   );
 }

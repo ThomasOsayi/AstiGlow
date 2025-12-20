@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Navbar, Footer } from "@/components/layout";
+import { Navbar } from "@/components/layout";
 import { Button } from "@/components/ui";
 import { services, serviceCategories, getServicesByCategory } from "@/lib/data";
 import type { Service, ServiceCategory } from "@/types";
@@ -878,8 +878,6 @@ export default function ServicesPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
 
       {/* Floating Help Button */}
       <button

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Navbar, Footer } from "@/components/layout";
+import { Navbar } from "@/components/layout";
 
 // ===========================================
 // Custom Hook for Scroll Animation
@@ -687,8 +687,6 @@ export default function PackagesPage() {
           </div>
         </section>
       </main>
-
-      <Footer />
 
       {/* Floating Cart Indicator (when cart has items) */}
       {cart.length > 0 && (
