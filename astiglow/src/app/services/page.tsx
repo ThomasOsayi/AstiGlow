@@ -8,6 +8,38 @@ import { services, serviceCategories, getServicesByCategory } from "@/lib/data";
 import type { Service, ServiceCategory } from "@/types";
 
 // ===========================================
+// Custom Hook for Scroll Animation
+// ===========================================
+
+function useScrollAnimation(threshold = 0.2) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Toggle visibility based on intersection (fade in AND out)
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [threshold]);
+
+  return { ref, isVisible };
+}
+
+// ===========================================
 // Icons
 // ===========================================
 const ArrowRightIcon = () => (
@@ -38,22 +70,6 @@ const MessageIcon = () => (
     strokeLinejoin="round"
   >
     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-  </svg>
-);
-
-const CloseIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
 
@@ -194,9 +210,17 @@ interface ServiceCardProps {
   service: Service;
   showCategoryBadge?: boolean;
   onSelect: (service: Service) => void;
+  animationDelay?: number;
+  isVisible?: boolean;
 }
 
-function ServiceCard({ service, showCategoryBadge = true, onSelect }: ServiceCardProps) {
+function ServiceCard({ 
+  service, 
+  showCategoryBadge = true, 
+  onSelect,
+  animationDelay = 0,
+  isVisible = true
+}: ServiceCardProps) {
   const categoryLabels: Record<ServiceCategory, string> = {
     face: "FACE",
     body: "BODY",
@@ -204,7 +228,14 @@ function ServiceCard({ service, showCategoryBadge = true, onSelect }: ServiceCar
   };
 
   return (
-    <div className="group relative flex flex-col h-full bg-white border border-border p-7 transition-all duration-400 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(45,42,38,0.08)] hover:border-gold">
+    <div 
+      className={`group relative flex flex-col h-full bg-white border border-border p-7 transition-all duration-700 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(45,42,38,0.08)] hover:border-gold ${
+        isVisible 
+          ? "opacity-100 translate-y-0" 
+          : "opacity-0 translate-y-8"
+      }`}
+      style={{ transitionDelay: isVisible ? `${animationDelay}ms` : "0ms" }}
+    >
       {/* Badges */}
       {service.popular && (
         <div className="absolute -top-px right-5 bg-gold text-white text-[10px] tracking-[0.08em] font-medium px-3 py-1.5">
@@ -264,13 +295,20 @@ function ServiceCard({ service, showCategoryBadge = true, onSelect }: ServiceCar
 interface CategoryHeaderProps {
   category: ServiceCategory;
   count: number;
+  isVisible?: boolean;
 }
 
-function CategoryHeader({ category, count }: CategoryHeaderProps) {
+function CategoryHeader({ category, count, isVisible = true }: CategoryHeaderProps) {
   const info = categoryInfo[category];
 
   return (
-    <div className="flex items-center gap-4 mb-8 pb-4 border-b border-border">
+    <div 
+      className={`flex items-center gap-4 mb-8 pb-4 border-b border-border transition-all duration-700 ${
+        isVisible 
+          ? "opacity-100 translate-y-0" 
+          : "opacity-0 translate-y-6"
+      }`}
+    >
       <div className="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white">
         {info.icon}
       </div>
@@ -523,6 +561,52 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
 }
 
 // ===========================================
+// Category Section with Animation
+// ===========================================
+interface CategorySectionProps {
+  categoryKey: ServiceCategory;
+  categoryServices: Service[];
+  showCategoryHeader: boolean;
+  onServiceSelect: (service: Service) => void;
+}
+
+function CategorySection({ 
+  categoryKey, 
+  categoryServices, 
+  showCategoryHeader,
+  onServiceSelect 
+}: CategorySectionProps) {
+  const sectionAnimation = useScrollAnimation(0.1);
+
+  return (
+    <div ref={sectionAnimation.ref} className="mb-16 last:mb-0">
+      {/* Category Header (only in "all" view) */}
+      {showCategoryHeader && (
+        <CategoryHeader
+          category={categoryKey}
+          count={categoryServices.length}
+          isVisible={sectionAnimation.isVisible}
+        />
+      )}
+
+      {/* Services Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {categoryServices.map((service, index) => (
+          <ServiceCard
+            key={service.id}
+            service={service}
+            showCategoryBadge={showCategoryHeader}
+            onSelect={onServiceSelect}
+            isVisible={sectionAnimation.isVisible}
+            animationDelay={index * 75}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ===========================================
 // Main Services Page
 // ===========================================
 type CategoryFilter = "all" | ServiceCategory;
@@ -532,6 +616,11 @@ export default function ServicesPage() {
   const [isFilterSticky, setIsFilterSticky] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const filterTopRef = useRef<HTMLDivElement>(null);
+
+  // Scroll animation refs
+  const heroAnimation = useScrollAnimation(0.3);
+  const valuePropsAnimation = useScrollAnimation(0.2);
+  const packagesUpsellAnimation = useScrollAnimation(0.3);
 
   // Count services by category
   const categoryCounts = {
@@ -581,16 +670,37 @@ export default function ServicesPage() {
 
       <main>
         {/* Hero Section */}
-        <section className="pt-36 pb-12 text-center px-6 md:px-12 lg:px-20 bg-cream">
-          <p className="text-xs tracking-[0.2em] uppercase font-medium text-gold mb-5 animate-fade-in">
+        <section 
+          ref={heroAnimation.ref}
+          className="pt-36 pb-12 text-center px-6 md:px-12 lg:px-20 bg-cream"
+        >
+          <p 
+            className={`text-xs tracking-[0.2em] uppercase font-medium text-gold mb-5 transition-all duration-700 ${
+              heroAnimation.isVisible 
+                ? "opacity-100 translate-y-0" 
+                : "opacity-0 translate-y-6"
+            }`}
+          >
             OUR OFFERINGS
           </p>
 
-          <h1 className="font-display text-5xl md:text-6xl font-normal text-charcoal mb-5 animate-fade-in animate-delay-100">
+          <h1 
+            className={`font-display text-5xl md:text-6xl font-normal text-charcoal mb-5 transition-all duration-700 delay-100 ${
+              heroAnimation.isVisible 
+                ? "opacity-100 translate-y-0" 
+                : "opacity-0 translate-y-6"
+            }`}
+          >
             Services<span className="text-gold">_</span>
           </h1>
 
-          <p className="text-base text-charcoal-light max-w-[500px] mx-auto leading-relaxed animate-fade-in animate-delay-200">
+          <p 
+            className={`text-base text-charcoal-light max-w-[500px] mx-auto leading-relaxed transition-all duration-700 delay-200 ${
+              heroAnimation.isVisible 
+                ? "opacity-100 translate-y-0" 
+                : "opacity-0 translate-y-6"
+            }`}
+          >
             Premium hard wax treatments tailored to your needs. Gentle on
             sensitive skin, with long-lasting results.
           </p>
@@ -657,32 +767,21 @@ export default function ServicesPage() {
         {/* Services Grid */}
         <section className="px-6 md:px-12 lg:px-20 py-6 pb-20 bg-cream">
           {Object.entries(filteredServices).map(([categoryKey, categoryServices]) => (
-            <div key={categoryKey} className="mb-16 last:mb-0">
-              {/* Category Header (only in "all" view) */}
-              {activeCategory === "all" && (
-                <CategoryHeader
-                  category={categoryKey as ServiceCategory}
-                  count={categoryServices.length}
-                />
-              )}
-
-              {/* Services Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {categoryServices.map((service) => (
-                  <ServiceCard
-                    key={service.id}
-                    service={service}
-                    showCategoryBadge={activeCategory === "all"}
-                    onSelect={handleServiceSelect}
-                  />
-                ))}
-              </div>
-            </div>
+            <CategorySection
+              key={categoryKey}
+              categoryKey={categoryKey as ServiceCategory}
+              categoryServices={categoryServices}
+              showCategoryHeader={activeCategory === "all"}
+              onServiceSelect={handleServiceSelect}
+            />
           ))}
         </section>
 
         {/* Value Props Banner */}
-        <section className="py-16 px-6 md:px-12 lg:px-20 bg-charcoal">
+        <section 
+          ref={valuePropsAnimation.ref}
+          className="py-16 px-6 md:px-12 lg:px-20 bg-charcoal"
+        >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
               {
@@ -703,7 +802,12 @@ export default function ServicesPage() {
             ].map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center text-center p-6 relative"
+                className={`flex flex-col items-center text-center p-6 relative transition-all duration-700 ${
+                  valuePropsAnimation.isVisible 
+                    ? "opacity-100 translate-y-0" 
+                    : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: valuePropsAnimation.isVisible ? `${index * 150}ms` : "0ms" }}
               >
                 <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center text-gold mb-5">
                   {item.icon}
@@ -723,12 +827,33 @@ export default function ServicesPage() {
         </section>
 
         {/* Packages Upsell */}
-        <section className="py-20 px-6 md:px-12 lg:px-20 bg-cream">
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 p-8 md:p-12 bg-white border border-border">
-            <div className="w-20 h-20 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0">
+        <section 
+          ref={packagesUpsellAnimation.ref}
+          className="py-20 px-6 md:px-12 lg:px-20 bg-cream"
+        >
+          <div 
+            className={`flex flex-col md:flex-row items-center gap-8 md:gap-12 p-8 md:p-12 bg-white border border-border transition-all duration-700 ${
+              packagesUpsellAnimation.isVisible 
+                ? "opacity-100 translate-y-0" 
+                : "opacity-0 translate-y-10"
+            }`}
+          >
+            <div 
+              className={`w-20 h-20 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0 transition-all duration-700 delay-150 ${
+                packagesUpsellAnimation.isVisible 
+                  ? "opacity-100 scale-100" 
+                  : "opacity-0 scale-75"
+              }`}
+            >
               <WalletIcon />
             </div>
-            <div className="flex-1 text-center md:text-left">
+            <div 
+              className={`flex-1 text-center md:text-left transition-all duration-700 delay-200 ${
+                packagesUpsellAnimation.isVisible 
+                  ? "opacity-100 translate-y-0" 
+                  : "opacity-0 translate-y-6"
+              }`}
+            >
               <h3 className="font-display text-[28px] font-medium text-charcoal mb-2">
                 Save Up to 20% with Packages
               </h3>
@@ -737,11 +862,19 @@ export default function ServicesPage() {
                 free. Perfect for maintaining your smooth, glowing skin year-round.
               </p>
             </div>
-            <Link href="/packages">
-              <Button rightIcon={<ArrowRightIcon />}>
-                VIEW PACKAGES
-              </Button>
-            </Link>
+            <div
+              className={`transition-all duration-700 delay-300 ${
+                packagesUpsellAnimation.isVisible 
+                  ? "opacity-100 translate-y-0" 
+                  : "opacity-0 translate-y-6"
+              }`}
+            >
+              <Link href="/packages">
+                <Button rightIcon={<ArrowRightIcon />}>
+                  VIEW PACKAGES
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       </main>

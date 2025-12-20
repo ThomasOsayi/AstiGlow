@@ -179,6 +179,17 @@
   }
 }
 
+@keyframes pulse-subtle {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 10px 30px rgba(201, 162, 124, 0.3);
+  }
+  50% { 
+    transform: scale(1.03); 
+    box-shadow: 0 15px 40px rgba(201, 162, 124, 0.4);
+  }
+}
+
 @keyframes slide-in-right {
   from {
     opacity: 0;
@@ -404,6 +415,10 @@ textarea::placeholder {
 
 .animate-scale-in {
   animation: scale-in 0.4s var(--ease-smooth) forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
 }
 
 /* Animation initial state (for JS-triggered animations) */

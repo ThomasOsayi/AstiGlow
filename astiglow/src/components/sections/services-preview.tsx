@@ -2,10 +2,41 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { SectionHeader, Button } from "@/components/ui";
 import { ArrowRight, Gift } from "@/components/ui";
+
+// ===========================================
+// Custom Hook for Scroll Animation
+// ===========================================
+
+function useScrollAnimation(threshold = 0.2) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [threshold]);
+
+  return { ref, isVisible };
+}
 
 // ===========================================
 // Category Icons (inline SVGs for custom designs)
@@ -105,11 +136,21 @@ const serviceCategories = [
 
 export function ServicesPreview() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const sectionAnimation = useScrollAnimation(0.15);
+  const cardsAnimation = useScrollAnimation(0.1);
+  const bannerAnimation = useScrollAnimation(0.3);
 
   return (
     <section className="py-20 lg:py-[100px] px-6 md:px-12 lg:px-20 bg-white">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mb-14">
+      <div 
+        ref={sectionAnimation.ref}
+        className={`flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mb-14 transition-all duration-700 ${
+          sectionAnimation.isVisible 
+            ? "opacity-100 translate-y-0" 
+            : "opacity-0 translate-y-8"
+        }`}
+      >
         <div>
           <SectionHeader
             title="Our Services"
@@ -119,7 +160,11 @@ export function ServicesPreview() {
         </div>
         <Link
           href="/services"
-          className="text-xs tracking-[0.08em] uppercase text-charcoal hover:text-gold transition-colors inline-flex items-center gap-2 group"
+          className={`text-xs tracking-[0.08em] uppercase text-charcoal hover:text-gold transition-all inline-flex items-center gap-2 group duration-700 delay-200 ${
+            sectionAnimation.isVisible 
+              ? "opacity-100 translate-x-0" 
+              : "opacity-0 translate-x-6"
+          }`}
         >
           View All Services
           <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
@@ -127,7 +172,10 @@ export function ServicesPreview() {
       </div>
 
       {/* Service Category Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div 
+        ref={cardsAnimation.ref}
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+      >
         {serviceCategories.map((category, index) => {
           const IconComponent = category.icon;
           const isHovered = hoveredIndex === index;
@@ -136,7 +184,12 @@ export function ServicesPreview() {
             <Link
               key={index}
               href={category.href}
-              className="group bg-white border border-border p-9 relative overflow-hidden transition-all duration-400 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,42,38,0.1)] hover:border-transparent"
+              className={`group bg-white border border-border p-9 relative overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,42,38,0.1)] hover:border-transparent ${
+                cardsAnimation.isVisible 
+                  ? "opacity-100 translate-y-0" 
+                  : "opacity-0 translate-y-10"
+              }`}
+              style={{ transitionDelay: cardsAnimation.isVisible ? `${index * 100}ms` : "0ms" }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
@@ -186,10 +239,29 @@ export function ServicesPreview() {
       </div>
 
       {/* Packages Callout Banner */}
-      <div className="bg-cream border border-border p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex items-center gap-5">
+      <div 
+        ref={bannerAnimation.ref}
+        className={`bg-cream border border-border p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6 transition-all duration-700 ${
+          bannerAnimation.isVisible 
+            ? "opacity-100 translate-y-0" 
+            : "opacity-0 translate-y-10"
+        }`}
+      >
+        <div 
+          className={`flex items-center gap-5 transition-all duration-700 delay-100 ${
+            bannerAnimation.isVisible 
+              ? "opacity-100 translate-x-0" 
+              : "opacity-0 -translate-x-6"
+          }`}
+        >
           {/* Icon */}
-          <div className="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0">
+          <div 
+            className={`w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0 transition-all duration-700 delay-150 ${
+              bannerAnimation.isVisible 
+                ? "opacity-100 scale-100" 
+                : "opacity-0 scale-75"
+            }`}
+          >
             <Gift size={24} />
           </div>
           {/* Text */}
@@ -204,11 +276,19 @@ export function ServicesPreview() {
         </div>
 
         {/* CTA */}
-        <Link href="/packages">
-          <Button variant="secondary" rightIcon={<ArrowRight size={14} />}>
-            View Packages
-          </Button>
-        </Link>
+        <div
+          className={`transition-all duration-700 delay-200 ${
+            bannerAnimation.isVisible 
+              ? "opacity-100 translate-x-0" 
+              : "opacity-0 translate-x-6"
+          }`}
+        >
+          <Link href="/packages">
+            <Button variant="secondary" rightIcon={<ArrowRight size={14} />}>
+              View Packages
+            </Button>
+          </Link>
+        </div>
       </div>
     </section>
   );

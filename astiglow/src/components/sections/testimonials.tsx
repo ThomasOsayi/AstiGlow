@@ -2,9 +2,40 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { StarFilled } from "@/components/ui";
 import { cn } from "@/lib/utils";
+
+// ===========================================
+// Custom Hook for Scroll Animation
+// ===========================================
+
+function useScrollAnimation(threshold = 0.2) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [threshold]);
+
+  return { ref, isVisible };
+}
 
 // ===========================================
 // Types
@@ -33,6 +64,7 @@ export function TestimonialsSection({
 }: TestimonialsSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const sectionAnimation = useScrollAnimation(0.2);
 
   const goToNext = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -50,6 +82,7 @@ export function TestimonialsSection({
 
   return (
     <section
+      ref={sectionAnimation.ref}
       className="py-20 lg:py-[100px] px-6 md:px-12 lg:px-20 bg-charcoal text-cream"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -58,16 +91,34 @@ export function TestimonialsSection({
         {/* Header */}
         <div className="text-center mb-12">
           {/* Accent Line */}
-          <div className="w-10 h-0.5 bg-gold mx-auto mb-6" />
+          <div 
+            className={`w-10 h-0.5 bg-gold mx-auto mb-6 transition-all duration-700 origin-center ${
+              sectionAnimation.isVisible 
+                ? "scale-x-100 opacity-100" 
+                : "scale-x-0 opacity-0"
+            }`}
+          />
           
           {/* Heading */}
-          <h2 className="font-display text-4xl lg:text-[42px] font-normal text-cream">
-            Client Love
+          <h2 
+            className={`font-display text-4xl lg:text-[42px] font-normal text-cream transition-all duration-700 delay-100 ${
+              sectionAnimation.isVisible 
+                ? "opacity-100 translate-y-0" 
+                : "opacity-0 translate-y-6"
+            }`}
+          >
+            Client Love<span className="text-gold">_</span>
           </h2>
         </div>
 
         {/* Testimonial Container */}
-        <div className="relative min-h-[280px] flex flex-col items-center justify-center">
+        <div 
+          className={`relative min-h-[280px] flex flex-col items-center justify-center transition-all duration-700 delay-200 ${
+            sectionAnimation.isVisible 
+              ? "opacity-100 translate-y-0" 
+              : "opacity-0 translate-y-8"
+          }`}
+        >
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
@@ -105,7 +156,13 @@ export function TestimonialsSection({
         </div>
 
         {/* Navigation Dots */}
-        <div className="flex gap-3 justify-center mt-10">
+        <div 
+          className={`flex gap-3 justify-center mt-10 transition-all duration-700 delay-300 ${
+            sectionAnimation.isVisible 
+              ? "opacity-100 translate-y-0" 
+              : "opacity-0 translate-y-4"
+          }`}
+        >
           {testimonials.map((_, index) => (
             <button
               key={index}
@@ -122,8 +179,14 @@ export function TestimonialsSection({
           ))}
         </div>
 
-        {/* Replaced "Based on X reviews" with something more compelling */}
-        <p className="text-center mt-8 text-[13px] text-cream/40 tracking-[0.08em] uppercase">
+        {/* 5-Star Rated */}
+        <p 
+          className={`text-center mt-8 text-[13px] text-cream/40 tracking-[0.08em] uppercase transition-all duration-700 delay-400 ${
+            sectionAnimation.isVisible 
+              ? "opacity-100 translate-y-0" 
+              : "opacity-0 translate-y-4"
+          }`}
+        >
           5-Star Rated on Google
         </p>
       </div>
