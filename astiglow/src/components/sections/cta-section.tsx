@@ -44,11 +44,11 @@ export function CTASection() {
   return (
     <section 
       ref={sectionAnimation.ref}
-      className="py-20 lg:py-[100px] px-6 md:px-12 lg:px-20 bg-cream text-center relative overflow-hidden"
+      className="py-16 md:py-20 lg:py-[100px] px-4 sm:px-6 md:px-12 lg:px-20 bg-cream text-center relative overflow-hidden"
     >
-      {/* Decorative Background Circles */}
+      {/* Decorative Background Circles - Sized responsively */}
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-gold/10 pointer-events-none transition-all duration-1000 ${
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] rounded-full border border-gold/10 pointer-events-none transition-all duration-1000 ${
           sectionAnimation.isVisible 
             ? "opacity-100 scale-100" 
             : "opacity-0 scale-50"
@@ -56,7 +56,7 @@ export function CTASection() {
         aria-hidden="true"
       />
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-gold/15 pointer-events-none transition-all duration-1000 delay-100 ${
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] sm:w-[280px] md:w-[340px] lg:w-[400px] h-[200px] sm:h-[280px] md:h-[340px] lg:h-[400px] rounded-full border border-gold/15 pointer-events-none transition-all duration-1000 delay-100 ${
           sectionAnimation.isVisible 
             ? "opacity-100 scale-100" 
             : "opacity-0 scale-50"
@@ -64,7 +64,7 @@ export function CTASection() {
         aria-hidden="true"
       />
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full border border-gold/10 pointer-events-none transition-all duration-1000 delay-200 ${
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] sm:w-[140px] md:w-[170px] lg:w-[200px] h-[100px] sm:h-[140px] md:h-[170px] lg:h-[200px] rounded-full border border-gold/10 pointer-events-none transition-all duration-1000 delay-200 ${
           sectionAnimation.isVisible 
             ? "opacity-100 scale-100" 
             : "opacity-0 scale-50"
@@ -75,7 +75,7 @@ export function CTASection() {
       {/* Content */}
       <div className="relative z-10">
         <h2 
-          className={`font-display text-4xl md:text-5xl font-normal text-charcoal mb-5 transition-all duration-700 ${
+          className={`font-display text-3xl sm:text-4xl md:text-5xl font-normal text-charcoal mb-4 sm:mb-5 transition-all duration-700 ${
             sectionAnimation.isVisible 
               ? "opacity-100 translate-y-0" 
               : "opacity-0 translate-y-8"
@@ -86,7 +86,7 @@ export function CTASection() {
         </h2>
 
         <p 
-          className={`text-base text-charcoal-light max-w-[450px] mx-auto mb-9 transition-all duration-700 delay-100 ${
+          className={`text-sm sm:text-base text-charcoal-light max-w-[400px] sm:max-w-[450px] mx-auto mb-7 sm:mb-9 transition-all duration-700 delay-100 ${
             sectionAnimation.isVisible 
               ? "opacity-100 translate-y-0" 
               : "opacity-0 translate-y-6"
@@ -102,13 +102,13 @@ export function CTASection() {
               : "opacity-0 translate-y-6"
           }`}
         >
-          <Link href="/book">
+          <Link href="/book" className="inline-block">
             <Button size="lg">Book Your Appointment</Button>
           </Link>
         </div>
 
         <p 
-          className={`mt-6 text-[13px] text-charcoal-light transition-all duration-700 delay-300 ${
+          className={`mt-5 sm:mt-6 text-[12px] sm:text-[13px] text-charcoal-light transition-all duration-700 delay-300 ${
             sectionAnimation.isVisible 
               ? "opacity-100 translate-y-0" 
               : "opacity-0 translate-y-4"

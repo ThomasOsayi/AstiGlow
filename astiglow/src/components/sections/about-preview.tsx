@@ -45,14 +45,14 @@ export function AboutPreview() {
   return (
     <section 
       ref={sectionAnimation.ref}
-      className="py-20 lg:py-[100px] px-6 md:px-12 lg:px-20 bg-cream"
+      className="py-16 md:py-20 lg:py-[100px] px-4 sm:px-6 md:px-12 lg:px-20 bg-cream"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-20 items-center">
         {/* Image Side */}
         <div className="relative">
           {/* Main Image */}
           <div 
-            className={`w-full lg:w-[85%] aspect-[4/5] bg-cream-dark rounded-tr-[60px] lg:rounded-tr-[80px] overflow-hidden relative transition-all duration-700 ${
+            className={`w-full lg:w-[85%] aspect-[4/5] bg-cream-dark rounded-tr-[40px] sm:rounded-tr-[60px] lg:rounded-tr-[80px] overflow-hidden relative transition-all duration-700 ${
               sectionAnimation.isVisible 
                 ? "opacity-100 translate-x-0" 
                 : "opacity-0 -translate-x-10"
@@ -66,18 +66,18 @@ export function AboutPreview() {
             />
           </div>
 
-          {/* Experience Badge */}
+          {/* Experience Badge - Repositioned for mobile */}
           <div 
-            className={`absolute bottom-10 right-0 lg:right-auto lg:bottom-10 lg:left-[75%] bg-white p-6 shadow-[0_10px_40px_rgba(45,42,38,0.1)] text-center transition-all duration-700 delay-300 ${
+            className={`absolute bottom-6 right-4 sm:bottom-10 sm:right-0 lg:right-auto lg:bottom-10 lg:left-[75%] bg-white p-4 sm:p-6 shadow-[0_10px_40px_rgba(45,42,38,0.1)] text-center transition-all duration-700 delay-300 ${
               sectionAnimation.isVisible 
                 ? "opacity-100 scale-100 translate-y-0" 
                 : "opacity-0 scale-90 translate-y-5"
             }`}
           >
-            <p className="font-display text-4xl font-medium text-gold leading-none">
+            <p className="font-display text-3xl sm:text-4xl font-medium text-gold leading-none">
               4+
             </p>
-            <p className="text-[11px] tracking-[0.1em] text-charcoal-light mt-1 uppercase">
+            <p className="text-[10px] sm:text-[11px] tracking-[0.1em] text-charcoal-light mt-1 uppercase">
               Years
             </p>
           </div>
@@ -101,11 +101,11 @@ export function AboutPreview() {
                 : "opacity-0 translate-y-8"
             }`}
           >
-            <SectionHeader title="Meet Aster" className="mb-7" />
+            <SectionHeader title="Meet Aster" className="mb-5 sm:mb-7" />
           </div>
 
           <p 
-            className={`text-base text-charcoal-light leading-[1.9] mb-5 transition-all duration-700 delay-200 ${
+            className={`text-sm sm:text-base text-charcoal-light leading-[1.8] sm:leading-[1.9] mb-4 sm:mb-5 transition-all duration-700 delay-200 ${
               sectionAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -117,7 +117,7 @@ export function AboutPreview() {
           </p>
 
           <p 
-            className={`text-base text-charcoal-light leading-[1.9] mb-8 transition-all duration-700 delay-300 ${
+            className={`text-sm sm:text-base text-charcoal-light leading-[1.8] sm:leading-[1.9] mb-6 sm:mb-8 transition-all duration-700 delay-300 ${
               sectionAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -129,9 +129,9 @@ export function AboutPreview() {
             glowing.
           </p>
 
-          {/* Signature Quote */}
+          {/* Signature Quote - Responsive sizing */}
           <blockquote 
-            className={`font-display text-2xl italic text-gold pl-5 border-l-2 border-gold mb-8 leading-relaxed transition-all duration-700 delay-400 ${
+            className={`font-display text-xl sm:text-2xl italic text-gold pl-4 sm:pl-5 border-l-2 border-gold mb-6 sm:mb-8 leading-relaxed transition-all duration-700 delay-400 ${
               sectionAnimation.isVisible 
                 ? "opacity-100 translate-x-0" 
                 : "opacity-0 -translate-x-6"
@@ -148,7 +148,7 @@ export function AboutPreview() {
                 : "opacity-0 translate-y-6"
             }`}
           >
-            <Link href="/about">
+            <Link href="/about" className="inline-block">
               <Button variant="secondary" rightIcon={<ArrowRight size={14} />}>
                 Learn More
               </Button>

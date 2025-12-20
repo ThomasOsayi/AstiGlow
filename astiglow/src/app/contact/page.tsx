@@ -165,7 +165,7 @@ const ChevronDownIcon = ({ isOpen }: { isOpen: boolean }) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+    className={`transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180" : ""}`}
   >
     <polyline points="6 9 12 15 18 9" />
   </svg>
@@ -181,6 +181,7 @@ const CheckCircleIcon = () => (
     strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
+    className="mx-auto"
   >
     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
     <polyline points="22 4 12 14.01 9 11.01" />
@@ -357,14 +358,14 @@ export default function ContactPage() {
 
       <main className="pt-[72px] md:pt-[84px]">
         {/* Main Content - Split Layout */}
-        <section className="min-h-[calc(100vh-84px)] grid grid-cols-1 lg:grid-cols-2">
+        <section className="min-h-[auto] lg:min-h-[calc(100vh-84px)] grid grid-cols-1 lg:grid-cols-2">
           {/* Left - Contact Info */}
-          <div className="bg-white px-6 md:px-12 lg:px-16 xl:px-20 py-12 lg:py-16">
+          <div className="bg-white px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 py-8 sm:py-12 lg:py-16">
             {/* Header Section */}
             <div ref={heroRef}>
               {/* Eyebrow */}
               <p
-                className={`text-xs tracking-[0.2em] uppercase text-gold font-medium mb-5 transition-all duration-700 ${
+                className={`text-[10px] sm:text-xs tracking-[0.2em] uppercase text-gold font-medium mb-4 sm:mb-5 transition-all duration-700 ${
                   heroVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
@@ -375,7 +376,7 @@ export default function ContactPage() {
 
               {/* Heading */}
               <h1
-                className={`font-display text-[36px] md:text-[42px] lg:text-[48px] text-charcoal leading-[1.15] mb-4 transition-all duration-700 delay-100 ${
+                className={`font-display text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] text-charcoal leading-[1.15] mb-3 sm:mb-4 transition-all duration-700 delay-100 ${
                   heroVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
@@ -387,7 +388,7 @@ export default function ContactPage() {
 
               {/* Description */}
               <p
-                className={`text-[15px] text-charcoal-light leading-[1.8] mb-6 max-w-[400px] transition-all duration-700 delay-200 ${
+                className={`text-sm sm:text-[15px] text-charcoal-light leading-[1.8] mb-5 sm:mb-6 max-w-[400px] transition-all duration-700 delay-200 ${
                   heroVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
@@ -399,13 +400,13 @@ export default function ContactPage() {
 
               {/* Response Time Badge */}
               <div
-                className={`mb-10 transition-all duration-700 delay-300 ${
+                className={`mb-8 sm:mb-10 transition-all duration-700 delay-300 ${
                   heroVisible
                     ? "opacity-100 translate-y-0 scale-100"
                     : "opacity-0 translate-y-6 scale-95"
                 }`}
               >
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 rounded-full text-xs text-gold font-medium">
+                <span className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-gold/10 rounded-full text-[11px] sm:text-xs text-gold font-medium">
                   <ClockIcon size={14} />
                   Usually responds within 4 hours
                 </span>
@@ -413,7 +414,7 @@ export default function ContactPage() {
             </div>
 
             {/* Contact Method Cards */}
-            <div ref={cardsRef} className="flex flex-col gap-4 mb-12">
+            <div ref={cardsRef} className="flex flex-col gap-3 sm:gap-4 mb-10 sm:mb-12">
               {contactMethods.map((method, index) => {
                 const IconComponent = method.icon;
                 return (
@@ -422,7 +423,7 @@ export default function ContactPage() {
                     href={method.href}
                     target={method.isExternal ? "_blank" : undefined}
                     rel={method.isExternal ? "noopener noreferrer" : undefined}
-                    className={`group flex items-center gap-4 p-5 bg-white border border-border rounded hover:border-gold hover:translate-x-1 hover:shadow-[0_4px_20px_rgba(45,42,38,0.06)] transition-all duration-700 ${
+                    className={`group flex items-center gap-3 sm:gap-4 p-4 sm:p-5 bg-white border border-border rounded hover:border-gold hover:translate-x-1 hover:shadow-[0_4px_20px_rgba(45,42,38,0.06)] active:bg-cream/50 transition-all duration-700 min-h-[72px] ${
                       cardsVisible
                         ? "opacity-100 translate-x-0"
                         : "opacity-0 -translate-x-8"
@@ -431,29 +432,29 @@ export default function ContactPage() {
                   >
                     {/* Icon */}
                     <div
-                      className={`w-12 h-12 rounded-full bg-cream flex items-center justify-center text-gold flex-shrink-0 transition-transform duration-500 ${
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-cream flex items-center justify-center text-gold flex-shrink-0 transition-transform duration-500 ${
                         cardsVisible ? "scale-100" : "scale-0"
                       }`}
                       style={{ transitionDelay: cardsVisible ? `${index * 100 + 150}ms` : "0ms" }}
                     >
-                      <IconComponent size={22} />
+                      <IconComponent size={20} />
                     </div>
 
                     {/* Text */}
-                    <div className="flex-1">
-                      <p className="text-[11px] tracking-[0.1em] text-gold mb-1">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] sm:text-[11px] tracking-[0.1em] text-gold mb-0.5 sm:mb-1">
                         {method.label}
                       </p>
-                      <p className="text-[15px] text-charcoal mb-0.5">
+                      <p className="text-sm sm:text-[15px] text-charcoal mb-0 sm:mb-0.5 truncate">
                         {method.primary}
                       </p>
-                      <p className="text-[13px] text-charcoal-light">
+                      <p className="text-[12px] sm:text-[13px] text-charcoal-light">
                         {method.secondary}
                       </p>
                     </div>
 
                     {/* Action Icon */}
-                    <div className="text-gold opacity-50 group-hover:opacity-100 transition-opacity">
+                    <div className="text-gold opacity-50 group-hover:opacity-100 transition-opacity flex-shrink-0">
                       {method.isExternal ? (
                         <ExternalLinkIcon size={16} />
                       ) : (
@@ -468,7 +469,7 @@ export default function ContactPage() {
             {/* Quick Answers FAQ */}
             <div ref={faqRef}>
               <p
-                className={`text-xs tracking-[0.15em] uppercase text-charcoal font-medium mb-4 transition-all duration-700 ${
+                className={`text-[10px] sm:text-xs tracking-[0.15em] uppercase text-charcoal font-medium mb-3 sm:mb-4 transition-all duration-700 ${
                   faqVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-6"
@@ -492,9 +493,9 @@ export default function ContactPage() {
                       onClick={() =>
                         setExpandedFaq(expandedFaq === index ? null : index)
                       }
-                      className="w-full py-5 flex items-center justify-between text-left"
+                      className="w-full py-4 sm:py-5 flex items-center justify-between text-left gap-3 min-h-[56px]"
                     >
-                      <span className="text-sm text-charcoal pr-4">
+                      <span className="text-[13px] sm:text-sm text-charcoal pr-2">
                         {faq.question}
                       </span>
                       <ChevronDownIcon isOpen={expandedFaq === index} />
@@ -502,11 +503,11 @@ export default function ContactPage() {
                     <div
                       className={`overflow-hidden transition-all duration-300 ${
                         expandedFaq === index
-                          ? "max-h-40 pb-5"
+                          ? "max-h-40 pb-4 sm:pb-5"
                           : "max-h-0"
                       }`}
                     >
-                      <p className="text-[13px] text-charcoal-light leading-[1.7]">
+                      <p className="text-[12px] sm:text-[13px] text-charcoal-light leading-[1.7]">
                         {faq.answer}
                       </p>
                     </div>
@@ -519,10 +520,10 @@ export default function ContactPage() {
           {/* Right - Contact Form */}
           <div
             ref={formRef}
-            className="bg-cream px-6 md:px-12 lg:px-16 xl:px-20 py-12 lg:py-16 flex items-start justify-center"
+            className="bg-cream px-4 sm:px-6 md:px-12 lg:px-16 xl:px-20 py-8 sm:py-12 lg:py-16 flex items-start justify-center"
           >
             <div
-              className={`w-full max-w-[480px] bg-white border border-border p-8 md:p-12 transition-all duration-700 ${
+              className={`w-full max-w-[480px] bg-white border border-border p-5 sm:p-8 md:p-12 transition-all duration-700 ${
                 formVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-10"
@@ -532,7 +533,7 @@ export default function ContactPage() {
                 <>
                   {/* Form Header */}
                   <h2
-                    className={`font-display text-[28px] text-charcoal mb-2 transition-all duration-700 delay-100 ${
+                    className={`font-display text-2xl sm:text-[28px] text-charcoal mb-2 transition-all duration-700 delay-100 ${
                       formVisible
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-6"
@@ -541,7 +542,7 @@ export default function ContactPage() {
                     Send a Message
                   </h2>
                   <p
-                    className={`text-sm text-charcoal-light mb-8 transition-all duration-700 delay-200 ${
+                    className={`text-xs sm:text-sm text-charcoal-light mb-6 sm:mb-8 transition-all duration-700 delay-200 ${
                       formVisible
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-6"
@@ -554,7 +555,7 @@ export default function ContactPage() {
                   <form onSubmit={handleSubmit}>
                     {/* Name Field */}
                     <div
-                      className={`relative mb-6 transition-all duration-700 delay-[250ms] ${
+                      className={`relative mb-5 sm:mb-6 transition-all duration-700 delay-[250ms] ${
                         formVisible
                           ? "opacity-100 translate-y-0"
                           : "opacity-0 translate-y-6"
@@ -568,7 +569,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         onFocus={() => setFocusedField("name")}
                         onBlur={() => handleBlur("name")}
-                        className={`w-full py-4 text-[15px] text-charcoal bg-transparent border-b outline-none transition-colors duration-300 placeholder:text-charcoal-light/60 ${
+                        className={`w-full py-3.5 sm:py-4 text-sm sm:text-[15px] text-charcoal bg-transparent border-b outline-none transition-colors duration-300 placeholder:text-charcoal-light/60 ${
                           errors.name && touched.name
                             ? "border-red-500"
                             : focusedField === "name"
@@ -578,12 +579,12 @@ export default function ContactPage() {
                       />
                       {/* Floating Label */}
                       {(focusedField === "name" || formData.name) && (
-                        <span className="absolute -top-2 left-0 text-[10px] tracking-[0.1em] text-gold">
+                        <span className="absolute -top-2 left-0 text-[9px] sm:text-[10px] tracking-[0.1em] text-gold">
                           YOUR NAME
                         </span>
                       )}
                       {errors.name && touched.name && (
-                        <span className="absolute -bottom-5 left-0 text-xs text-red-500">
+                        <span className="absolute -bottom-4 sm:-bottom-5 left-0 text-[11px] sm:text-xs text-red-500">
                           {errors.name}
                         </span>
                       )}
@@ -591,7 +592,7 @@ export default function ContactPage() {
 
                     {/* Email Field */}
                     <div
-                      className={`relative mb-6 transition-all duration-700 delay-[300ms] ${
+                      className={`relative mb-5 sm:mb-6 transition-all duration-700 delay-[300ms] ${
                         formVisible
                           ? "opacity-100 translate-y-0"
                           : "opacity-0 translate-y-6"
@@ -605,7 +606,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         onFocus={() => setFocusedField("email")}
                         onBlur={() => handleBlur("email")}
-                        className={`w-full py-4 text-[15px] text-charcoal bg-transparent border-b outline-none transition-colors duration-300 placeholder:text-charcoal-light/60 ${
+                        className={`w-full py-3.5 sm:py-4 text-sm sm:text-[15px] text-charcoal bg-transparent border-b outline-none transition-colors duration-300 placeholder:text-charcoal-light/60 ${
                           errors.email && touched.email
                             ? "border-red-500"
                             : focusedField === "email"
@@ -614,12 +615,12 @@ export default function ContactPage() {
                         }`}
                       />
                       {(focusedField === "email" || formData.email) && (
-                        <span className="absolute -top-2 left-0 text-[10px] tracking-[0.1em] text-gold">
+                        <span className="absolute -top-2 left-0 text-[9px] sm:text-[10px] tracking-[0.1em] text-gold">
                           EMAIL ADDRESS
                         </span>
                       )}
                       {errors.email && touched.email && (
-                        <span className="absolute -bottom-5 left-0 text-xs text-red-500">
+                        <span className="absolute -bottom-4 sm:-bottom-5 left-0 text-[11px] sm:text-xs text-red-500">
                           {errors.email}
                         </span>
                       )}
@@ -627,7 +628,7 @@ export default function ContactPage() {
 
                     {/* Phone Field */}
                     <div
-                      className={`relative mb-6 transition-all duration-700 delay-[350ms] ${
+                      className={`relative mb-5 sm:mb-6 transition-all duration-700 delay-[350ms] ${
                         formVisible
                           ? "opacity-100 translate-y-0"
                           : "opacity-0 translate-y-6"
@@ -641,12 +642,12 @@ export default function ContactPage() {
                         onChange={handleChange}
                         onFocus={() => setFocusedField("phone")}
                         onBlur={() => setFocusedField(null)}
-                        className={`w-full py-4 text-[15px] text-charcoal bg-transparent border-b outline-none transition-colors duration-300 placeholder:text-charcoal-light/60 ${
+                        className={`w-full py-3.5 sm:py-4 text-sm sm:text-[15px] text-charcoal bg-transparent border-b outline-none transition-colors duration-300 placeholder:text-charcoal-light/60 ${
                           focusedField === "phone" ? "border-gold" : "border-border"
                         }`}
                       />
                       {(focusedField === "phone" || formData.phone) && (
-                        <span className="absolute -top-2 left-0 text-[10px] tracking-[0.1em] text-gold">
+                        <span className="absolute -top-2 left-0 text-[9px] sm:text-[10px] tracking-[0.1em] text-gold">
                           PHONE NUMBER
                         </span>
                       )}
@@ -654,7 +655,7 @@ export default function ContactPage() {
 
                     {/* Inquiry Type Dropdown */}
                     <div
-                      className={`relative mb-6 transition-all duration-700 delay-[400ms] ${
+                      className={`relative mb-5 sm:mb-6 transition-all duration-700 delay-[400ms] ${
                         formVisible
                           ? "opacity-100 translate-y-0"
                           : "opacity-0 translate-y-6"
@@ -666,7 +667,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         onFocus={() => setFocusedField("inquiryType")}
                         onBlur={() => handleBlur("inquiryType")}
-                        className={`w-full py-4 text-[15px] bg-transparent border-b outline-none transition-colors duration-300 appearance-none cursor-pointer ${
+                        className={`w-full py-3.5 sm:py-4 text-sm sm:text-[15px] bg-transparent border-b outline-none transition-colors duration-300 appearance-none cursor-pointer ${
                           formData.inquiryType ? "text-charcoal" : "text-charcoal-light/60"
                         } ${
                           errors.inquiryType && touched.inquiryType
@@ -687,12 +688,12 @@ export default function ContactPage() {
                         <ChevronDownIcon isOpen={false} />
                       </div>
                       {(focusedField === "inquiryType" || formData.inquiryType) && (
-                        <span className="absolute -top-2 left-0 text-[10px] tracking-[0.1em] text-gold">
+                        <span className="absolute -top-2 left-0 text-[9px] sm:text-[10px] tracking-[0.1em] text-gold">
                           WHAT CAN WE HELP WITH?
                         </span>
                       )}
                       {errors.inquiryType && touched.inquiryType && (
-                        <span className="absolute -bottom-5 left-0 text-xs text-red-500">
+                        <span className="absolute -bottom-4 sm:-bottom-5 left-0 text-[11px] sm:text-xs text-red-500">
                           {errors.inquiryType}
                         </span>
                       )}
@@ -700,7 +701,7 @@ export default function ContactPage() {
 
                     {/* Message Field */}
                     <div
-                      className={`relative mb-6 transition-all duration-700 delay-[450ms] ${
+                      className={`relative mb-5 sm:mb-6 transition-all duration-700 delay-[450ms] ${
                         formVisible
                           ? "opacity-100 translate-y-0"
                           : "opacity-0 translate-y-6"
@@ -715,7 +716,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         onFocus={() => setFocusedField("message")}
                         onBlur={() => handleBlur("message")}
-                        className={`w-full py-4 text-[15px] text-charcoal bg-transparent border-b outline-none transition-colors duration-300 placeholder:text-charcoal-light/60 resize-none ${
+                        className={`w-full py-3.5 sm:py-4 text-sm sm:text-[15px] text-charcoal bg-transparent border-b outline-none transition-colors duration-300 placeholder:text-charcoal-light/60 resize-none ${
                           errors.message && touched.message
                             ? "border-red-500"
                             : focusedField === "message"
@@ -724,16 +725,16 @@ export default function ContactPage() {
                         }`}
                       />
                       {(focusedField === "message" || formData.message) && (
-                        <span className="absolute -top-2 left-0 text-[10px] tracking-[0.1em] text-gold">
+                        <span className="absolute -top-2 left-0 text-[9px] sm:text-[10px] tracking-[0.1em] text-gold">
                           YOUR MESSAGE
                         </span>
                       )}
                       {/* Character Count */}
-                      <span className="absolute -bottom-5 right-0 text-[11px] text-charcoal-light/60">
+                      <span className="absolute -bottom-4 sm:-bottom-5 right-0 text-[10px] sm:text-[11px] text-charcoal-light/60">
                         {formData.message.length}/{maxMessageLength}
                       </span>
                       {errors.message && touched.message && (
-                        <span className="absolute -bottom-5 left-0 text-xs text-red-500">
+                        <span className="absolute -bottom-4 sm:-bottom-5 left-0 text-[11px] sm:text-xs text-red-500">
                           {errors.message}
                         </span>
                       )}
@@ -743,7 +744,7 @@ export default function ContactPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`mt-4 w-full py-4 bg-charcoal text-cream text-xs tracking-[0.12em] uppercase font-medium hover:bg-gold transition-all duration-700 delay-[500ms] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${
+                      className={`mt-3 sm:mt-4 w-full py-3.5 sm:py-4 bg-charcoal text-cream text-[11px] sm:text-xs tracking-[0.12em] uppercase font-medium hover:bg-gold active:bg-gold transition-all duration-700 delay-[500ms] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[48px] ${
                         formVisible
                           ? "opacity-100 translate-y-0"
                           : "opacity-0 translate-y-6"
@@ -762,19 +763,19 @@ export default function ContactPage() {
                 </>
               ) : (
                 /* Success State */
-                <div className="text-center py-10">
-                  <div className="mb-6 animate-[scaleIn_0.4s_ease]">
+                <div className="text-center py-6 sm:py-10">
+                  <div className="mb-5 sm:mb-6 animate-[scaleIn_0.4s_ease]">
                     <CheckCircleIcon />
                   </div>
-                  <h2 className="font-display text-[28px] text-charcoal mb-3">
+                  <h2 className="font-display text-2xl sm:text-[28px] text-charcoal mb-2 sm:mb-3">
                     Message Sent<span className="text-gold">!</span>
                   </h2>
-                  <p className="text-[15px] text-charcoal-light leading-[1.7] mb-8">
+                  <p className="text-sm sm:text-[15px] text-charcoal-light leading-[1.7] mb-6 sm:mb-8">
                     Thank you for reaching out! I'll get back to you within 24 hours.
                   </p>
                   <button
                     onClick={resetForm}
-                    className="px-8 py-3.5 border border-charcoal text-charcoal text-xs tracking-[0.1em] uppercase font-medium hover:bg-charcoal hover:text-cream transition-colors duration-300"
+                    className="px-6 sm:px-8 py-3 sm:py-3.5 border border-charcoal text-charcoal text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium hover:bg-charcoal hover:text-cream active:bg-charcoal active:text-cream transition-colors duration-300 min-h-[48px]"
                   >
                     Send Another Message
                   </button>
@@ -785,8 +786,8 @@ export default function ContactPage() {
         </section>
 
         {/* Business Hours Banner */}
-        <section ref={bannerRef} className="py-16 px-6 md:px-12 lg:px-20 bg-charcoal">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+        <section ref={bannerRef} className="py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20 bg-charcoal">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             {/* Hours */}
             <div
               className={`transition-all duration-700 ${
@@ -795,10 +796,10 @@ export default function ContactPage() {
                   : "opacity-0 -translate-x-10"
               }`}
             >
-              <p className="text-[11px] tracking-[0.15em] uppercase text-gold mb-4">
+              <p className="text-[10px] sm:text-[11px] tracking-[0.15em] uppercase text-gold mb-3 sm:mb-4">
                 Business Hours
               </p>
-              <p className="font-display text-2xl text-cream leading-[1.6]">
+              <p className="font-display text-xl sm:text-2xl text-cream leading-[1.6]">
                 Monday – Wednesday: 9am – 8pm
                 <br />
                 Thursday – Sunday: 9am – 5pm
@@ -813,15 +814,15 @@ export default function ContactPage() {
                   : "opacity-0 translate-x-10"
               }`}
             >
-              <p className="text-[11px] tracking-[0.15em] uppercase text-gold mb-4">
+              <p className="text-[10px] sm:text-[11px] tracking-[0.15em] uppercase text-gold mb-3 sm:mb-4">
                 Ready to Book?
               </p>
-              <p className="font-display text-2xl text-cream mb-6">
+              <p className="font-display text-xl sm:text-2xl text-cream mb-5 sm:mb-6">
                 Skip the form, book directly
               </p>
               <Link
                 href="/book"
-                className="inline-flex items-center gap-2 px-8 py-3.5 border border-cream text-cream text-xs tracking-[0.1em] uppercase font-medium hover:bg-cream hover:text-charcoal transition-colors duration-300"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 border border-cream text-cream text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium hover:bg-cream hover:text-charcoal active:bg-cream active:text-charcoal transition-colors duration-300 min-h-[48px]"
               >
                 Book Appointment
                 <ArrowRightIcon size={14} />
@@ -831,7 +832,7 @@ export default function ContactPage() {
         </section>
 
         {/* Map Section */}
-        <section ref={mapRef} className="h-[400px] bg-[#F0EDE8] relative overflow-hidden">
+        <section ref={mapRef} className="h-[300px] sm:h-[350px] md:h-[400px] bg-[#F0EDE8] relative overflow-hidden">
           {/* Stylized Map Background */}
           <div className="absolute inset-0">
             {/* Grid Pattern */}
@@ -866,30 +867,30 @@ export default function ContactPage() {
                 mapVisible ? "opacity-100 scale-100" : "opacity-0 scale-0"
               }`}
             >
-              <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center animate-pulse">
-                <div className="w-10 h-10 rounded-full bg-gold/40 flex items-center justify-center">
-                  <div className="w-5 h-5 rounded-full bg-gold" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gold/20 flex items-center justify-center animate-pulse">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gold/40 flex items-center justify-center">
+                  <div className="w-3 h-3 sm:w-5 sm:h-5 rounded-full bg-gold" />
                 </div>
               </div>
             </div>
 
-            {/* Neighborhood Labels */}
+            {/* Neighborhood Labels - Hidden on smallest screens */}
             <span
-              className={`absolute top-[30%] left-[20%] text-xs tracking-[0.1em] text-charcoal-light/50 transition-all duration-700 delay-500 ${
+              className={`absolute top-[30%] left-[15%] sm:left-[20%] text-[10px] sm:text-xs tracking-[0.1em] text-charcoal-light/50 transition-all duration-700 delay-500 hidden sm:block ${
                 mapVisible ? "opacity-100" : "opacity-0"
               }`}
             >
               WESTWOOD
             </span>
             <span
-              className={`absolute top-[60%] right-[25%] text-xs tracking-[0.1em] text-charcoal-light/50 transition-all duration-700 delay-600 ${
+              className={`absolute top-[60%] right-[15%] sm:right-[25%] text-[10px] sm:text-xs tracking-[0.1em] text-charcoal-light/50 transition-all duration-700 delay-600 hidden sm:block ${
                 mapVisible ? "opacity-100" : "opacity-0"
               }`}
             >
               UCLA
             </span>
             <span
-              className={`absolute bottom-[25%] left-[35%] text-xs tracking-[0.1em] text-charcoal-light/50 transition-all duration-700 delay-700 ${
+              className={`absolute bottom-[25%] left-[25%] sm:left-[35%] text-[10px] sm:text-xs tracking-[0.1em] text-charcoal-light/50 transition-all duration-700 delay-700 hidden sm:block ${
                 mapVisible ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -899,23 +900,23 @@ export default function ContactPage() {
 
           {/* Address Card */}
           <div
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-12 py-8 shadow-[0_20px_60px_rgba(45,42,38,0.15)] text-center z-10 transition-all duration-700 delay-200 ${
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-6 sm:px-8 md:px-12 py-5 sm:py-6 md:py-8 shadow-[0_20px_60px_rgba(45,42,38,0.15)] text-center z-10 transition-all duration-700 delay-200 w-[90%] sm:w-auto max-w-[400px] ${
               mapVisible
                 ? "opacity-100 scale-100"
                 : "opacity-0 scale-95"
             }`}
           >
-            <p className="font-display text-2xl text-charcoal mb-2">
+            <p className="font-display text-lg sm:text-xl md:text-2xl text-charcoal mb-1 sm:mb-2">
               10880 Wilshire Blvd, Suite 402
             </p>
-            <p className="text-sm text-charcoal-light mb-5">
+            <p className="text-xs sm:text-sm text-charcoal-light mb-4 sm:mb-5">
               Los Angeles, CA 90024
             </p>
             <a
               href="https://maps.google.com/?q=10880+Wilshire+Blvd+Suite+402+Los+Angeles+CA+90024"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs tracking-[0.1em] uppercase text-gold font-medium hover:opacity-70 transition-opacity"
+              className="inline-flex items-center justify-center gap-2 text-[11px] sm:text-xs tracking-[0.1em] uppercase text-gold font-medium hover:opacity-70 active:opacity-70 transition-opacity min-h-[44px]"
             >
               Open in Google Maps
               <ExternalLinkIcon size={12} />

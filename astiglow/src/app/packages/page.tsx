@@ -15,7 +15,6 @@ function useScrollAnimation(threshold = 0.2) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Toggle visibility based on intersection
         setIsVisible(entry.isIntersecting);
       },
       { threshold }
@@ -73,7 +72,7 @@ const ChevronDownIcon = ({ isOpen }: { isOpen: boolean }) => (
     fill="none"
     stroke="currentColor"
     strokeWidth="2"
-    className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+    className={`transition-transform duration-300 flex-shrink-0 ${isOpen ? "rotate-180" : ""}`}
   >
     <polyline points="6 9 12 15 18 9" />
   </svg>
@@ -90,6 +89,13 @@ const CartIcon = () => (
     <circle cx="9" cy="21" r="1" />
     <circle cx="20" cy="21" r="1" />
     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+  </svg>
+);
+
+const CloseIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
 
@@ -229,14 +235,14 @@ function PackageCard({ pkg, isInCart, onAdd, onRemove }: PackageCardProps) {
 
   return (
     <div
-      className={`bg-white border p-8 transition-all duration-400 relative flex flex-col h-full hover:-translate-y-1.5 hover:shadow-xl ${
+      className={`bg-white border p-5 sm:p-6 md:p-8 transition-all duration-400 relative flex flex-col h-full hover:-translate-y-1.5 hover:shadow-xl active:scale-[0.99] ${
         isInCart ? "border-gold bg-gold/[0.03]" : "border-border hover:border-gold"
       }`}
     >
       {/* Badge */}
       {pkg.badge && (
         <div
-          className={`absolute -top-px right-6 text-[10px] tracking-[0.1em] font-medium px-4 py-2 text-white ${
+          className={`absolute -top-px right-4 sm:right-6 text-[9px] sm:text-[10px] tracking-[0.1em] font-medium px-2.5 sm:px-4 py-1.5 sm:py-2 text-white ${
             pkg.badgeColor === "gold" ? "bg-gold" : "bg-charcoal"
           }`}
         >
@@ -246,26 +252,26 @@ function PackageCard({ pkg, isInCart, onAdd, onRemove }: PackageCardProps) {
 
       <div className="flex-1">
         {/* Title */}
-        <h3 className="font-display text-[28px] font-medium text-charcoal mb-2">
+        <h3 className="font-display text-2xl sm:text-[28px] font-medium text-charcoal mb-2">
           {pkg.name}
         </h3>
 
         {/* Description */}
-        <p className="text-sm text-charcoal-light leading-relaxed mb-5">
+        <p className="text-xs sm:text-sm text-charcoal-light leading-relaxed mb-4 sm:mb-5">
           {pkg.description}
         </p>
 
         {/* Session Visualization */}
-        <div className="mb-5">
-          <p className="text-[11px] tracking-[0.1em] text-charcoal-light mb-2.5">
+        <div className="mb-4 sm:mb-5">
+          <p className="text-[10px] sm:text-[11px] tracking-[0.1em] text-charcoal-light mb-2 sm:mb-2.5">
             {totalSessions} SESSIONS INCLUDED
           </p>
-          <div className="flex gap-1.5 flex-wrap">
+          <div className="flex gap-1 sm:gap-1.5 flex-wrap">
             {/* Paid sessions - charcoal dots */}
             {[...Array(pkg.sessions)].map((_, i) => (
               <div
                 key={`paid-${i}`}
-                className="w-3 h-3 rounded-full bg-charcoal"
+                className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-charcoal"
                 title="Paid session"
               />
             ))}
@@ -273,36 +279,36 @@ function PackageCard({ pkg, isInCart, onAdd, onRemove }: PackageCardProps) {
             {[...Array(pkg.bonus)].map((_, i) => (
               <div
                 key={`free-${i}`}
-                className="w-3 h-3 rounded-full bg-gold animate-pulse-subtle"
+                className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gold animate-pulse-subtle"
                 title="FREE bonus session"
               />
             ))}
           </div>
-          <p className="text-[11px] text-gold mt-2">
+          <p className="text-[10px] sm:text-[11px] text-gold mt-1.5 sm:mt-2">
             ● {pkg.bonus} FREE bonus sessions
           </p>
         </div>
 
         {/* Savings Badge */}
-        <div className="inline-block px-3.5 py-2 bg-gold/10 rounded mb-5">
-          <span className="text-[13px] font-semibold text-gold">
+        <div className="inline-block px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gold/10 rounded mb-4 sm:mb-5">
+          <span className="text-[12px] sm:text-[13px] font-semibold text-gold">
             SAVE ${savings}
           </span>
         </div>
       </div>
 
       {/* Pricing */}
-      <div className="pt-5 border-t border-border">
+      <div className="pt-4 sm:pt-5 border-t border-border">
         {/* Total Price */}
-        <div className="mb-2">
-          <span className="font-display text-4xl font-medium text-charcoal">
+        <div className="mb-1.5 sm:mb-2">
+          <span className="font-display text-3xl sm:text-4xl font-medium text-charcoal">
             ${total}
           </span>
-          <span className="text-sm text-charcoal-light ml-2">total</span>
+          <span className="text-xs sm:text-sm text-charcoal-light ml-1.5 sm:ml-2">total</span>
         </div>
 
         {/* Per Session Breakdown */}
-        <p className="text-[13px] text-charcoal-light mb-5">
+        <p className="text-[12px] sm:text-[13px] text-charcoal-light mb-4 sm:mb-5">
           <span className="line-through">${pkg.originalPrice}</span>{" "}
           <span className="text-charcoal font-medium">${pkg.packagePrice}</span>{" "}
           per session
@@ -311,10 +317,10 @@ function PackageCard({ pkg, isInCart, onAdd, onRemove }: PackageCardProps) {
         {/* Button */}
         <button
           onClick={isInCart ? onRemove : onAdd}
-          className={`w-full py-4 text-xs tracking-[0.1em] font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+          className={`w-full py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.1em] font-medium transition-all duration-300 flex items-center justify-center gap-2 min-h-[48px] ${
             isInCart
               ? "bg-gold text-white"
-              : "bg-charcoal text-white hover:bg-gold"
+              : "bg-charcoal text-white hover:bg-gold active:bg-gold"
           }`}
         >
           {isInCart ? (
@@ -371,11 +377,18 @@ export default function PackagesPage() {
     <>
       <Navbar />
 
-      {/* Toast Notification */}
+      {/* Toast Notification - Responsive positioning */}
       {showToast && (
-        <div className="fixed bottom-6 right-6 bg-charcoal text-white px-6 py-4 rounded flex items-center gap-3 shadow-xl z-[1000] animate-slide-in">
+        <div className="fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-auto bg-charcoal text-white px-4 sm:px-6 py-3 sm:py-4 rounded flex items-center gap-3 shadow-xl z-[1000] animate-slide-in">
           <CheckIcon />
-          <span className="text-sm">{toastMessage}</span>
+          <span className="text-sm flex-1">{toastMessage}</span>
+          <button 
+            onClick={() => setShowToast(false)}
+            className="p-1 hover:bg-white/10 rounded transition-colors"
+            aria-label="Dismiss"
+          >
+            <CloseIcon />
+          </button>
         </div>
       )}
 
@@ -383,10 +396,10 @@ export default function PackagesPage() {
         {/* Hero Section */}
         <section 
           ref={heroAnimation.ref}
-          className="pt-36 pb-16 text-center px-6 md:px-12 lg:px-20 bg-cream"
+          className="pt-28 sm:pt-32 md:pt-36 pb-10 sm:pb-16 text-center px-4 sm:px-6 md:px-12 lg:px-20 bg-cream"
         >
           <p 
-            className={`text-xs tracking-[0.2em] text-gold font-medium mb-5 transition-all duration-700 ${
+            className={`text-[10px] sm:text-xs tracking-[0.2em] text-gold font-medium mb-4 sm:mb-5 transition-all duration-700 ${
               heroAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -396,7 +409,7 @@ export default function PackagesPage() {
           </p>
 
           <h1 
-            className={`font-display text-5xl md:text-6xl font-normal text-charcoal mb-5 transition-all duration-700 delay-100 ${
+            className={`font-display text-4xl sm:text-5xl md:text-6xl font-normal text-charcoal mb-4 sm:mb-5 transition-all duration-700 delay-100 ${
               heroAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -406,7 +419,7 @@ export default function PackagesPage() {
           </h1>
 
           <p 
-            className={`text-base text-charcoal-light max-w-[520px] mx-auto leading-relaxed transition-all duration-700 delay-200 ${
+            className={`text-sm sm:text-base text-charcoal-light max-w-[520px] mx-auto leading-relaxed transition-all duration-700 delay-200 ${
               heroAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -420,13 +433,13 @@ export default function PackagesPage() {
         {/* How It Works */}
         <section 
           ref={stepsAnimation.ref}
-          className="py-10 pb-20 px-6 md:px-12 lg:px-20 bg-cream"
+          className="py-8 sm:py-10 pb-14 sm:pb-20 px-4 sm:px-6 md:px-12 lg:px-20 bg-cream"
         >
-          <div className="flex flex-col md:flex-row justify-center items-start gap-6 max-w-[900px] mx-auto">
+          <div className="flex flex-col md:flex-row justify-center items-center md:items-start gap-8 md:gap-6 max-w-[900px] mx-auto">
             {steps.map((step, index) => (
               <div 
                 key={step.num} 
-                className={`flex items-center transition-all duration-700 ${
+                className={`flex flex-col md:flex-row items-center transition-all duration-700 ${
                   stepsAnimation.isVisible 
                     ? "opacity-100 translate-y-0" 
                     : "opacity-0 translate-y-8"
@@ -434,30 +447,39 @@ export default function PackagesPage() {
                 style={{ transitionDelay: stepsAnimation.isVisible ? `${index * 150}ms` : "0ms" }}
               >
                 {/* Step */}
-                <div className="text-center" style={{ maxWidth: "200px" }}>
+                <div className="text-center max-w-[200px]">
                   {/* Icon Circle */}
-                  <div className="relative w-[72px] h-[72px] rounded-full border-2 border-gold bg-white flex items-center justify-center mx-auto mb-5 text-gold">
+                  <div className="relative w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-full border-2 border-gold bg-white flex items-center justify-center mx-auto mb-4 sm:mb-5 text-gold">
                     {step.icon}
                     {/* Number Badge */}
-                    <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gold text-white text-xs font-semibold flex items-center justify-center">
+                    <div className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gold text-white text-[10px] sm:text-xs font-semibold flex items-center justify-center">
                       {step.num}
                     </div>
                   </div>
-                  <p className="text-[15px] text-charcoal font-medium mb-1.5">
+                  <p className="text-sm sm:text-[15px] text-charcoal font-medium mb-1 sm:mb-1.5">
                     {step.title}
                   </p>
-                  <p className="text-[13px] text-charcoal-light leading-relaxed">
+                  <p className="text-[12px] sm:text-[13px] text-charcoal-light leading-relaxed">
                     {step.desc}
                   </p>
                 </div>
 
-                {/* Connector Arrow */}
+                {/* Connector - Vertical on mobile, horizontal on desktop */}
                 {index < steps.length - 1 && (
-                  <div className="hidden md:flex items-center mx-6">
-                    <div className="w-20 h-0.5 bg-border relative">
-                      <div className="absolute right-0 -top-1 w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-gold" />
+                  <>
+                    {/* Mobile: Vertical connector */}
+                    <div className="flex md:hidden items-center my-4">
+                      <div className="h-8 w-0.5 bg-border relative">
+                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[8px] border-t-gold" />
+                      </div>
                     </div>
-                  </div>
+                    {/* Desktop: Horizontal connector */}
+                    <div className="hidden md:flex items-center mx-6">
+                      <div className="w-16 lg:w-20 h-0.5 bg-border relative">
+                        <div className="absolute right-0 -top-1 w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[8px] border-l-gold" />
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             ))}
@@ -465,11 +487,11 @@ export default function PackagesPage() {
         </section>
 
         {/* Packages Grid */}
-        <section className="pb-24 px-6 md:px-12 lg:px-20 bg-cream">
+        <section className="pb-16 sm:pb-24 px-4 sm:px-6 md:px-12 lg:px-20 bg-cream">
           {/* Top Row - 3 cards */}
           <div 
             ref={packagesTopAnimation.ref}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1200px] mx-auto mb-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-[1200px] mx-auto mb-4 sm:mb-6"
           >
             {packagesData.slice(0, 3).map((pkg, index) => (
               <div
@@ -494,7 +516,7 @@ export default function PackagesPage() {
           {/* Bottom Row - 2 cards centered */}
           <div 
             ref={packagesBottomAnimation.ref}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[800px] mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-[800px] mx-auto"
           >
             {packagesData.slice(3).map((pkg, index) => (
               <div
@@ -520,10 +542,10 @@ export default function PackagesPage() {
         {/* BNPL Section */}
         <section 
           ref={bnplAnimation.ref}
-          className="py-16 px-6 md:px-12 lg:px-20 bg-white text-center"
+          className="py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20 bg-white text-center"
         >
           <p 
-            className={`text-[11px] tracking-[0.15em] text-charcoal-light mb-8 transition-all duration-700 ${
+            className={`text-[10px] sm:text-[11px] tracking-[0.15em] text-charcoal-light mb-6 sm:mb-8 transition-all duration-700 ${
               bnplAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -533,7 +555,7 @@ export default function PackagesPage() {
           </p>
 
           <div 
-            className={`flex justify-center items-center gap-8 flex-wrap mb-6 transition-all duration-700 delay-150 ${
+            className={`flex justify-center items-center gap-3 sm:gap-6 md:gap-8 flex-wrap mb-5 sm:mb-6 transition-all duration-700 delay-150 ${
               bnplAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -541,31 +563,31 @@ export default function PackagesPage() {
           >
             {/* Klarna */}
             <div 
-              className="px-10 py-5 rounded-lg transition-transform duration-300 hover:scale-105" 
+              className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg transition-transform duration-300 hover:scale-105 active:scale-100" 
               style={{ backgroundColor: "#FFB3C7" }}
             >
-              <span className="font-bold text-xl text-black">Klarna.</span>
+              <span className="font-bold text-base sm:text-lg md:text-xl text-black">Klarna.</span>
             </div>
 
             {/* Affirm */}
             <div 
-              className="px-10 py-5 rounded-lg transition-transform duration-300 hover:scale-105" 
+              className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg transition-transform duration-300 hover:scale-105 active:scale-100" 
               style={{ backgroundColor: "#0FA0EA" }}
             >
-              <span className="font-bold text-xl text-white">affirm</span>
+              <span className="font-bold text-base sm:text-lg md:text-xl text-white">affirm</span>
             </div>
 
             {/* Afterpay */}
             <div 
-              className="px-10 py-5 rounded-lg transition-transform duration-300 hover:scale-105" 
+              className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg transition-transform duration-300 hover:scale-105 active:scale-100" 
               style={{ backgroundColor: "#B2FCE4" }}
             >
-              <span className="font-bold text-lg text-black">Afterpay</span>
+              <span className="font-bold text-sm sm:text-base md:text-lg text-black">Afterpay</span>
             </div>
           </div>
 
           <p 
-            className={`text-sm text-charcoal-light transition-all duration-700 delay-300 ${
+            className={`text-xs sm:text-sm text-charcoal-light transition-all duration-700 delay-300 ${
               bnplAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -579,18 +601,18 @@ export default function PackagesPage() {
         {/* FAQ Section */}
         <section 
           ref={faqAnimation.ref}
-          className="py-20 px-6 md:px-12 lg:px-20 bg-cream"
+          className="py-14 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-20 bg-cream"
         >
           <div className="max-w-[700px] mx-auto">
             <div 
-              className={`w-10 h-0.5 bg-gold mb-6 transition-all duration-500 ${
+              className={`w-10 h-0.5 bg-gold mb-4 sm:mb-6 transition-all duration-500 ${
                 faqAnimation.isVisible 
                   ? "opacity-100 scale-x-100 origin-left" 
                   : "opacity-0 scale-x-0 origin-left"
               }`}
             />
             <h2 
-              className={`font-display text-4xl font-normal text-charcoal mb-12 transition-all duration-700 delay-100 ${
+              className={`font-display text-3xl sm:text-4xl font-normal text-charcoal mb-8 sm:mb-12 transition-all duration-700 delay-100 ${
                 faqAnimation.isVisible 
                   ? "opacity-100 translate-y-0" 
                   : "opacity-0 translate-y-6"
@@ -611,20 +633,20 @@ export default function PackagesPage() {
                   style={{ transitionDelay: faqAnimation.isVisible ? `${200 + index * 100}ms` : "0ms" }}
                 >
                   <button
-                    className="w-full py-6 flex justify-between items-center text-left bg-transparent"
+                    className="w-full py-5 sm:py-6 flex justify-between items-center text-left bg-transparent gap-4 min-h-[64px]"
                     onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
                   >
-                    <span className="text-base font-medium text-charcoal pr-4">
+                    <span className="text-sm sm:text-base font-medium text-charcoal">
                       {faq.q}
                     </span>
                     <ChevronDownIcon isOpen={expandedFaq === index} />
                   </button>
                   <div
                     className={`overflow-hidden transition-all duration-300 ${
-                      expandedFaq === index ? "max-h-48 pb-6" : "max-h-0"
+                      expandedFaq === index ? "max-h-48 pb-5 sm:pb-6" : "max-h-0"
                     }`}
                   >
-                    <p className="text-[15px] text-charcoal-light leading-relaxed">
+                    <p className="text-sm sm:text-[15px] text-charcoal-light leading-relaxed">
                       {faq.a}
                     </p>
                   </div>
@@ -637,10 +659,10 @@ export default function PackagesPage() {
         {/* CTA Section */}
         <section 
           ref={ctaAnimation.ref}
-          className="py-20 px-6 md:px-12 lg:px-20 bg-charcoal text-center text-white"
+          className="py-14 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-20 bg-charcoal text-center text-white"
         >
           <p 
-            className={`text-[11px] tracking-[0.2em] text-gold mb-4 transition-all duration-700 ${
+            className={`text-[10px] sm:text-[11px] tracking-[0.2em] text-gold mb-3 sm:mb-4 transition-all duration-700 ${
               ctaAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -649,7 +671,7 @@ export default function PackagesPage() {
             PREFER INDIVIDUAL SESSIONS?
           </p>
           <h2 
-            className={`font-display text-4xl font-normal mb-4 transition-all duration-700 delay-100 ${
+            className={`font-display text-3xl sm:text-4xl font-normal mb-3 sm:mb-4 transition-all duration-700 delay-100 ${
               ctaAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -658,7 +680,7 @@ export default function PackagesPage() {
             Not ready to commit<span className="text-gold">?</span>
           </h2>
           <p 
-            className={`text-[15px] text-white/70 max-w-[400px] mx-auto mb-8 transition-all duration-700 delay-200 ${
+            className={`text-sm sm:text-[15px] text-white/70 max-w-[400px] mx-auto mb-6 sm:mb-8 transition-all duration-700 delay-200 ${
               ctaAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -668,19 +690,19 @@ export default function PackagesPage() {
             package later.
           </p>
           <div 
-            className={`flex justify-center gap-4 flex-wrap transition-all duration-700 delay-300 ${
+            className={`flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 transition-all duration-700 delay-300 ${
               ctaAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
             }`}
           >
-            <Link href="/services">
-              <button className="px-9 py-4 bg-white text-charcoal text-xs tracking-[0.1em] font-medium hover:bg-cream transition-colors">
+            <Link href="/services" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto px-8 sm:px-9 py-3.5 sm:py-4 bg-white text-charcoal text-[11px] sm:text-xs tracking-[0.1em] font-medium hover:bg-cream active:bg-cream transition-colors min-h-[48px]">
                 VIEW ALL SERVICES
               </button>
             </Link>
-            <Link href="/contact">
-              <button className="px-9 py-4 bg-transparent border border-white/30 text-white text-xs tracking-[0.1em] font-medium hover:bg-white/10 transition-colors">
+            <Link href="/contact" className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto px-8 sm:px-9 py-3.5 sm:py-4 bg-transparent border border-white/30 text-white text-[11px] sm:text-xs tracking-[0.1em] font-medium hover:bg-white/10 active:bg-white/10 transition-colors min-h-[48px]">
                 CONTACT ASTER
               </button>
             </Link>
@@ -688,18 +710,18 @@ export default function PackagesPage() {
         </section>
       </main>
 
-      {/* Floating Cart Indicator (when cart has items) */}
+      {/* Floating Cart Indicator (when cart has items) - Responsive */}
       {cart.length > 0 && (
-        <div className="fixed bottom-6 left-6 bg-white border border-border rounded-lg px-4 py-3 shadow-lg flex items-center gap-3 z-50 animate-slide-in">
+        <div className="fixed bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-auto bg-white border border-border rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 shadow-lg flex items-center gap-2 sm:gap-3 z-50 animate-slide-in">
           <CartIcon />
-          <div>
-            <p className="text-xs text-charcoal-light">Cart ({cart.length})</p>
-            <p className="text-base font-medium text-charcoal">
+          <div className="flex-1 sm:flex-none">
+            <p className="text-[10px] sm:text-xs text-charcoal-light">Cart ({cart.length})</p>
+            <p className="text-sm sm:text-base font-medium text-charcoal">
               ${cartTotal.toLocaleString()}
             </p>
           </div>
-          <Link href="/book">
-            <button className="ml-2 px-4 py-2 bg-charcoal text-white text-xs tracking-wider hover:bg-gold transition-colors">
+          <Link href="/book" className="flex-shrink-0">
+            <button className="px-3 sm:px-4 py-2 bg-charcoal text-white text-[10px] sm:text-xs tracking-wider hover:bg-gold active:bg-gold transition-colors min-h-[40px]">
               CHECKOUT
             </button>
           </Link>

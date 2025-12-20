@@ -19,7 +19,6 @@ function useScrollAnimation(threshold = 0.2) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Toggle visibility based on intersection (fade in AND out)
         setIsVisible(entry.isIntersecting);
       },
       { threshold }
@@ -230,57 +229,62 @@ function ServiceCard({
 
   return (
     <div 
-      className={`group relative flex flex-col h-full bg-white border border-border p-7 transition-all duration-700 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(45,42,38,0.08)] hover:border-gold ${
+      className={`group relative flex flex-col h-full bg-white border border-border p-5 sm:p-6 md:p-7 transition-all duration-700 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(45,42,38,0.08)] hover:border-gold active:scale-[0.99] ${
         isVisible 
           ? "opacity-100 translate-y-0" 
           : "opacity-0 translate-y-8"
       }`}
       style={{ transitionDelay: isVisible ? `${animationDelay}ms` : "0ms" }}
+      onClick={() => onSelect(service)}
     >
       {/* Badges */}
       {service.popular && (
-        <div className="absolute -top-px right-5 bg-gold text-white text-[10px] tracking-[0.08em] font-medium px-3 py-1.5">
+        <div className="absolute -top-px right-4 sm:right-5 bg-gold text-white text-[9px] sm:text-[10px] tracking-[0.08em] font-medium px-2 sm:px-3 py-1 sm:py-1.5">
           POPULAR
         </div>
       )}
       {service.addon && (
-        <div className="absolute -top-px right-5 bg-charcoal-light text-white text-[10px] tracking-[0.08em] font-medium px-3 py-1.5">
+        <div className="absolute -top-px right-4 sm:right-5 bg-charcoal-light text-white text-[9px] sm:text-[10px] tracking-[0.08em] font-medium px-2 sm:px-3 py-1 sm:py-1.5">
           ADD-ON
         </div>
       )}
 
       {/* Card Content */}
       <div className="flex-1">
-        <div className="flex items-start justify-between mb-3">
-          <h3 className="font-display text-2xl font-medium text-charcoal">
+        <div className="flex items-start justify-between gap-2 mb-2 sm:mb-3">
+          <h3 className="font-display text-xl sm:text-2xl font-medium text-charcoal">
             {service.name}
           </h3>
           {showCategoryBadge && (
-            <span className="text-[10px] tracking-[0.05em] text-gold bg-gold/10 px-2 py-1 rounded mt-1">
+            <span className="text-[9px] sm:text-[10px] tracking-[0.05em] text-gold bg-gold/10 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded mt-1 flex-shrink-0">
               {categoryLabels[service.category]}
             </span>
           )}
         </div>
 
-        <p className="text-sm text-charcoal-light leading-relaxed mb-5">
+        <p className="text-xs sm:text-sm text-charcoal-light leading-relaxed mb-4 sm:mb-5">
           {service.description}
         </p>
       </div>
 
       {/* Price & Duration */}
       <div>
-        <div className="flex justify-between items-center pt-4 border-t border-border mb-4">
-          <span className="font-display text-2xl font-medium text-charcoal">
+        <div className="flex justify-between items-center pt-3 sm:pt-4 border-t border-border mb-3 sm:mb-4">
+          <span className="font-display text-xl sm:text-2xl font-medium text-charcoal">
             ${service.price}
           </span>
-          <span className="text-xs text-charcoal-light tracking-[0.05em]">
+          <span className="text-[10px] sm:text-xs text-charcoal-light tracking-[0.05em]">
             {service.duration} MIN
           </span>
         </div>
 
+        {/* Button - Always visible on mobile, hover effect on desktop */}
         <button
-          onClick={() => onSelect(service)}
-          className="w-full py-3.5 bg-transparent text-charcoal border border-border text-xs tracking-[0.1em] font-medium flex items-center justify-center gap-2 transition-all duration-300 group-hover:bg-charcoal group-hover:text-cream group-hover:border-charcoal"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect(service);
+          }}
+          className="w-full py-3 sm:py-3.5 bg-transparent text-charcoal border border-border text-[11px] sm:text-xs tracking-[0.1em] font-medium flex items-center justify-center gap-2 transition-all duration-300 group-hover:bg-charcoal group-hover:text-cream group-hover:border-charcoal active:bg-charcoal active:text-cream"
         >
           BOOK THIS SERVICE
           <ArrowRightIcon />
@@ -304,22 +308,24 @@ function CategoryHeader({ category, count, isVisible = true }: CategoryHeaderPro
 
   return (
     <div 
-      className={`flex items-center gap-4 mb-8 pb-4 border-b border-border transition-all duration-700 ${
+      className={`flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8 pb-4 border-b border-border transition-all duration-700 ${
         isVisible 
           ? "opacity-100 translate-y-0" 
           : "opacity-0 translate-y-6"
       }`}
     >
-      <div className="w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white">
-        {info.icon}
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0">
+          {info.icon}
+        </div>
+        <div>
+          <h2 className="font-display text-2xl sm:text-[28px] font-medium text-charcoal mb-0.5 sm:mb-1">
+            {info.title}
+          </h2>
+          <p className="text-xs sm:text-sm text-charcoal-light">{info.description}</p>
+        </div>
       </div>
-      <div>
-        <h2 className="font-display text-[28px] font-medium text-charcoal mb-1">
-          {info.title}
-        </h2>
-        <p className="text-sm text-charcoal-light">{info.description}</p>
-      </div>
-      <span className="ml-auto text-[13px] text-charcoal-light">
+      <span className="text-[12px] sm:text-[13px] text-charcoal-light sm:ml-auto">
         {count} services
       </span>
     </div>
@@ -461,7 +467,7 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-[1000] flex items-center justify-center p-4 transition-all duration-300 ${
+      className={`fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300 ${
         isOpen ? "opacity-100 visible" : "opacity-0 invisible"
       }`}
       onClick={onClose}
@@ -469,9 +475,9 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
       {/* Backdrop */}
       <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" />
 
-      {/* Modal */}
+      {/* Modal - Full width on mobile, centered on desktop */}
       <div
-        className={`relative bg-white w-full max-w-md transform transition-all duration-300 ${
+        className={`relative bg-white w-full sm:max-w-md transform transition-all duration-300 sm:rounded-sm ${
           isOpen ? "translate-y-0 scale-100" : "translate-y-4 scale-95"
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -479,7 +485,7 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center text-charcoal-light hover:text-charcoal hover:bg-cream rounded-full transition-all duration-200"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center text-charcoal-light hover:text-charcoal hover:bg-cream rounded-full transition-all duration-200"
           aria-label="Close modal"
         >
           <ModalCloseIcon />
@@ -489,11 +495,11 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
         <div className="h-1 bg-gold" />
 
         {/* Content */}
-        <div className="p-8 pt-10">
+        <div className="p-6 sm:p-8 pt-8 sm:pt-10">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-6 sm:mb-8">
             {/* Avatar with gold ring */}
-            <div className="relative w-20 h-20 mx-auto mb-6">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6">
               <div className="absolute inset-0 rounded-full border-2 border-gold" />
               <div className="absolute inset-1 rounded-full overflow-hidden bg-cream-dark">
                 <img
@@ -503,45 +509,45 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 />
               </div>
               {/* Online indicator */}
-              <div className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 border-2 border-white rounded-full" />
+              <div className="absolute bottom-0 right-0 w-4 h-4 sm:w-5 sm:h-5 bg-green-500 border-2 border-white rounded-full" />
             </div>
 
             {/* Heading */}
-            <h3 className="font-display text-3xl text-charcoal mb-3">
+            <h3 className="font-display text-2xl sm:text-3xl text-charcoal mb-2 sm:mb-3">
               Not sure what you need<span className="text-gold">?</span>
             </h3>
 
-            <p className="text-sm text-charcoal-light leading-relaxed max-w-xs mx-auto">
+            <p className="text-xs sm:text-sm text-charcoal-light leading-relaxed max-w-xs mx-auto">
               First time getting waxed or unsure which service is right for you?
               I'm happy to help guide you!
             </p>
           </div>
 
           {/* Contact Options */}
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {contactOptions.map((option, index) => (
               <a
                 key={index}
                 href={option.href}
                 target={option.external ? "_blank" : undefined}
                 rel={option.external ? "noopener noreferrer" : undefined}
-                className="group flex items-center gap-4 p-4 border border-border rounded-sm hover:border-gold hover:bg-cream/50 transition-all duration-300"
+                className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 border border-border rounded-sm hover:border-gold hover:bg-cream/50 active:bg-cream transition-all duration-300 min-h-[64px]"
               >
                 {/* Icon */}
-                <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-white transition-all duration-300">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/10 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-white transition-all duration-300 flex-shrink-0">
                   {option.icon}
                 </div>
 
                 {/* Text */}
-                <div className="flex-1">
-                  <p className="font-medium text-charcoal group-hover:text-gold transition-colors">
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-sm sm:text-base text-charcoal group-hover:text-gold transition-colors">
                     {option.title}
                   </p>
-                  <p className="text-sm text-charcoal-light">{option.subtitle}</p>
+                  <p className="text-xs sm:text-sm text-charcoal-light truncate">{option.subtitle}</p>
                 </div>
 
                 {/* Arrow */}
-                <div className="text-border group-hover:text-gold transition-colors">
+                <div className="text-border group-hover:text-gold transition-colors flex-shrink-0">
                   <ModalArrowRightIcon />
                 </div>
               </a>
@@ -549,13 +555,16 @@ function HelpModal({ isOpen, onClose }: HelpModalProps) {
           </div>
 
           {/* Footer Note */}
-          <div className="mt-8 pt-6 border-t border-border text-center">
-            <p className="text-xs text-charcoal-light">
+          <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-border text-center">
+            <p className="text-[10px] sm:text-xs text-charcoal-light">
               <span className="font-medium text-charcoal">Business Hours:</span>{" "}
               Mon–Wed 9am–8pm, Thu–Sun 9am–5pm
             </p>
           </div>
         </div>
+
+        {/* Safe area padding for iOS */}
+        <div className="h-safe-area-inset-bottom sm:hidden" />
       </div>
     </div>
   );
@@ -580,7 +589,7 @@ function CategorySection({
   const sectionAnimation = useScrollAnimation(0.1);
 
   return (
-    <div ref={sectionAnimation.ref} className="mb-16 last:mb-0">
+    <div ref={sectionAnimation.ref} className="mb-12 sm:mb-16 last:mb-0">
       {/* Category Header (only in "all" view) */}
       {showCategoryHeader && (
         <CategoryHeader
@@ -591,7 +600,7 @@ function CategorySection({
       )}
 
       {/* Services Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
         {categoryServices.map((service, index) => (
           <ServiceCard
             key={service.id}
@@ -603,6 +612,53 @@ function CategorySection({
           />
         ))}
       </div>
+    </div>
+  );
+}
+
+// ===========================================
+// Filter Pills Component
+// ===========================================
+interface FilterPillsProps {
+  activeCategory: CategoryFilter;
+  onCategoryChange: (category: CategoryFilter) => void;
+  categoryCounts: Record<CategoryFilter, number>;
+  variant?: "default" | "sticky";
+}
+
+function FilterPills({ activeCategory, onCategoryChange, categoryCounts, variant = "default" }: FilterPillsProps) {
+  const categories = [
+    { id: "all", label: "All", fullLabel: "All Services" },
+    { id: "face", label: "Face", fullLabel: "Face" },
+    { id: "body", label: "Body", fullLabel: "Body" },
+    { id: "brazilian", label: "Brazilian", fullLabel: "Brazilian & Bikini" },
+  ];
+
+  return (
+    <div 
+      className={`flex gap-2 overflow-x-auto scrollbar-hide ${
+        variant === "sticky" ? "justify-center" : "justify-start sm:justify-center"
+      }`}
+      style={{ WebkitOverflowScrolling: "touch" }}
+    >
+      {categories.map((cat) => (
+        <button
+          key={cat.id}
+          onClick={() => onCategoryChange(cat.id as CategoryFilter)}
+          className={`px-3 sm:px-5 py-2.5 sm:py-3 text-[11px] sm:text-xs tracking-[0.08em] rounded-full flex items-center gap-1.5 sm:gap-2 transition-all duration-300 border-none cursor-pointer whitespace-nowrap flex-shrink-0 min-h-[44px] ${
+            activeCategory === cat.id
+              ? "bg-charcoal text-cream"
+              : "bg-white sm:bg-transparent text-charcoal-light hover:bg-white hover:text-charcoal active:bg-cream-dark"
+          }`}
+        >
+          {/* Show short label on mobile, full label on larger screens */}
+          <span className="sm:hidden">{cat.label}</span>
+          <span className="hidden sm:inline">{cat.fullLabel}</span>
+          <span className="text-[9px] sm:text-[10px] opacity-60">
+            ({categoryCounts[cat.id as CategoryFilter]})
+          </span>
+        </button>
+      ))}
     </div>
   );
 }
@@ -637,7 +693,9 @@ export default function ServicesPage() {
     const handleScroll = () => {
       if (filterTopRef.current) {
         const filterTop = filterTopRef.current.getBoundingClientRect().top;
-        setIsFilterSticky(filterTop <= 80);
+        // Adjust for different navbar heights on mobile vs desktop
+        const navbarHeight = window.innerWidth < 768 ? 72 : 84;
+        setIsFilterSticky(filterTop <= navbarHeight);
       }
     };
 
@@ -646,7 +704,6 @@ export default function ServicesPage() {
   }, []);
 
   const handleServiceSelect = (service: Service) => {
-    // Navigate to booking page with service ID as query parameter
     router.push(`/book?service=${service.id}`);
   };
 
@@ -674,10 +731,10 @@ export default function ServicesPage() {
         {/* Hero Section */}
         <section 
           ref={heroAnimation.ref}
-          className="pt-36 pb-12 text-center px-6 md:px-12 lg:px-20 bg-cream"
+          className="pt-28 sm:pt-32 md:pt-36 pb-8 sm:pb-12 text-center px-4 sm:px-6 md:px-12 lg:px-20 bg-cream"
         >
           <p 
-            className={`text-xs tracking-[0.2em] uppercase font-medium text-gold mb-5 transition-all duration-700 ${
+            className={`text-[10px] sm:text-xs tracking-[0.2em] uppercase font-medium text-gold mb-4 sm:mb-5 transition-all duration-700 ${
               heroAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -687,7 +744,7 @@ export default function ServicesPage() {
           </p>
 
           <h1 
-            className={`font-display text-5xl md:text-6xl font-normal text-charcoal mb-5 transition-all duration-700 delay-100 ${
+            className={`font-display text-4xl sm:text-5xl md:text-6xl font-normal text-charcoal mb-4 sm:mb-5 transition-all duration-700 delay-100 ${
               heroAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -697,7 +754,7 @@ export default function ServicesPage() {
           </h1>
 
           <p 
-            className={`text-base text-charcoal-light max-w-[500px] mx-auto leading-relaxed transition-all duration-700 delay-200 ${
+            className={`text-sm sm:text-base text-charcoal-light max-w-[500px] mx-auto leading-relaxed transition-all duration-700 delay-200 ${
               heroAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-6"
@@ -709,65 +766,32 @@ export default function ServicesPage() {
         </section>
 
         {/* Category Filter */}
-        <section ref={filterTopRef} className="px-6 md:px-12 lg:px-20 pb-8 bg-cream">
-          <div className="flex justify-center gap-2 p-4 bg-cream-100 rounded-full w-fit mx-auto">
-            {[
-              { id: "all", label: "All Services" },
-              { id: "face", label: "Face" },
-              { id: "body", label: "Body" },
-              { id: "brazilian", label: "Brazilian & Bikini" },
-            ].map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id as CategoryFilter)}
-                className={`px-5 py-3 text-xs tracking-[0.08em] rounded-full flex items-center gap-2 transition-all duration-300 border-none cursor-pointer ${
-                  activeCategory === cat.id
-                    ? "bg-charcoal text-cream"
-                    : "bg-transparent text-charcoal-light hover:bg-white hover:text-charcoal"
-                }`}
-              >
-                {cat.label}
-                <span className="text-[10px] opacity-60">
-                  ({categoryCounts[cat.id as CategoryFilter]})
-                </span>
-              </button>
-            ))}
+        <section ref={filterTopRef} className="px-4 sm:px-6 md:px-12 lg:px-20 pb-6 sm:pb-8 bg-cream">
+          <div className="p-2 sm:p-4 bg-cream-dark/50 rounded-full w-full sm:w-fit sm:mx-auto">
+            <FilterPills
+              activeCategory={activeCategory}
+              onCategoryChange={setActiveCategory}
+              categoryCounts={categoryCounts}
+            />
           </div>
         </section>
 
-        {/* Sticky Filter Bar */}
+        {/* Sticky Filter Bar - Hidden on mobile (uses native scroll instead) */}
         <div
-          className={`fixed top-20 left-0 right-0 bg-cream/98 backdrop-blur-md px-20 py-4 border-b border-border z-40 transition-transform duration-300 ${
+          className={`fixed top-[72px] md:top-[84px] left-0 right-0 bg-cream/98 backdrop-blur-md px-4 sm:px-6 md:px-12 lg:px-20 py-3 sm:py-4 border-b border-border z-40 transition-transform duration-300 ${
             isFilterSticky ? "translate-y-0" : "-translate-y-full"
           }`}
         >
-          <div className="flex justify-center gap-2">
-            {[
-              { id: "all", label: "All Services" },
-              { id: "face", label: "Face" },
-              { id: "body", label: "Body" },
-              { id: "brazilian", label: "Brazilian & Bikini" },
-            ].map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id as CategoryFilter)}
-                className={`px-5 py-3 text-xs tracking-[0.08em] rounded-full flex items-center gap-2 transition-all duration-300 border-none cursor-pointer ${
-                  activeCategory === cat.id
-                    ? "bg-charcoal text-cream"
-                    : "bg-transparent text-charcoal-light hover:bg-cream-100 hover:text-charcoal"
-                }`}
-              >
-                {cat.label}
-                <span className="text-[10px] opacity-60">
-                  ({categoryCounts[cat.id as CategoryFilter]})
-                </span>
-              </button>
-            ))}
-          </div>
+          <FilterPills
+            activeCategory={activeCategory}
+            onCategoryChange={setActiveCategory}
+            categoryCounts={categoryCounts}
+            variant="sticky"
+          />
         </div>
 
         {/* Services Grid */}
-        <section className="px-6 md:px-12 lg:px-20 py-6 pb-20 bg-cream">
+        <section className="px-4 sm:px-6 md:px-12 lg:px-20 py-4 sm:py-6 pb-16 sm:pb-20 bg-cream">
           {Object.entries(filteredServices).map(([categoryKey, categoryServices]) => (
             <CategorySection
               key={categoryKey}
@@ -782,9 +806,9 @@ export default function ServicesPage() {
         {/* Value Props Banner */}
         <section 
           ref={valuePropsAnimation.ref}
-          className="py-16 px-6 md:px-12 lg:px-20 bg-charcoal"
+          className="py-12 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20 bg-charcoal"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
             {[
               {
                 icon: <ClockIcon />,
@@ -804,22 +828,22 @@ export default function ServicesPage() {
             ].map((item, index) => (
               <div
                 key={index}
-                className={`flex flex-col items-center text-center p-6 relative transition-all duration-700 ${
+                className={`flex flex-col items-center text-center p-4 sm:p-6 relative transition-all duration-700 ${
                   valuePropsAnimation.isVisible 
                     ? "opacity-100 translate-y-0" 
                     : "opacity-0 translate-y-8"
                 }`}
                 style={{ transitionDelay: valuePropsAnimation.isVisible ? `${index * 150}ms` : "0ms" }}
               >
-                <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center text-gold mb-5">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gold/20 flex items-center justify-center text-gold mb-4 sm:mb-5">
                   {item.icon}
                 </div>
-                <p className="font-display text-2xl text-cream mb-2">{item.title}</p>
-                <p className="text-[11px] text-gold tracking-[0.12em]">
+                <p className="font-display text-xl sm:text-2xl text-cream mb-1 sm:mb-2">{item.title}</p>
+                <p className="text-[10px] sm:text-[11px] text-gold tracking-[0.12em]">
                   {item.subtitle}
                 </p>
 
-                {/* Divider */}
+                {/* Divider - Only visible on md+ */}
                 {index < 2 && (
                   <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-[60px] bg-cream/15" />
                 )}
@@ -831,17 +855,17 @@ export default function ServicesPage() {
         {/* Packages Upsell */}
         <section 
           ref={packagesUpsellAnimation.ref}
-          className="py-20 px-6 md:px-12 lg:px-20 bg-cream"
+          className="py-16 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-20 bg-cream"
         >
           <div 
-            className={`flex flex-col md:flex-row items-center gap-8 md:gap-12 p-8 md:p-12 bg-white border border-border transition-all duration-700 ${
+            className={`flex flex-col md:flex-row items-center gap-6 sm:gap-8 md:gap-12 p-6 sm:p-8 md:p-12 bg-white border border-border transition-all duration-700 ${
               packagesUpsellAnimation.isVisible 
                 ? "opacity-100 translate-y-0" 
                 : "opacity-0 translate-y-10"
             }`}
           >
             <div 
-              className={`w-20 h-20 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0 transition-all duration-700 delay-150 ${
+              className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0 transition-all duration-700 delay-150 ${
                 packagesUpsellAnimation.isVisible 
                   ? "opacity-100 scale-100" 
                   : "opacity-0 scale-75"
@@ -856,23 +880,23 @@ export default function ServicesPage() {
                   : "opacity-0 translate-y-6"
               }`}
             >
-              <h3 className="font-display text-[28px] font-medium text-charcoal mb-2">
+              <h3 className="font-display text-2xl sm:text-[28px] font-medium text-charcoal mb-2">
                 Save Up to 20% with Packages
               </h3>
-              <p className="text-[15px] text-charcoal-light leading-relaxed">
+              <p className="text-sm sm:text-[15px] text-charcoal-light leading-relaxed">
                 Buy 9 sessions of your favorite service and get 2 bonus sessions
                 free. Perfect for maintaining your smooth, glowing skin year-round.
               </p>
             </div>
             <div
-              className={`transition-all duration-700 delay-300 ${
+              className={`w-full md:w-auto transition-all duration-700 delay-300 ${
                 packagesUpsellAnimation.isVisible 
                   ? "opacity-100 translate-y-0" 
                   : "opacity-0 translate-y-6"
               }`}
             >
-              <Link href="/packages">
-                <Button rightIcon={<ArrowRightIcon />}>
+              <Link href="/packages" className="block">
+                <Button rightIcon={<ArrowRightIcon />} className="w-full md:w-auto">
                   VIEW PACKAGES
                 </Button>
               </Link>
@@ -881,10 +905,10 @@ export default function ServicesPage() {
         </section>
       </main>
 
-      {/* Floating Help Button */}
+      {/* Floating Help Button - Adjusted position for mobile */}
       <button
         onClick={() => setShowHelpModal(true)}
-        className="fixed bottom-8 right-8 w-[60px] h-[60px] rounded-full bg-gold text-white border-none cursor-pointer shadow-[0_4px_20px_rgba(201,162,124,0.4)] flex items-center justify-center transition-all duration-300 z-[100] hover:scale-110 hover:shadow-[0_6px_30px_rgba(201,162,124,0.5)]"
+        className="fixed bottom-6 right-4 sm:bottom-8 sm:right-8 w-14 h-14 sm:w-[60px] sm:h-[60px] rounded-full bg-gold text-white border-none cursor-pointer shadow-[0_4px_20px_rgba(201,162,124,0.4)] flex items-center justify-center transition-all duration-300 z-[100] hover:scale-110 hover:shadow-[0_6px_30px_rgba(201,162,124,0.5)] active:scale-105"
         aria-label="Need help choosing?"
       >
         <MessageIcon />

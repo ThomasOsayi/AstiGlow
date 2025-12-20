@@ -70,10 +70,10 @@ const categories = [
 ];
 
 const steps = [
-  { num: 1, label: "Service" },
-  { num: 2, label: "Date & Time" },
-  { num: 3, label: "Details" },
-  { num: 4, label: "Confirm" },
+  { num: 1, label: "Service", shortLabel: "Service" },
+  { num: 2, label: "Date & Time", shortLabel: "Time" },
+  { num: 3, label: "Details", shortLabel: "Details" },
+  { num: 4, label: "Confirm", shortLabel: "Confirm" },
 ];
 
 // Icons
@@ -104,6 +104,18 @@ const CheckCircleIcon = () => (
   </svg>
 );
 
+const ChevronUpIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <polyline points="18 15 12 9 6 15" />
+  </svg>
+);
+
+const ChevronDownIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
+
 // Main booking content component that uses useSearchParams
 function BookingContent() {
   const searchParams = useSearchParams();
@@ -126,6 +138,7 @@ function BookingContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
+  const [showMobileSummary, setShowMobileSummary] = useState(false);
 
   // Handle pre-selected service from URL parameter
   useEffect(() => {
@@ -315,57 +328,57 @@ function BookingContent() {
         `}</style>
         
         <header
-          className="px-6 md:px-16 py-5 flex justify-between items-center bg-white"
+          className="px-4 sm:px-6 md:px-16 py-4 sm:py-5 flex justify-between items-center bg-white"
           style={{ borderBottom: "1px solid #E5DED6" }}
         >
           <Link
             href="/"
-            className="font-display text-[28px] font-medium tracking-wide"
+            className="font-display text-2xl sm:text-[28px] font-medium tracking-wide"
             style={{ color: "#2D2A26" }}
           >
             Astiglow<span style={{ color: "#C4A484" }}>_</span>
           </Link>
         </header>
 
-        <div className="flex-1 flex items-center justify-center px-6 py-20">
-          <div className="text-center max-w-md">
+        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12 sm:py-20">
+          <div className="text-center max-w-md w-full">
             <div
-              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 animate-scale-in animate-bounce-once"
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 animate-scale-in animate-bounce-once"
               style={{ backgroundColor: "rgba(196, 164, 132, 0.15)" }}
             >
               <CheckCircleIcon />
             </div>
-            <h1 className="font-display text-4xl mb-4 animate-fade-in-up stagger-1" style={{ color: "#2D2A26" }}>
+            <h1 className="font-display text-3xl sm:text-4xl mb-3 sm:mb-4 animate-fade-in-up stagger-1" style={{ color: "#2D2A26" }}>
               Booking Confirmed!
             </h1>
-            <p className="text-base mb-8 animate-fade-in-up stagger-2" style={{ color: "#6B6560" }}>
+            <p className="text-sm sm:text-base mb-6 sm:mb-8 animate-fade-in-up stagger-2" style={{ color: "#6B6560" }}>
               Thank you for booking with Astiglow. You'll receive a confirmation
               email shortly with all the details.
             </p>
 
             <div
-              className="p-6 mb-8 text-left animate-fade-in-up stagger-3"
+              className="p-4 sm:p-6 mb-6 sm:mb-8 text-left animate-fade-in-up stagger-3"
               style={{ backgroundColor: "#FFFFFF", border: "1px solid #E5DED6" }}
             >
               {selectedServices.map((service) => (
                 <div key={service.id} className="flex justify-between mb-2">
-                  <span style={{ color: "#2D2A26" }}>{service.name}</span>
-                  <span style={{ color: "#6B6560" }}>${service.price}</span>
+                  <span className="text-sm sm:text-base" style={{ color: "#2D2A26" }}>{service.name}</span>
+                  <span className="text-sm sm:text-base" style={{ color: "#6B6560" }}>${service.price}</span>
                 </div>
               ))}
-              <div className="pt-4 mt-4" style={{ borderTop: "1px solid #E5DED6" }}>
-                <p className="text-sm" style={{ color: "#2D2A26" }}>
+              <div className="pt-3 sm:pt-4 mt-3 sm:mt-4" style={{ borderTop: "1px solid #E5DED6" }}>
+                <p className="text-xs sm:text-sm" style={{ color: "#2D2A26" }}>
                   {selectedDate && formatDate(selectedDate)}
                 </p>
-                <p className="text-sm" style={{ color: "#C4A484" }}>
+                <p className="text-xs sm:text-sm" style={{ color: "#C4A484" }}>
                   {selectedTime} – {getEndTime()} ({getTotalDuration()} min)
                 </p>
               </div>
             </div>
 
-            <Link href="/" className="animate-fade-in-up stagger-4 inline-block">
+            <Link href="/" className="animate-fade-in-up stagger-4 inline-block w-full sm:w-auto">
               <button
-                className="px-8 py-4 text-xs tracking-[0.12em] uppercase font-medium transition-all duration-300 hover:bg-[#C4A484]"
+                className="w-full sm:w-auto px-8 py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.12em] uppercase font-medium transition-all duration-300 hover:bg-[#C4A484] active:bg-[#C4A484] min-h-[48px]"
                 style={{ backgroundColor: "#2D2A26", color: "#FFFFFF" }}
               >
                 Back to Home
@@ -434,6 +447,17 @@ function BookingContent() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.6; }
         }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(100%);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
         
         .animate-fade-in-up {
           animation: fadeInUp 0.6s ease-out forwards;
@@ -454,6 +478,10 @@ function BookingContent() {
         .animate-scale-in {
           animation: scaleIn 0.4s ease-out forwards;
         }
+
+        .animate-slide-up {
+          animation: slideUp 0.3s ease-out forwards;
+        }
         
         .stagger-1 { animation-delay: 0.05s; opacity: 0; }
         .stagger-2 { animation-delay: 0.1s; opacity: 0; }
@@ -465,16 +493,25 @@ function BookingContent() {
         .stagger-8 { animation-delay: 0.4s; opacity: 0; }
         .stagger-9 { animation-delay: 0.45s; opacity: 0; }
         .stagger-10 { animation-delay: 0.5s; opacity: 0; }
+
+        /* Hide scrollbar for category tabs */
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
       `}</style>
 
       {/* Header */}
       <header
-        className="px-6 md:px-16 py-5 flex justify-between items-center bg-white animate-fade-in"
+        className="px-4 sm:px-6 md:px-16 py-4 sm:py-5 flex justify-between items-center bg-white animate-fade-in"
         style={{ borderBottom: "1px solid #E5DED6" }}
       >
         <Link
           href="/"
-          className="font-display text-[28px] font-medium tracking-wide"
+          className="font-display text-2xl sm:text-[28px] font-medium tracking-wide"
           style={{ color: "#2D2A26" }}
         >
           Astiglow<span style={{ color: "#C4A484" }}>_</span>
@@ -482,22 +519,22 @@ function BookingContent() {
 
         <Link
           href="/"
-          className="text-sm flex items-center gap-2 transition-colors hover:opacity-70"
+          className="text-xs sm:text-sm flex items-center gap-1 sm:gap-2 transition-colors hover:opacity-70 active:opacity-70"
           style={{ color: "#6B6560" }}
         >
-          ← Back to website
+          ← <span className="hidden sm:inline">Back to website</span><span className="sm:hidden">Back</span>
         </Link>
       </header>
 
       {/* Progress Steps */}
       <div
-        className="px-6 md:px-16 py-8 bg-white animate-fade-in-up stagger-1"
+        className="px-4 sm:px-6 md:px-16 py-5 sm:py-8 bg-white animate-fade-in-up stagger-1"
         style={{ borderBottom: "1px solid #E5DED6" }}
       >
         <div className="max-w-[700px] mx-auto flex justify-between items-center relative">
           {/* Progress Line */}
           <div
-            className="absolute top-[18px] left-[50px] right-[50px] h-0.5 z-0"
+            className="absolute top-[14px] sm:top-[18px] left-[30px] sm:left-[50px] right-[30px] sm:right-[50px] h-0.5 z-0"
             style={{ backgroundColor: "#E5DED6" }}
           >
             <div
@@ -513,11 +550,11 @@ function BookingContent() {
             <div
               key={step.num}
               onClick={() => goToStep(step.num)}
-              className="flex flex-col items-center gap-2.5 z-10"
+              className="flex flex-col items-center gap-1.5 sm:gap-2.5 z-10"
               style={{ cursor: step.num < currentStep ? "pointer" : "default" }}
             >
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300"
+                className="w-7 h-7 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium transition-all duration-300"
                 style={{
                   backgroundColor: currentStep >= step.num ? "#C4A484" : "#FFFFFF",
                   border: `2px solid ${currentStep >= step.num ? "#C4A484" : "#E5DED6"}`,
@@ -527,13 +564,14 @@ function BookingContent() {
                 {currentStep > step.num ? <CheckIcon /> : step.num}
               </div>
               <span
-                className="text-[11px] tracking-[0.05em] uppercase"
+                className="text-[9px] sm:text-[11px] tracking-[0.05em] uppercase text-center"
                 style={{
                   color: currentStep >= step.num ? "#2D2A26" : "#A0A0A0",
                   fontWeight: currentStep === step.num ? 500 : 400,
                 }}
               >
-                {step.label}
+                <span className="hidden sm:inline">{step.label}</span>
+                <span className="sm:hidden">{step.shortLabel}</span>
               </span>
             </div>
           ))}
@@ -543,24 +581,24 @@ function BookingContent() {
       {/* Main Content */}
       <main className="grid grid-cols-1 lg:grid-cols-[1fr_380px] min-h-[calc(100vh-160px)]">
         {/* Left - Form Area */}
-        <div className="px-6 md:px-12 lg:px-16 py-12" style={{ backgroundColor: "#FAFAF8" }}>
+        <div className="px-4 sm:px-6 md:px-12 lg:px-16 py-8 sm:py-12 pb-32 lg:pb-12" style={{ backgroundColor: "#FAFAF8" }}>
           {/* Step 1: Select Service */}
           {currentStep === 1 && (
             <div className="animate-fade-in">
-              <h2 className="font-display text-[32px] font-normal mb-2 animate-fade-in-up" style={{ color: "#2D2A26" }}>
+              <h2 className="font-display text-2xl sm:text-[32px] font-normal mb-2 animate-fade-in-up" style={{ color: "#2D2A26" }}>
                 Choose Your Service<span style={{ color: "#C4A484" }}>_</span>
               </h2>
-              <p className="text-sm mb-6 animate-fade-in-up stagger-1" style={{ color: "#6B6560" }}>
+              <p className="text-xs sm:text-sm mb-5 sm:mb-6 animate-fade-in-up stagger-1" style={{ color: "#6B6560" }}>
                 Select one or more services for your appointment
               </p>
 
-              {/* Category Tabs */}
-              <div className="flex gap-2 mb-6 animate-fade-in-up stagger-2">
+              {/* Category Tabs - Horizontally scrollable on mobile */}
+              <div className="flex gap-2 mb-5 sm:mb-6 overflow-x-auto hide-scrollbar pb-1 -mx-4 px-4 sm:mx-0 sm:px-0 animate-fade-in-up stagger-2">
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => setActiveCategory(cat.id)}
-                    className="px-5 py-2.5 text-xs tracking-[0.08em] uppercase transition-all duration-300"
+                    className="px-4 sm:px-5 py-2 sm:py-2.5 text-[11px] sm:text-xs tracking-[0.08em] uppercase transition-all duration-300 whitespace-nowrap flex-shrink-0 min-h-[40px] active:scale-95"
                     style={{
                       backgroundColor: activeCategory === cat.id ? "#2D2A26" : "transparent",
                       border: "1px solid",
@@ -582,7 +620,7 @@ function BookingContent() {
                     <div
                       key={service.id}
                       onClick={() => toggleService(service)}
-                      className={`p-4 flex justify-between items-center cursor-pointer transition-all duration-300 relative animate-fade-in-up ${staggerClass}`}
+                      className={`p-3 sm:p-4 flex justify-between items-center cursor-pointer transition-all duration-300 relative animate-fade-in-up ${staggerClass} active:scale-[0.99]`}
                       style={{
                         backgroundColor: isSelected ? "rgba(196, 164, 132, 0.08)" : "#FFFFFF",
                         border: "1px solid",
@@ -593,14 +631,14 @@ function BookingContent() {
                     >
                       {service.popular && (
                         <div
-                          className="absolute -top-px right-4 px-2 py-1 text-[9px] tracking-[0.05em] font-medium uppercase"
+                          className="absolute -top-px right-3 sm:right-4 px-1.5 sm:px-2 py-0.5 sm:py-1 text-[8px] sm:text-[9px] tracking-[0.05em] font-medium uppercase"
                           style={{ backgroundColor: "#C4A484", color: "#FFFFFF" }}
                         >
                           Popular
                         </div>
                       )}
 
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3 sm:gap-4">
                         <div
                           className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-all duration-200"
                           style={{
@@ -612,16 +650,16 @@ function BookingContent() {
                           {isSelected && <CheckIcon />}
                         </div>
                         <div>
-                          <p className="text-[15px] font-medium mb-0.5" style={{ color: "#2D2A26" }}>
+                          <p className="text-sm sm:text-[15px] font-medium mb-0.5" style={{ color: "#2D2A26" }}>
                             {service.name}
                           </p>
-                          <p className="text-xs flex items-center gap-1" style={{ color: "#6B6560" }}>
+                          <p className="text-[11px] sm:text-xs flex items-center gap-1" style={{ color: "#6B6560" }}>
                             <ClockIcon /> {service.duration} min
                           </p>
                         </div>
                       </div>
 
-                      <p className="font-display text-xl" style={{ color: "#2D2A26" }}>
+                      <p className="font-display text-lg sm:text-xl" style={{ color: "#2D2A26" }}>
                         ${service.price}
                       </p>
                     </div>
@@ -634,25 +672,25 @@ function BookingContent() {
           {/* Step 2: Select Date & Time */}
           {currentStep === 2 && (
             <div className="animate-fade-in">
-              <h2 className="font-display text-[32px] font-normal mb-2 animate-fade-in-up" style={{ color: "#2D2A26" }}>
+              <h2 className="font-display text-2xl sm:text-[32px] font-normal mb-2 animate-fade-in-up" style={{ color: "#2D2A26" }}>
                 Pick a Time<span style={{ color: "#C4A484" }}>_</span>
               </h2>
-              <p className="text-sm mb-8 animate-fade-in-up stagger-1" style={{ color: "#6B6560" }}>
+              <p className="text-xs sm:text-sm mb-6 sm:mb-8 animate-fade-in-up stagger-1" style={{ color: "#6B6560" }}>
                 Choose a date and time that works for you
               </p>
 
               {/* Date Selection */}
-              <div className="mb-10 animate-fade-in-up stagger-2">
-                <p className="text-[11px] tracking-[0.1em] uppercase mb-4" style={{ color: "#6B6560" }}>
+              <div className="mb-8 sm:mb-10 animate-fade-in-up stagger-2">
+                <p className="text-[10px] sm:text-[11px] tracking-[0.1em] uppercase mb-3 sm:mb-4" style={{ color: "#6B6560" }}>
                   Select Date
                 </p>
 
                 {Object.entries(groupedDays).map(([month, days], monthIdx) => (
-                  <div key={month} className={`mb-5 animate-fade-in-up stagger-${Math.min(monthIdx + 3, 10)}`}>
-                    <p className="text-[13px] font-medium mb-3" style={{ color: "#2D2A26" }}>
+                  <div key={month} className={`mb-4 sm:mb-5 animate-fade-in-up stagger-${Math.min(monthIdx + 3, 10)}`}>
+                    <p className="text-[12px] sm:text-[13px] font-medium mb-2 sm:mb-3" style={{ color: "#2D2A26" }}>
                       {month}
                     </p>
-                    <div className="flex gap-2 flex-wrap">
+                    <div className="flex gap-1.5 sm:gap-2 flex-wrap">
                       {days.map((date, index) => {
                         const isToday = date.toDateString() === new Date().toDateString();
                         const isSelected = selectedDate?.getTime() === date.getTime();
@@ -660,7 +698,7 @@ function BookingContent() {
                           <div
                             key={index}
                             onClick={() => setSelectedDate(date)}
-                            className="p-3 min-w-[60px] text-center cursor-pointer transition-all duration-300 flex-shrink-0"
+                            className="p-2 sm:p-3 min-w-[52px] sm:min-w-[60px] text-center cursor-pointer transition-all duration-300 flex-shrink-0 active:scale-95"
                             style={{
                               backgroundColor: isSelected ? "#C4A484" : "#FFFFFF",
                               border: "1px solid",
@@ -668,13 +706,13 @@ function BookingContent() {
                               color: isSelected ? "#FFFFFF" : "#2D2A26",
                             }}
                           >
-                            <p className="text-[10px] mb-0.5 opacity-70">
+                            <p className="text-[9px] sm:text-[10px] mb-0.5 opacity-70">
                               {dayNames[date.getDay()]}
                             </p>
-                            <p className="text-base font-medium">{date.getDate()}</p>
+                            <p className="text-sm sm:text-base font-medium">{date.getDate()}</p>
                             {isToday && (
                               <p
-                                className="text-[8px] mt-0.5"
+                                className="text-[7px] sm:text-[8px] mt-0.5"
                                 style={{ color: isSelected ? "#FFFFFF" : "#C4A484" }}
                               >
                                 TODAY
@@ -691,15 +729,15 @@ function BookingContent() {
               {/* Time Selection */}
               {selectedDate && (
                 <div className="animate-fade-in-up">
-                  <div className="flex justify-between items-center mb-4">
-                    <p className="text-[11px] tracking-[0.1em] uppercase" style={{ color: "#6B6560" }}>
+                  <div className="flex justify-between items-center mb-3 sm:mb-4">
+                    <p className="text-[10px] sm:text-[11px] tracking-[0.1em] uppercase" style={{ color: "#6B6560" }}>
                       Select Time
                     </p>
-                    <p className="text-[11px]" style={{ color: "#A0A0A0" }}>
+                    <p className="text-[10px] sm:text-[11px]" style={{ color: "#A0A0A0" }}>
                       Pacific Time (PT)
                     </p>
                   </div>
-                  <div className="grid grid-cols-3 md:grid-cols-4 gap-2.5">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-2.5">
                     {timeSlots.map((slot, index) => {
                       const isSelected = selectedTime === slot.time;
                       const staggerClass = `stagger-${Math.min(Math.floor(index / 4) + 1, 10)}`;
@@ -707,7 +745,7 @@ function BookingContent() {
                         <div
                           key={index}
                           onClick={() => slot.available && setSelectedTime(slot.time)}
-                          className={`py-3.5 px-5 text-center transition-all duration-300 animate-scale-in ${staggerClass}`}
+                          className={`py-3 sm:py-3.5 px-2 sm:px-5 text-center transition-all duration-300 animate-scale-in ${staggerClass} active:scale-95`}
                           style={{
                             backgroundColor: !slot.available
                               ? "#F5F5F3"
@@ -725,14 +763,14 @@ function BookingContent() {
                             textDecoration: !slot.available ? "line-through" : "none",
                           }}
                         >
-                          <p className="text-[13px]">{slot.time}</p>
+                          <p className="text-[12px] sm:text-[13px]">{slot.time}</p>
                         </div>
                       );
                     })}
                   </div>
 
                   {selectedTime && (
-                    <p className="text-[13px] mt-4 flex items-center gap-1.5 animate-fade-in" style={{ color: "#6B6560" }}>
+                    <p className="text-[12px] sm:text-[13px] mt-3 sm:mt-4 flex items-center gap-1.5 animate-fade-in" style={{ color: "#6B6560" }}>
                       <ClockIcon /> Your appointment: {selectedTime} – {getEndTime()} ({getTotalDuration()} min)
                     </p>
                   )}
@@ -744,15 +782,15 @@ function BookingContent() {
           {/* Step 3: Your Details */}
           {currentStep === 3 && (
             <div className="animate-fade-in">
-              <h2 className="font-display text-[32px] font-normal mb-2 animate-fade-in-up" style={{ color: "#2D2A26" }}>
+              <h2 className="font-display text-2xl sm:text-[32px] font-normal mb-2 animate-fade-in-up" style={{ color: "#2D2A26" }}>
                 Your Details<span style={{ color: "#C4A484" }}>_</span>
               </h2>
-              <p className="text-sm mb-8 animate-fade-in-up stagger-1" style={{ color: "#6B6560" }}>
+              <p className="text-xs sm:text-sm mb-6 sm:mb-8 animate-fade-in-up stagger-1" style={{ color: "#6B6560" }}>
                 Enter your information to complete the booking
               </p>
 
-              <div className="flex flex-col gap-5 max-w-[500px]">
-                <div className="grid grid-cols-2 gap-4 animate-fade-in-up stagger-2">
+              <div className="flex flex-col gap-4 sm:gap-5 max-w-[500px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 animate-fade-in-up stagger-2">
                   <div>
                     <input
                       type="text"
@@ -761,7 +799,7 @@ function BookingContent() {
                       value={formData.firstName}
                       onChange={handleChange}
                       onBlur={() => handleBlur("firstName")}
-                      className="w-full p-4 text-[15px] outline-none transition-colors duration-300"
+                      className="w-full p-3.5 sm:p-4 text-sm sm:text-[15px] outline-none transition-colors duration-300"
                       style={{
                         backgroundColor: "#FFFFFF",
                         border: `1px solid ${errors.firstName && touched.firstName ? "#D64545" : "#E5DED6"}`,
@@ -769,7 +807,7 @@ function BookingContent() {
                       }}
                     />
                     {errors.firstName && touched.firstName && (
-                      <p className="text-xs mt-1.5 animate-fade-in" style={{ color: "#D64545" }}>
+                      <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 animate-fade-in" style={{ color: "#D64545" }}>
                         {errors.firstName}
                       </p>
                     )}
@@ -782,7 +820,7 @@ function BookingContent() {
                       value={formData.lastName}
                       onChange={handleChange}
                       onBlur={() => handleBlur("lastName")}
-                      className="w-full p-4 text-[15px] outline-none transition-colors duration-300"
+                      className="w-full p-3.5 sm:p-4 text-sm sm:text-[15px] outline-none transition-colors duration-300"
                       style={{
                         backgroundColor: "#FFFFFF",
                         border: `1px solid ${errors.lastName && touched.lastName ? "#D64545" : "#E5DED6"}`,
@@ -790,7 +828,7 @@ function BookingContent() {
                       }}
                     />
                     {errors.lastName && touched.lastName && (
-                      <p className="text-xs mt-1.5 animate-fade-in" style={{ color: "#D64545" }}>
+                      <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 animate-fade-in" style={{ color: "#D64545" }}>
                         {errors.lastName}
                       </p>
                     )}
@@ -805,7 +843,7 @@ function BookingContent() {
                     value={formData.email}
                     onChange={handleChange}
                     onBlur={() => handleBlur("email")}
-                    className="w-full p-4 text-[15px] outline-none transition-colors duration-300"
+                    className="w-full p-3.5 sm:p-4 text-sm sm:text-[15px] outline-none transition-colors duration-300"
                     style={{
                       backgroundColor: "#FFFFFF",
                       border: `1px solid ${errors.email && touched.email ? "#D64545" : "#E5DED6"}`,
@@ -813,7 +851,7 @@ function BookingContent() {
                     }}
                   />
                   {errors.email && touched.email && (
-                    <p className="text-xs mt-1.5 animate-fade-in" style={{ color: "#D64545" }}>
+                    <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 animate-fade-in" style={{ color: "#D64545" }}>
                       {errors.email}
                     </p>
                   )}
@@ -827,7 +865,7 @@ function BookingContent() {
                     value={formData.phone}
                     onChange={handleChange}
                     onBlur={() => handleBlur("phone")}
-                    className="w-full p-4 text-[15px] outline-none transition-colors duration-300"
+                    className="w-full p-3.5 sm:p-4 text-sm sm:text-[15px] outline-none transition-colors duration-300"
                     style={{
                       backgroundColor: "#FFFFFF",
                       border: `1px solid ${errors.phone && touched.phone ? "#D64545" : "#E5DED6"}`,
@@ -835,27 +873,27 @@ function BookingContent() {
                     }}
                   />
                   {errors.phone && touched.phone && (
-                    <p className="text-xs mt-1.5 animate-fade-in" style={{ color: "#D64545" }}>
+                    <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 animate-fade-in" style={{ color: "#D64545" }}>
                       {errors.phone}
                     </p>
                   )}
                 </div>
 
                 {/* First Visit Checkbox */}
-                <div className="p-5 animate-fade-in-up stagger-5" style={{ backgroundColor: "#FFFFFF", border: "1px solid #E5DED6" }}>
+                <div className="p-4 sm:p-5 animate-fade-in-up stagger-5" style={{ backgroundColor: "#FFFFFF", border: "1px solid #E5DED6" }}>
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       name="isFirstVisit"
                       checked={formData.isFirstVisit}
                       onChange={handleChange}
-                      className="mt-0.5 w-[18px] h-[18px] accent-[#C4A484]"
+                      className="mt-0.5 w-[18px] h-[18px] accent-[#C4A484] flex-shrink-0"
                     />
                     <div>
                       <p className="text-sm mb-0.5" style={{ color: "#2D2A26" }}>
                         This is my first visit to Astiglow
                       </p>
-                      <p className="text-xs" style={{ color: "#6B6560" }}>
+                      <p className="text-[11px] sm:text-xs" style={{ color: "#6B6560" }}>
                         We'll make sure to allow extra time for consultation
                       </p>
                     </div>
@@ -869,7 +907,7 @@ function BookingContent() {
                   value={formData.notes}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full p-4 text-[15px] outline-none transition-colors duration-300 resize-none animate-fade-in-up stagger-6"
+                  className="w-full p-3.5 sm:p-4 text-sm sm:text-[15px] outline-none transition-colors duration-300 resize-none animate-fade-in-up stagger-6"
                   style={{
                     backgroundColor: "#FFFFFF",
                     border: "1px solid #E5DED6",
@@ -879,7 +917,7 @@ function BookingContent() {
 
                 {/* SMS Reminders */}
                 <div
-                  className="p-5 animate-fade-in-up stagger-7"
+                  className="p-4 sm:p-5 animate-fade-in-up stagger-7"
                   style={{
                     backgroundColor: "rgba(196, 164, 132, 0.08)",
                     border: "1px solid rgba(196, 164, 132, 0.2)",
@@ -891,13 +929,13 @@ function BookingContent() {
                       name="smsReminders"
                       checked={formData.smsReminders}
                       onChange={handleChange}
-                      className="mt-0.5 w-[18px] h-[18px] accent-[#C4A484]"
+                      className="mt-0.5 w-[18px] h-[18px] accent-[#C4A484] flex-shrink-0"
                     />
                     <div>
                       <p className="text-sm mb-0.5" style={{ color: "#2D2A26" }}>
                         Send me appointment reminders via text
                       </p>
-                      <p className="text-xs" style={{ color: "#6B6560" }}>
+                      <p className="text-[11px] sm:text-xs" style={{ color: "#6B6560" }}>
                         You'll receive a reminder 24 hours and 2 hours before your appointment
                       </p>
                     </div>
@@ -910,28 +948,28 @@ function BookingContent() {
           {/* Step 4: Review */}
           {currentStep === 4 && (
             <div className="max-w-[600px] animate-fade-in">
-              <div className="text-center mb-10 animate-scale-in">
+              <div className="text-center mb-8 sm:mb-10 animate-scale-in">
                 <CheckCircleIcon />
-                <h2 className="font-display text-4xl font-normal mt-6 mb-2 animate-fade-in-up stagger-1" style={{ color: "#2D2A26" }}>
+                <h2 className="font-display text-3xl sm:text-4xl font-normal mt-5 sm:mt-6 mb-2 animate-fade-in-up stagger-1" style={{ color: "#2D2A26" }}>
                   Review Your Booking<span style={{ color: "#C4A484" }}>_</span>
                 </h2>
-                <p className="text-[15px] animate-fade-in-up stagger-2" style={{ color: "#6B6560" }}>
+                <p className="text-sm sm:text-[15px] animate-fade-in-up stagger-2" style={{ color: "#6B6560" }}>
                   Please confirm your appointment details
                 </p>
               </div>
 
-              <div className="p-8 animate-fade-in-up stagger-3" style={{ backgroundColor: "#FFFFFF", border: "1px solid #E5DED6" }}>
+              <div className="p-5 sm:p-8 animate-fade-in-up stagger-3" style={{ backgroundColor: "#FFFFFF", border: "1px solid #E5DED6" }}>
                 {/* Services */}
-                <div className="mb-6 pb-6" style={{ borderBottom: "1px solid #E5DED6" }}>
-                  <p className="text-[11px] tracking-[0.1em] uppercase mb-3" style={{ color: "#C4A484" }}>
+                <div className="mb-5 sm:mb-6 pb-5 sm:pb-6" style={{ borderBottom: "1px solid #E5DED6" }}>
+                  <p className="text-[10px] sm:text-[11px] tracking-[0.1em] uppercase mb-2 sm:mb-3" style={{ color: "#C4A484" }}>
                     Services
                   </p>
                   {selectedServices.map((service) => (
                     <div key={service.id} className="flex justify-between mb-2">
-                      <span className="text-[15px]" style={{ color: "#2D2A26" }}>
+                      <span className="text-sm sm:text-[15px]" style={{ color: "#2D2A26" }}>
                         {service.name}
                       </span>
-                      <span className="text-[15px]" style={{ color: "#6B6560" }}>
+                      <span className="text-sm sm:text-[15px]" style={{ color: "#6B6560" }}>
                         ${service.price}
                       </span>
                     </div>
@@ -939,34 +977,34 @@ function BookingContent() {
                 </div>
 
                 {/* Date & Time */}
-                <div className="mb-6 pb-6" style={{ borderBottom: "1px solid #E5DED6" }}>
-                  <p className="text-[11px] tracking-[0.1em] uppercase mb-3" style={{ color: "#C4A484" }}>
+                <div className="mb-5 sm:mb-6 pb-5 sm:pb-6" style={{ borderBottom: "1px solid #E5DED6" }}>
+                  <p className="text-[10px] sm:text-[11px] tracking-[0.1em] uppercase mb-2 sm:mb-3" style={{ color: "#C4A484" }}>
                     Date & Time
                   </p>
-                  <p className="text-[15px] mb-1" style={{ color: "#2D2A26" }}>
+                  <p className="text-sm sm:text-[15px] mb-1" style={{ color: "#2D2A26" }}>
                     {selectedDate && formatDate(selectedDate)}
                   </p>
-                  <p className="text-[15px]" style={{ color: "#6B6560" }}>
+                  <p className="text-sm sm:text-[15px]" style={{ color: "#6B6560" }}>
                     {selectedTime} – {getEndTime()} ({getTotalDuration()} min)
                   </p>
                 </div>
 
                 {/* Contact Info */}
-                <div className="mb-6 pb-6" style={{ borderBottom: "1px solid #E5DED6" }}>
-                  <p className="text-[11px] tracking-[0.1em] uppercase mb-3" style={{ color: "#C4A484" }}>
+                <div className="mb-5 sm:mb-6 pb-5 sm:pb-6" style={{ borderBottom: "1px solid #E5DED6" }}>
+                  <p className="text-[10px] sm:text-[11px] tracking-[0.1em] uppercase mb-2 sm:mb-3" style={{ color: "#C4A484" }}>
                     Your Information
                   </p>
-                  <p className="text-[15px] mb-1" style={{ color: "#2D2A26" }}>
+                  <p className="text-sm sm:text-[15px] mb-1" style={{ color: "#2D2A26" }}>
                     {formData.firstName} {formData.lastName}
                   </p>
-                  <p className="text-sm mb-0.5" style={{ color: "#6B6560" }}>
+                  <p className="text-xs sm:text-sm mb-0.5" style={{ color: "#6B6560" }}>
                     {formData.email}
                   </p>
-                  <p className="text-sm" style={{ color: "#6B6560" }}>
+                  <p className="text-xs sm:text-sm" style={{ color: "#6B6560" }}>
                     {formData.phone}
                   </p>
                   {formData.isFirstVisit && (
-                    <p className="text-xs mt-2" style={{ color: "#C4A484" }}>
+                    <p className="text-[11px] sm:text-xs mt-2" style={{ color: "#C4A484" }}>
                       ★ First-time client
                     </p>
                   )}
@@ -974,13 +1012,13 @@ function BookingContent() {
 
                 {/* Location */}
                 <div>
-                  <p className="text-[11px] tracking-[0.1em] uppercase mb-3" style={{ color: "#C4A484" }}>
+                  <p className="text-[10px] sm:text-[11px] tracking-[0.1em] uppercase mb-2 sm:mb-3" style={{ color: "#C4A484" }}>
                     Location
                   </p>
-                  <p className="text-[15px] mb-1" style={{ color: "#2D2A26" }}>
+                  <p className="text-sm sm:text-[15px] mb-1" style={{ color: "#2D2A26" }}>
                     Astiglow
                   </p>
-                  <p className="text-sm" style={{ color: "#6B6560" }}>
+                  <p className="text-xs sm:text-sm" style={{ color: "#6B6560" }}>
                     10880 Wilshire Blvd, Suite 402
                     <br />
                     Los Angeles, CA 90024
@@ -990,10 +1028,10 @@ function BookingContent() {
 
               {/* Cancellation Policy */}
               <div
-                className="mt-5 p-4 animate-fade-in-up stagger-4"
+                className="mt-4 sm:mt-5 p-3 sm:p-4 animate-fade-in-up stagger-4"
                 style={{ backgroundColor: "#FAFAF8", border: "1px solid #E5DED6" }}
               >
-                <p className="text-[13px]" style={{ color: "#6B6560" }}>
+                <p className="text-[12px] sm:text-[13px]" style={{ color: "#6B6560" }}>
                   <strong style={{ color: "#2D2A26" }}>Cancellation Policy:</strong> Please notify us
                   at least 24 hours in advance if you need to cancel or reschedule.
                 </p>
@@ -1002,11 +1040,11 @@ function BookingContent() {
           )}
 
           {/* Navigation Buttons */}
-          <div className="flex gap-3 mt-10">
+          <div className="flex flex-col sm:flex-row gap-3 mt-8 sm:mt-10">
             {currentStep > 1 && currentStep < 4 && (
               <button
                 onClick={handleBack}
-                className="px-6 py-4 text-xs tracking-[0.1em] uppercase font-medium transition-colors hover:opacity-70"
+                className="order-2 sm:order-1 px-6 py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium transition-colors hover:opacity-70 active:opacity-70 min-h-[48px]"
                 style={{ color: "#6B6560", backgroundColor: "transparent", border: "none" }}
               >
                 ← Back
@@ -1017,7 +1055,7 @@ function BookingContent() {
               <button
                 onClick={handleNext}
                 disabled={!canProceed()}
-                className="px-10 py-4 text-xs tracking-[0.1em] uppercase font-medium transition-all duration-300"
+                className="order-1 sm:order-2 w-full sm:w-auto px-10 py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium transition-all duration-300 min-h-[48px]"
                 style={{
                   backgroundColor: canProceed() ? "#2D2A26" : "#E5DED6",
                   color: "#FFFFFF",
@@ -1031,7 +1069,7 @@ function BookingContent() {
             {currentStep === 3 && (
               <button
                 onClick={handleNext}
-                className="px-10 py-4 text-xs tracking-[0.1em] uppercase font-medium transition-all duration-300 hover:bg-[#C4A484]"
+                className="order-1 sm:order-2 w-full sm:w-auto px-10 py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium transition-all duration-300 hover:bg-[#C4A484] active:bg-[#C4A484] min-h-[48px]"
                 style={{ backgroundColor: "#2D2A26", color: "#FFFFFF" }}
               >
                 Review Booking →
@@ -1039,10 +1077,10 @@ function BookingContent() {
             )}
 
             {currentStep === 4 && (
-              <div className="flex gap-3 w-full max-w-[600px]">
+              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-[600px]">
                 <button
                   onClick={handleBack}
-                  className="px-6 py-4 text-xs tracking-[0.1em] uppercase font-medium transition-colors hover:opacity-70"
+                  className="order-2 sm:order-1 px-6 py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium transition-colors hover:opacity-70 active:opacity-70 min-h-[48px]"
                   style={{ color: "#6B6560", backgroundColor: "transparent", border: "none" }}
                 >
                   ← Edit Details
@@ -1050,7 +1088,7 @@ function BookingContent() {
                 <button
                   onClick={handleConfirmBooking}
                   disabled={isSubmitting}
-                  className="flex-1 py-4 text-xs tracking-[0.1em] uppercase font-medium transition-all duration-300 flex items-center justify-center gap-2.5"
+                  className="order-1 sm:order-2 flex-1 py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium transition-all duration-300 flex items-center justify-center gap-2.5 min-h-[48px]"
                   style={{
                     backgroundColor: isSubmitting ? "#E5DED6" : "#2D2A26",
                     color: "#FFFFFF",
@@ -1077,7 +1115,7 @@ function BookingContent() {
           </div>
         </div>
 
-        {/* Right - Summary Panel */}
+        {/* Right - Summary Panel (Desktop only) */}
         <div
           className="hidden lg:block px-8 py-12 bg-white sticky top-0 h-fit max-h-[calc(100vh-160px)] overflow-y-auto animate-slide-in-right"
           style={{ borderLeft: "1px solid #E5DED6" }}
@@ -1221,6 +1259,69 @@ function BookingContent() {
           </div>
         </div>
       </main>
+
+      {/* Mobile Summary Bar (Fixed at bottom) */}
+      {selectedServices.length > 0 && (
+        <div 
+          className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t z-50 animate-slide-up"
+          style={{ borderColor: "#E5DED6" }}
+        >
+          {/* Expandable Summary Drawer */}
+          {showMobileSummary && (
+            <div 
+              className="border-b px-4 py-4 max-h-[50vh] overflow-y-auto"
+              style={{ borderColor: "#E5DED6", backgroundColor: "#FAFAF8" }}
+            >
+              <div className="mb-3">
+                <p className="text-[10px] tracking-[0.1em] uppercase mb-2" style={{ color: "#C4A484" }}>
+                  Selected Services
+                </p>
+                {selectedServices.map((service) => (
+                  <div key={service.id} className="flex justify-between mb-1">
+                    <span className="text-sm" style={{ color: "#2D2A26" }}>{service.name}</span>
+                    <span className="text-sm" style={{ color: "#6B6560" }}>${service.price}</span>
+                  </div>
+                ))}
+              </div>
+              
+              {selectedDate && (
+                <div className="pt-3 border-t" style={{ borderColor: "#E5DED6" }}>
+                  <p className="text-[10px] tracking-[0.1em] uppercase mb-1" style={{ color: "#C4A484" }}>
+                    Date & Time
+                  </p>
+                  <p className="text-sm" style={{ color: "#2D2A26" }}>
+                    {formatShortDate(selectedDate)}
+                    {selectedTime && ` · ${selectedTime}`}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Summary Bar */}
+          <div 
+            className="px-4 py-3 flex items-center justify-between cursor-pointer"
+            onClick={() => setShowMobileSummary(!showMobileSummary)}
+          >
+            <div className="flex items-center gap-3">
+              <div>
+                <p className="text-[10px] tracking-[0.08em] uppercase" style={{ color: "#6B6560" }}>
+                  {selectedServices.length} service{selectedServices.length > 1 ? 's' : ''} · {getTotalDuration()} min
+                </p>
+                <p className="font-display text-xl" style={{ color: "#2D2A26" }}>
+                  ${getTotalPrice()}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2" style={{ color: "#6B6560" }}>
+              <span className="text-[11px] uppercase tracking-wide">
+                {showMobileSummary ? 'Hide' : 'Details'}
+              </span>
+              {showMobileSummary ? <ChevronDownIcon /> : <ChevronUpIcon />}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

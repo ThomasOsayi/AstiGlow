@@ -18,7 +18,6 @@ function useScrollAnimation(threshold = 0.2) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Toggle visibility based on intersection (fade in AND out)
         setIsVisible(entry.isIntersecting);
       },
       { threshold }
@@ -217,19 +216,19 @@ export default function AboutPage() {
         {/* Hero Section */}
         <section 
           ref={heroAnimation.ref}
-          className="pt-32 lg:pt-28 grid grid-cols-1 lg:grid-cols-2 min-h-[90vh] items-center"
+          className="pt-24 sm:pt-28 lg:pt-32 grid grid-cols-1 lg:grid-cols-2 min-h-[auto] lg:min-h-[90vh] items-center"
         >
           {/* Image Side */}
-          <div className="relative px-6 py-12 lg:py-16 lg:pl-20 lg:pr-10 order-2 lg:order-1">
+          <div className="relative px-4 sm:px-6 py-8 sm:py-12 lg:py-16 lg:pl-20 lg:pr-10 order-2 lg:order-1">
             <div 
-              className={`relative max-w-[480px] mx-auto lg:mx-0 transition-all duration-700 ${
+              className={`relative max-w-[400px] sm:max-w-[480px] mx-auto lg:mx-0 transition-all duration-700 ${
                 heroAnimation.isVisible 
                   ? "opacity-100 translate-x-0" 
                   : "opacity-0 -translate-x-10"
               }`}
             >
               {/* Main Photo */}
-              <div className="relative aspect-[4/5] rounded-tr-[80px] overflow-hidden bg-cream-dark">
+              <div className="relative aspect-[4/5] rounded-tr-[60px] sm:rounded-tr-[80px] overflow-hidden bg-cream-dark">
                 <Image
                   src="/images/aster-portrait.jpeg"
                   alt="Aster Ambaw"
@@ -239,19 +238,19 @@ export default function AboutPage() {
                 />
               </div>
 
-              {/* Experience Badge */}
+              {/* Experience Badge - Adjusted position for mobile */}
               <div 
-                className={`absolute -bottom-5 -right-5 w-24 h-24 lg:w-[100px] lg:h-[100px] rounded-full bg-gold text-white flex flex-col items-center justify-center shadow-lg transition-all duration-700 delay-300 ${
+                className={`absolute -bottom-3 -right-3 sm:-bottom-5 sm:-right-5 w-20 h-20 sm:w-24 sm:h-24 lg:w-[100px] lg:h-[100px] rounded-full bg-gold text-white flex flex-col items-center justify-center shadow-lg transition-all duration-700 delay-300 ${
                   heroAnimation.isVisible 
                     ? "opacity-100 scale-100" 
                     : "opacity-0 scale-75"
                 }`}
               >
-                <span className="font-display text-3xl font-medium leading-none">4+</span>
-                <span className="text-[9px] tracking-[0.1em] mt-1">YEARS</span>
+                <span className="font-display text-2xl sm:text-3xl font-medium leading-none">4+</span>
+                <span className="text-[8px] sm:text-[9px] tracking-[0.1em] mt-1">YEARS</span>
               </div>
 
-              {/* Decorative Line */}
+              {/* Decorative Line - Hidden on mobile/tablet */}
               <div 
                 className={`absolute top-1/4 -left-8 h-0.5 bg-gold hidden lg:block transition-all duration-700 delay-200 ${
                   heroAnimation.isVisible 
@@ -263,9 +262,9 @@ export default function AboutPage() {
           </div>
 
           {/* Content Side */}
-          <div className="px-6 py-12 lg:py-16 lg:pr-20 lg:pl-10 order-1 lg:order-2">
+          <div className="px-4 sm:px-6 py-8 sm:py-12 lg:py-16 lg:pr-20 lg:pl-10 order-1 lg:order-2">
             <p 
-              className={`text-xs tracking-[0.2em] text-gold font-medium mb-5 transition-all duration-700 ${
+              className={`text-[10px] sm:text-xs tracking-[0.2em] text-gold font-medium mb-4 sm:mb-5 transition-all duration-700 ${
                 heroAnimation.isVisible 
                   ? "opacity-100 translate-y-0" 
                   : "opacity-0 translate-y-6"
@@ -275,7 +274,7 @@ export default function AboutPage() {
             </p>
 
             <h1 
-              className={`font-display text-5xl md:text-6xl font-normal text-charcoal mb-8 leading-tight transition-all duration-700 delay-100 ${
+              className={`font-display text-4xl sm:text-5xl md:text-6xl font-normal text-charcoal mb-6 sm:mb-8 leading-tight transition-all duration-700 delay-100 ${
                 heroAnimation.isVisible 
                   ? "opacity-100 translate-y-0" 
                   : "opacity-0 translate-y-6"
@@ -286,19 +285,19 @@ export default function AboutPage() {
             </h1>
 
             <div 
-              className={`space-y-6 mb-8 transition-all duration-700 delay-200 ${
+              className={`space-y-4 sm:space-y-6 mb-6 sm:mb-8 transition-all duration-700 delay-200 ${
                 heroAnimation.isVisible 
                   ? "opacity-100 translate-y-0" 
                   : "opacity-0 translate-y-6"
               }`}
             >
-              <p className="text-base text-charcoal-light leading-relaxed">
+              <p className="text-sm sm:text-base text-charcoal-light leading-relaxed">
                 Welcome to Astiglow! With over four years of experience in the
                 waxing industry, I've dedicated my career to helping clients
                 feel confident and comfortable in their own skin.
               </p>
 
-              <p className="text-base text-charcoal-light leading-relaxed">
+              <p className="text-sm sm:text-base text-charcoal-light leading-relaxed">
                 I specialize in using high-quality hard wax that's gentle on the
                 skin and perfect for even the most sensitive areas. My goal is
                 to create a clean, welcoming, and relaxing space where every
@@ -308,31 +307,33 @@ export default function AboutPage() {
 
             {/* Signature Quote */}
             <div 
-              className={`relative pl-6 py-6 border-l-[3px] border-gold bg-gold/5 mb-8 transition-all duration-700 delay-300 ${
+              className={`relative pl-4 sm:pl-6 py-4 sm:py-6 border-l-[3px] border-gold bg-gold/5 mb-6 sm:mb-8 transition-all duration-700 delay-300 ${
                 heroAnimation.isVisible 
                   ? "opacity-100 translate-y-0" 
                   : "opacity-0 translate-y-6"
               }`}
             >
-              <QuoteIcon />
-              <p className="font-display text-xl italic text-charcoal leading-relaxed">
+              <div className="hidden sm:block">
+                <QuoteIcon />
+              </div>
+              <p className="font-display text-lg sm:text-xl italic text-charcoal leading-relaxed">
                 "Waxing isn't just a service to me — it's about self-care,
                 confidence, and trust."
               </p>
             </div>
 
             <div 
-              className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 delay-400 ${
+              className={`flex flex-col sm:flex-row gap-3 sm:gap-4 transition-all duration-700 delay-400 ${
                 heroAnimation.isVisible 
                   ? "opacity-100 translate-y-0" 
                   : "opacity-0 translate-y-6"
               }`}
             >
-              <Link href="/book">
-                <Button>Book With Me</Button>
+              <Link href="/book" className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto">Book With Me</Button>
               </Link>
-              <Link href="/services">
-                <Button variant="secondary">View Services</Button>
+              <Link href="/services" className="w-full sm:w-auto">
+                <Button variant="secondary" className="w-full sm:w-auto">View Services</Button>
               </Link>
             </div>
           </div>
@@ -341,9 +342,9 @@ export default function AboutPage() {
         {/* Stats Section */}
         <section 
           ref={statsAnimation.ref} 
-          className="py-20 px-6 md:px-12 lg:px-20 bg-white"
+          className="py-14 sm:py-16 md:py-20 px-4 sm:px-6 md:px-12 lg:px-20 bg-white"
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 max-w-5xl mx-auto">
             {stats.map((stat, index) => (
               <div
                 key={index}
@@ -356,7 +357,7 @@ export default function AboutPage() {
               >
                 {/* Icon */}
                 <div 
-                  className={`w-14 h-14 rounded-full bg-cream flex items-center justify-center mx-auto mb-4 text-gold transition-all duration-700 ${
+                  className={`w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-cream flex items-center justify-center mx-auto mb-3 sm:mb-4 text-gold transition-all duration-700 ${
                     statsAnimation.isVisible
                       ? "opacity-100 scale-100"
                       : "opacity-0 scale-75"
@@ -367,27 +368,27 @@ export default function AboutPage() {
                 </div>
 
                 {/* Number */}
-                <p className="font-display text-5xl font-normal text-charcoal mb-2 leading-none">
+                <p className="font-display text-3xl sm:text-4xl md:text-5xl font-normal text-charcoal mb-1 sm:mb-2 leading-none">
                   {stat.number}
                 </p>
 
                 {/* Stars for rating */}
                 {stat.showStars && (
-                  <div className="flex justify-center gap-1 mb-2 text-gold">
+                  <div className="flex justify-center gap-0.5 sm:gap-1 mb-1 sm:mb-2 text-gold">
                     {[...Array(5)].map((_, i) => (
-                      <StarIcon key={i} size={14} />
+                      <StarIcon key={i} size={12} />
                     ))}
                   </div>
                 )}
 
                 {/* Label */}
-                <p className="text-[11px] tracking-[0.15em] text-charcoal-light">
+                <p className="text-[9px] sm:text-[11px] tracking-[0.12em] sm:tracking-[0.15em] text-charcoal-light">
                   {stat.label}
                 </p>
 
-                {/* Vertical Divider */}
+                {/* Vertical Divider - Hidden on mobile */}
                 {index < 3 && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-16 bg-border hidden md:block" />
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-12 sm:h-16 bg-border hidden md:block" />
                 )}
               </div>
             ))}
@@ -397,21 +398,21 @@ export default function AboutPage() {
         {/* Hours & Location Section */}
         <section 
           ref={hoursLocationAnimation.ref}
-          className="py-20 px-6 md:px-12 lg:px-20 bg-cream"
+          className="py-14 sm:py-16 md:py-20 px-4 sm:px-6 md:px-12 lg:px-20 bg-cream"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {/* Hours Card */}
             <div 
-              className={`bg-white border border-border p-8 lg:p-12 transition-all duration-700 ${
+              className={`bg-white border border-border p-5 sm:p-8 lg:p-12 transition-all duration-700 ${
                 hoursLocationAnimation.isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-10"
               }`}
             >
               {/* Header with Icon */}
-              <div className="flex items-center gap-3 mb-8">
+              <div className="flex items-center gap-3 mb-6 sm:mb-8">
                 <div 
-                  className={`w-10 h-10 rounded-full bg-gold flex items-center justify-center text-white transition-all duration-700 delay-150 ${
+                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gold flex items-center justify-center text-white transition-all duration-700 delay-150 ${
                     hoursLocationAnimation.isVisible
                       ? "opacity-100 scale-100"
                       : "opacity-0 scale-75"
@@ -419,7 +420,7 @@ export default function AboutPage() {
                 >
                   <ClockIcon />
                 </div>
-                <h2 className="font-display text-[28px] font-medium text-charcoal">
+                <h2 className="font-display text-2xl sm:text-[28px] font-medium text-charcoal">
                   Business Hours<span className="text-gold">_</span>
                 </h2>
               </div>
@@ -429,7 +430,7 @@ export default function AboutPage() {
                 {hoursData.map((item, index) => (
                   <div
                     key={index}
-                    className={`flex justify-between items-center py-4 transition-all duration-500 ${
+                    className={`flex justify-between items-center py-3 sm:py-4 transition-all duration-500 ${
                       index < hoursData.length - 1 ? "border-b border-border" : ""
                     } ${
                       hoursLocationAnimation.isVisible
@@ -438,15 +439,15 @@ export default function AboutPage() {
                     }`}
                     style={{ transitionDelay: hoursLocationAnimation.isVisible ? `${200 + index * 50}ms` : "0ms" }}
                   >
-                    <span className="text-[15px] text-charcoal flex items-center gap-2">
+                    <span className="text-sm sm:text-[15px] text-charcoal flex items-center gap-2">
                       {item.day}
                       {item.late && (
-                        <span className="text-[9px] bg-gold text-white px-1.5 py-0.5 rounded tracking-wider">
+                        <span className="text-[8px] sm:text-[9px] bg-gold text-white px-1 sm:px-1.5 py-0.5 rounded tracking-wider">
                           LATE
                         </span>
                       )}
                     </span>
-                    <span className="text-[15px] text-charcoal-light">
+                    <span className="text-sm sm:text-[15px] text-charcoal-light">
                       {item.hours}
                     </span>
                   </div>
@@ -455,19 +456,19 @@ export default function AboutPage() {
             </div>
 
             {/* Location & Policy Column */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4 sm:gap-6">
               {/* Location Card */}
               <div 
-                className={`bg-white border border-border p-8 lg:p-12 flex-1 transition-all duration-700 delay-150 ${
+                className={`bg-white border border-border p-5 sm:p-8 lg:p-12 flex-1 transition-all duration-700 delay-150 ${
                   hoursLocationAnimation.isVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-10"
                 }`}
               >
                 {/* Header with Icon */}
-                <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center gap-3 mb-4 sm:mb-6">
                   <div 
-                    className={`w-10 h-10 rounded-full bg-gold flex items-center justify-center text-white transition-all duration-700 delay-300 ${
+                    className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gold flex items-center justify-center text-white transition-all duration-700 delay-300 ${
                       hoursLocationAnimation.isVisible
                         ? "opacity-100 scale-100"
                         : "opacity-0 scale-75"
@@ -475,14 +476,14 @@ export default function AboutPage() {
                   >
                     <MapPinIcon />
                   </div>
-                  <h2 className="font-display text-[28px] font-medium text-charcoal">
+                  <h2 className="font-display text-2xl sm:text-[28px] font-medium text-charcoal">
                     Location<span className="text-gold">_</span>
                   </h2>
                 </div>
 
                 {/* Address */}
                 <p 
-                  className={`text-base text-charcoal leading-relaxed mb-4 transition-all duration-700 delay-350 ${
+                  className={`text-sm sm:text-base text-charcoal leading-relaxed mb-3 sm:mb-4 transition-all duration-700 delay-350 ${
                     hoursLocationAnimation.isVisible
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-4"
@@ -503,7 +504,7 @@ export default function AboutPage() {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-2 text-[13px] tracking-[0.1em] text-gold font-medium hover:opacity-70 transition-all duration-700 delay-400 ${
+                  className={`inline-flex items-center gap-2 text-[12px] sm:text-[13px] tracking-[0.1em] text-gold font-medium hover:opacity-70 transition-all duration-700 delay-400 min-h-[44px] ${
                     hoursLocationAnimation.isVisible
                       ? "opacity-100"
                       : "opacity-0"
@@ -514,7 +515,7 @@ export default function AboutPage() {
 
                 {/* Map Placeholder */}
                 <div 
-                  className={`mt-5 h-[140px] bg-cream-dark rounded relative overflow-hidden transition-all duration-700 delay-450 ${
+                  className={`mt-4 sm:mt-5 h-[120px] sm:h-[140px] bg-cream-dark rounded relative overflow-hidden transition-all duration-700 delay-450 ${
                     hoursLocationAnimation.isVisible
                       ? "opacity-100 scale-100"
                       : "opacity-0 scale-95"
@@ -535,14 +536,14 @@ export default function AboutPage() {
 
                 {/* Parking Info */}
                 <div 
-                  className={`flex items-center gap-3 mt-4 p-3 bg-cream rounded text-charcoal-light transition-all duration-700 delay-500 ${
+                  className={`flex items-center gap-2 sm:gap-3 mt-3 sm:mt-4 p-2.5 sm:p-3 bg-cream rounded text-charcoal-light transition-all duration-700 delay-500 ${
                     hoursLocationAnimation.isVisible
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-4"
                   }`}
                 >
                   <CarIcon />
-                  <span className="text-[13px]">
+                  <span className="text-[12px] sm:text-[13px]">
                     Parking available in building garage
                   </span>
                 </div>
@@ -550,16 +551,16 @@ export default function AboutPage() {
 
               {/* Cancellation Policy */}
               <div 
-                className={`bg-charcoal p-8 text-white transition-all duration-700 delay-300 ${
+                className={`bg-charcoal p-5 sm:p-8 text-white transition-all duration-700 delay-300 ${
                   hoursLocationAnimation.isVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-10"
                 }`}
               >
-                <h3 className="text-[11px] tracking-[0.15em] text-gold mb-4">
+                <h3 className="text-[10px] sm:text-[11px] tracking-[0.15em] text-gold mb-3 sm:mb-4">
                   CANCELLATION POLICY
                 </h3>
-                <p className="text-sm leading-relaxed text-white/80">
+                <p className="text-xs sm:text-sm leading-relaxed text-white/80">
                   We understand things come up. If you need to cancel or
                   reschedule, please notify us at{" "}
                   <strong className="text-white">{businessInfo.phone}</strong> at
@@ -573,11 +574,11 @@ export default function AboutPage() {
         {/* Reviews Section */}
         <section 
           ref={reviewsAnimation.ref} 
-          className="py-24 px-6 md:px-12 lg:px-20 bg-white"
+          className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 lg:px-20 bg-white"
         >
           {/* Header */}
           <div 
-            className={`flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-12 max-w-6xl mx-auto transition-all duration-700 ${
+            className={`flex flex-col md:flex-row md:justify-between md:items-end gap-4 sm:gap-6 mb-8 sm:mb-12 max-w-6xl mx-auto transition-all duration-700 ${
               reviewsAnimation.isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8"
@@ -585,42 +586,42 @@ export default function AboutPage() {
           >
             <div>
               <div 
-                className={`w-10 h-0.5 bg-gold mb-6 transition-all duration-700 origin-left ${
+                className={`w-10 h-0.5 bg-gold mb-4 sm:mb-6 transition-all duration-700 origin-left ${
                   reviewsAnimation.isVisible
                     ? "scale-x-100"
                     : "scale-x-0"
                 }`}
               />
-              <h2 className="font-display text-4xl font-normal text-charcoal">
+              <h2 className="font-display text-3xl sm:text-4xl font-normal text-charcoal">
                 Client Reviews<span className="text-gold">_</span>
               </h2>
             </div>
 
             <div 
-              className={`flex items-center gap-4 transition-all duration-700 delay-150 ${
+              className={`flex items-center gap-3 sm:gap-4 transition-all duration-700 delay-150 ${
                 reviewsAnimation.isVisible
                   ? "opacity-100 translate-x-0"
                   : "opacity-0 translate-x-6"
               }`}
             >
-              <div className="flex gap-1 text-gold">
+              <div className="flex gap-0.5 sm:gap-1 text-gold">
                 {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} size={20} />
+                  <StarIcon key={i} size={16} />
                 ))}
               </div>
-              <span className="text-[15px] text-charcoal font-medium">5.0</span>
-              <span className="text-sm text-charcoal-light">
-                ({reviewsWithTags.length} verified reviews)
+              <span className="text-sm sm:text-[15px] text-charcoal font-medium">5.0</span>
+              <span className="text-xs sm:text-sm text-charcoal-light">
+                ({reviewsWithTags.length} verified)
               </span>
             </div>
           </div>
 
           {/* Reviews Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10 max-w-6xl mx-auto">
             {displayedReviews.map((review, index) => (
               <div
                 key={index}
-                className={`bg-white border border-border p-8 transition-all duration-700 hover:shadow-lg hover:border-gold hover:-translate-y-1 ${
+                className={`bg-white border border-border p-5 sm:p-8 transition-all duration-700 hover:shadow-lg hover:border-gold hover:-translate-y-1 active:scale-[0.99] ${
                   review.featured ? "border-l-[3px] border-l-gold" : ""
                 } ${
                   reviewsAnimation.isVisible
@@ -630,28 +631,28 @@ export default function AboutPage() {
                 style={{ transitionDelay: reviewsAnimation.isVisible ? `${200 + index * 100}ms` : "0ms" }}
               >
                 {/* Stars + Service Tag Row */}
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex gap-1 text-gold">
+                <div className="flex justify-between items-center mb-3 sm:mb-4">
+                  <div className="flex gap-0.5 sm:gap-1 text-gold">
                     {[...Array(review.rating)].map((_, i) => (
-                      <StarIcon key={i} size={14} />
+                      <StarIcon key={i} size={12} />
                     ))}
                   </div>
-                  <span className="text-[10px] tracking-[0.08em] font-medium px-2.5 py-1 bg-gold/15 text-gold rounded">
+                  <span className="text-[9px] sm:text-[10px] tracking-[0.08em] font-medium px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gold/15 text-gold rounded">
                     {review.service.toUpperCase()}
                   </span>
                 </div>
 
                 {/* Review Text */}
-                <p className="text-[15px] text-charcoal-light leading-relaxed mb-6 italic">
+                <p className="text-sm sm:text-[15px] text-charcoal-light leading-relaxed mb-4 sm:mb-6 italic">
                   "{review.text}"
                 </p>
 
                 {/* Author + Date */}
-                <div className="flex justify-between items-center pt-4 border-t border-border">
-                  <span className="font-display text-lg text-charcoal font-medium">
+                <div className="flex justify-between items-center pt-3 sm:pt-4 border-t border-border">
+                  <span className="font-display text-base sm:text-lg text-charcoal font-medium">
                     {review.author}
                   </span>
-                  <span className="text-xs text-charcoal-light">
+                  <span className="text-[10px] sm:text-xs text-charcoal-light">
                     {review.date}
                   </span>
                 </div>
@@ -671,14 +672,14 @@ export default function AboutPage() {
               {!showAllReviews ? (
                 <button
                   onClick={() => setShowAllReviews(true)}
-                  className="px-8 py-3.5 text-xs tracking-[0.1em] uppercase font-medium border border-charcoal text-charcoal bg-transparent hover:bg-charcoal hover:text-white transition-all duration-300"
+                  className="px-6 sm:px-8 py-3 sm:py-3.5 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium border border-charcoal text-charcoal bg-transparent hover:bg-charcoal hover:text-white active:bg-charcoal active:text-white transition-all duration-300 min-h-[48px]"
                 >
                   Show All {reviewsWithTags.length} Reviews
                 </button>
               ) : (
                 <button
                   onClick={() => setShowAllReviews(false)}
-                  className="px-8 py-3.5 text-xs tracking-[0.1em] uppercase font-medium border border-charcoal text-charcoal bg-transparent hover:bg-charcoal hover:text-white transition-all duration-300"
+                  className="px-6 sm:px-8 py-3 sm:py-3.5 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium border border-charcoal text-charcoal bg-transparent hover:bg-charcoal hover:text-white active:bg-charcoal active:text-white transition-all duration-300 min-h-[48px]"
                 >
                   Show Less
                 </button>
@@ -690,11 +691,11 @@ export default function AboutPage() {
         {/* CTA Section */}
         <section 
           ref={ctaAnimation.ref}
-          className="py-24 px-6 md:px-12 lg:px-20 bg-cream text-center relative overflow-hidden"
+          className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 lg:px-20 bg-cream text-center relative overflow-hidden"
         >
-          {/* Background Pattern - Concentric Circles */}
+          {/* Background Pattern - Responsive sizing */}
           <div 
-            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none transition-all duration-1000 ${
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] pointer-events-none transition-all duration-1000 ${
               ctaAnimation.isVisible
                 ? "opacity-5 scale-100"
                 : "opacity-0 scale-75"
@@ -708,7 +709,7 @@ export default function AboutPage() {
           </div>
 
           <h2 
-            className={`font-display text-4xl md:text-5xl font-normal text-charcoal mb-5 relative transition-all duration-700 ${
+            className={`font-display text-3xl sm:text-4xl md:text-5xl font-normal text-charcoal mb-4 sm:mb-5 relative transition-all duration-700 ${
               ctaAnimation.isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8"
@@ -719,7 +720,7 @@ export default function AboutPage() {
             <span className="text-gold">?</span>
           </h2>
           <p 
-            className={`text-base text-charcoal-light max-w-[500px] mx-auto mb-8 relative transition-all duration-700 delay-100 ${
+            className={`text-sm sm:text-base text-charcoal-light max-w-[500px] mx-auto mb-6 sm:mb-8 relative transition-all duration-700 delay-100 ${
               ctaAnimation.isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
@@ -729,18 +730,18 @@ export default function AboutPage() {
             deserve.
           </p>
           <div
-            className={`relative inline-block transition-all duration-700 delay-200 ${
+            className={`relative inline-block w-full sm:w-auto transition-all duration-700 delay-200 ${
               ctaAnimation.isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"
             }`}
           >
-            <Link href="/book">
-              <Button size="lg">Book Your Appointment</Button>
+            <Link href="/book" className="block sm:inline-block">
+              <Button size="lg" className="w-full sm:w-auto">Book Your Appointment</Button>
             </Link>
           </div>
           <p 
-            className={`text-[13px] text-charcoal-light mt-5 relative transition-all duration-700 delay-300 ${
+            className={`text-[12px] sm:text-[13px] text-charcoal-light mt-4 sm:mt-5 relative transition-all duration-700 delay-300 ${
               ctaAnimation.isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6"

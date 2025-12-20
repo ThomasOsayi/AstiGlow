@@ -45,8 +45,8 @@ function useScrollAnimation(threshold = 0.2) {
 function FaceIcon({ className }: { className?: string }) {
   return (
     <svg
-      width="32"
-      height="32"
+      width="28"
+      height="28"
       viewBox="0 0 32 32"
       fill="none"
       stroke="currentColor"
@@ -66,8 +66,8 @@ function FaceIcon({ className }: { className?: string }) {
 function BodyIcon({ className }: { className?: string }) {
   return (
     <svg
-      width="32"
-      height="32"
+      width="28"
+      height="28"
       viewBox="0 0 32 32"
       fill="none"
       stroke="currentColor"
@@ -85,8 +85,8 @@ function BodyIcon({ className }: { className?: string }) {
 function BrazilianIcon({ className }: { className?: string }) {
   return (
     <svg
-      width="32"
-      height="32"
+      width="28"
+      height="28"
       viewBox="0 0 32 32"
       fill="none"
       stroke="currentColor"
@@ -141,11 +141,11 @@ export function ServicesPreview() {
   const bannerAnimation = useScrollAnimation(0.3);
 
   return (
-    <section className="py-20 lg:py-[100px] px-6 md:px-12 lg:px-20 bg-white">
+    <section className="py-16 md:py-20 lg:py-[100px] px-4 sm:px-6 md:px-12 lg:px-20 bg-white">
       {/* Header */}
       <div 
         ref={sectionAnimation.ref}
-        className={`flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 mb-14 transition-all duration-700 ${
+        className={`flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 sm:gap-6 mb-10 md:mb-14 transition-all duration-700 ${
           sectionAnimation.isVisible 
             ? "opacity-100 translate-y-0" 
             : "opacity-0 translate-y-8"
@@ -160,7 +160,7 @@ export function ServicesPreview() {
         </div>
         <Link
           href="/services"
-          className={`text-xs tracking-[0.08em] uppercase text-charcoal hover:text-gold transition-all inline-flex items-center gap-2 group duration-700 delay-200 ${
+          className={`text-xs tracking-[0.08em] uppercase text-charcoal hover:text-gold transition-all inline-flex items-center gap-2 group duration-700 delay-200 self-start sm:self-auto ${
             sectionAnimation.isVisible 
               ? "opacity-100 translate-x-0" 
               : "opacity-0 translate-x-6"
@@ -174,7 +174,7 @@ export function ServicesPreview() {
       {/* Service Category Cards */}
       <div 
         ref={cardsAnimation.ref}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12"
       >
         {serviceCategories.map((category, index) => {
           const IconComponent = category.icon;
@@ -184,7 +184,7 @@ export function ServicesPreview() {
             <Link
               key={index}
               href={category.href}
-              className={`group bg-white border border-border p-9 relative overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,42,38,0.1)] hover:border-transparent ${
+              className={`group bg-white border border-border p-6 sm:p-7 md:p-9 relative overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(45,42,38,0.1)] hover:border-transparent ${
                 cardsAnimation.isVisible 
                   ? "opacity-100 translate-y-0" 
                   : "opacity-0 translate-y-10"
@@ -195,7 +195,7 @@ export function ServicesPreview() {
             >
               {/* Popular Badge */}
               {category.popular && (
-                <div className="absolute -top-px right-6 bg-gold text-white text-[10px] tracking-[0.08em] uppercase font-medium px-3 py-1.5">
+                <div className="absolute -top-px right-4 sm:right-6 bg-gold text-white text-[9px] sm:text-[10px] tracking-[0.08em] uppercase font-medium px-2 sm:px-3 py-1 sm:py-1.5">
                   Most Booked
                 </div>
               )}
@@ -205,7 +205,7 @@ export function ServicesPreview() {
 
               {/* Icon */}
               <div
-                className={`w-14 h-14 rounded-full flex items-center justify-center mb-6 transition-all duration-300 ${
+                className={`w-11 h-11 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-4 sm:mb-6 transition-all duration-300 ${
                   isHovered ? "bg-gold text-white" : "bg-cream text-gold"
                 }`}
               >
@@ -213,16 +213,16 @@ export function ServicesPreview() {
               </div>
 
               {/* Content */}
-              <h3 className="font-display text-[28px] font-medium text-charcoal mb-2.5">
+              <h3 className="font-display text-[22px] sm:text-[26px] md:text-[28px] font-medium text-charcoal mb-2">
                 {category.name}
               </h3>
-              <p className="text-sm text-charcoal-light leading-relaxed mb-5">
+              <p className="text-sm text-charcoal-light leading-relaxed mb-4 sm:mb-5">
                 {category.description}
               </p>
 
               {/* Price & View Link */}
-              <div className="flex justify-between items-center pt-4 border-t border-border">
-                <p className="text-[13px] tracking-[0.03em] text-gold font-medium">
+              <div className="flex justify-between items-center pt-3 sm:pt-4 border-t border-border">
+                <p className="text-xs sm:text-[13px] tracking-[0.03em] text-gold font-medium">
                   {category.price}
                 </p>
                 <span
@@ -241,14 +241,14 @@ export function ServicesPreview() {
       {/* Packages Callout Banner */}
       <div 
         ref={bannerAnimation.ref}
-        className={`bg-cream border border-border p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6 transition-all duration-700 ${
+        className={`bg-cream border border-border p-5 sm:p-6 md:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 transition-all duration-700 ${
           bannerAnimation.isVisible 
             ? "opacity-100 translate-y-0" 
             : "opacity-0 translate-y-10"
         }`}
       >
         <div 
-          className={`flex items-center gap-5 transition-all duration-700 delay-100 ${
+          className={`flex items-center gap-4 sm:gap-5 transition-all duration-700 delay-100 ${
             bannerAnimation.isVisible 
               ? "opacity-100 translate-x-0" 
               : "opacity-0 -translate-x-6"
@@ -256,20 +256,20 @@ export function ServicesPreview() {
         >
           {/* Icon */}
           <div 
-            className={`w-12 h-12 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0 transition-all duration-700 delay-150 ${
+            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold flex items-center justify-center text-white flex-shrink-0 transition-all duration-700 delay-150 ${
               bannerAnimation.isVisible 
                 ? "opacity-100 scale-100" 
                 : "opacity-0 scale-75"
             }`}
           >
-            <Gift size={24} />
+            <Gift size={20} className="sm:w-6 sm:h-6" />
           </div>
           {/* Text */}
           <div>
-            <p className="text-lg font-medium text-charcoal mb-1">
+            <p className="text-base sm:text-lg font-medium text-charcoal mb-0.5 sm:mb-1">
               Save with Packages
             </p>
-            <p className="text-sm text-charcoal-light">
+            <p className="text-xs sm:text-sm text-charcoal-light">
               Buy 9 sessions, get 2 free — save up to 20%
             </p>
           </div>
@@ -277,14 +277,14 @@ export function ServicesPreview() {
 
         {/* CTA */}
         <div
-          className={`transition-all duration-700 delay-200 ${
+          className={`w-full sm:w-auto transition-all duration-700 delay-200 ${
             bannerAnimation.isVisible 
               ? "opacity-100 translate-x-0" 
               : "opacity-0 translate-x-6"
           }`}
         >
-          <Link href="/packages">
-            <Button variant="secondary" rightIcon={<ArrowRight size={14} />}>
+          <Link href="/packages" className="block">
+            <Button variant="secondary" rightIcon={<ArrowRight size={14} />} className="w-full sm:w-auto">
               View Packages
             </Button>
           </Link>
