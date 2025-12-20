@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout";
 import { Button } from "@/components/ui";
 import { services, serviceCategories, getServicesByCategory } from "@/lib/data";
@@ -612,6 +613,7 @@ function CategorySection({
 type CategoryFilter = "all" | ServiceCategory;
 
 export default function ServicesPage() {
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all");
   const [isFilterSticky, setIsFilterSticky] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
@@ -644,8 +646,8 @@ export default function ServicesPage() {
   }, []);
 
   const handleServiceSelect = (service: Service) => {
-    // TODO: Navigate to booking with service pre-selected
-    console.log("Selected service:", service);
+    // Navigate to booking page with service ID as query parameter
+    router.push(`/book?service=${service.id}`);
   };
 
   // Get filtered services grouped by category
