@@ -14,7 +14,7 @@ export interface Service {
     addon?: boolean;
   }
   
-  export type ServiceCategory = 'face' | 'body' | 'brazilian';
+  export type ServiceCategory = "face" | "body" | "brazilian";
   
   export interface ServiceCategoryFilter {
     id: string;
@@ -34,6 +34,10 @@ export interface Service {
     bonus: number;
     description: string;
     popular?: boolean;
+    /** Optional badge text (e.g., "BEST VALUE", "MOST POPULAR") */
+    badge?: string | null;
+    /** Badge color variant */
+    badgeColor?: "gold" | "charcoal" | null;
   }
   
   // ===========================================
@@ -125,4 +129,12 @@ export interface Service {
     email: string;
     phone?: string;
     message: string;
+  }
+  
+  // ===========================================
+  // Cart Types
+  // ===========================================
+  export interface CartItem {
+    packageId: string;
+    quantity: number;
   }

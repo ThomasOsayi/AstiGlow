@@ -203,6 +203,12 @@ const packagesData = [
 ];
 
 // ===========================================
+// Constants
+// ===========================================
+
+const CART_STORAGE_KEY = "astiglow-cart";
+
+// ===========================================
 // Helper Functions
 // ===========================================
 
@@ -342,7 +348,7 @@ function PackageCard({ pkg, isInCart, onAdd, onRemove }: PackageCardProps) {
 // ===========================================
 
 export default function PackagesPage() {
-  const [cart, setCart] = useState<typeof packagesData>([]);
+  const [cart, setCart] = useState<string[]>([]);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -356,9 +362,27 @@ export default function PackagesPage() {
   const faqAnimation = useScrollAnimation(0.2);
   const ctaAnimation = useScrollAnimation(0.3);
 
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+    if (savedCart) {
+      try {
+        const cartIds = JSON.parse(savedCart) as string[];
+        setCart(cartIds);
+      } catch (e) {
+        console.error("Failed to parse cart:", e);
+      }
+    }
+  }, []);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  }, [cart]);
+
   const addToCart = (pkg: typeof packagesData[0]) => {
     if (!isInCart(pkg.id)) {
-      setCart([...cart, pkg]);
+      setCart([...cart, pkg.id]);
       setToastMessage(`${pkg.name} Package added to cart`);
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
@@ -366,12 +390,14 @@ export default function PackagesPage() {
   };
 
   const removeFromCart = (pkgId: string) => {
-    setCart(cart.filter((p) => p.id !== pkgId));
+    setCart(cart.filter((id) => id !== pkgId));
   };
 
-  const isInCart = (pkgId: string) => cart.some((p) => p.id === pkgId);
+  const isInCart = (pkgId: string) => cart.includes(pkgId);
 
-  const cartTotal = cart.reduce((sum, pkg) => sum + calculateTotal(pkg), 0);
+  // Calculate cart total from package IDs
+  const cartPackages = packagesData.filter((pkg) => cart.includes(pkg.id));
+  const cartTotal = cartPackages.reduce((sum, pkg) => sum + calculateTotal(pkg), 0);
 
   return (
     <>
@@ -710,6 +736,9 @@ export default function PackagesPage() {
         </section>
       </main>
 
+      {/* ============================================= */}
+      {/* FIX: Changed href from "/book" to "/cart"    */}
+      {/* ============================================= */}
       {/* Floating Cart Indicator (when cart has items) - Responsive */}
       {cart.length > 0 && (
         <div className="fixed bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-auto bg-white border border-border rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 shadow-lg flex items-center gap-2 sm:gap-3 z-50 animate-slide-in">
@@ -720,7 +749,8 @@ export default function PackagesPage() {
               ${cartTotal.toLocaleString()}
             </p>
           </div>
-          <Link href="/book" className="flex-shrink-0">
+          {/* ✅ FIXED: Now links to /cart instead of /book */}
+          <Link href="/cart" className="flex-shrink-0">
             <button className="px-3 sm:px-4 py-2 bg-charcoal text-white text-[10px] sm:text-xs tracking-wider hover:bg-gold active:bg-gold transition-colors min-h-[40px]">
               CHECKOUT
             </button>
