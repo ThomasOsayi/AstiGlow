@@ -59,15 +59,11 @@ export function AboutPreview() {
             }`}
           >
             <Image
-              src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=600&q=80"
-              alt="Aster Ambaw - Founder of Astiglow"
+              src="/images/aster-portrait.jpeg"
+              alt="Aster Ambaw"
               fill
               className="object-cover"
             />
-            {/* Placeholder indicator - remove when real photo is added */}
-            <div className="absolute bottom-5 left-5 bg-charcoal/80 text-cream px-3 py-2 text-[10px] tracking-[0.1em] uppercase">
-              Aster's Photo Here
-            </div>
           </div>
 
           {/* Experience Badge */}

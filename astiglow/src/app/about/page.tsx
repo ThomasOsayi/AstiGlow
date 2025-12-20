@@ -231,8 +231,8 @@ export default function AboutPage() {
               {/* Main Photo */}
               <div className="relative aspect-[4/5] rounded-tr-[80px] overflow-hidden bg-cream-dark">
                 <Image
-                  src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=600&q=80"
-                  alt="Aster Ambaw - Founder of Astiglow"
+                  src="/images/aster-portrait.jpeg"
+                  alt="Aster Ambaw"
                   fill
                   className="object-cover"
                   priority

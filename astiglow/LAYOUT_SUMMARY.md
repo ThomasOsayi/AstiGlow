@@ -8,32 +8,39 @@
 ## Root Directory Structure
 
 ```
-astiglow/
-├── Configuration Files
-│   ├── .gitignore
-│   ├── eslint.config.mjs
-│   ├── next.config.ts
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── postcss.config.mjs
-│   ├── tailwind.config.ts
-│   ├── tsconfig.json
-│   └── next-env.d.ts
+AstiGlow/                      # Workspace root
+├── .vscode/                   # VS Code workspace settings
+│   └── settings.json
 │
-├── public/                    # Static assets
-│   ├── file.svg
-│   ├── globe.svg
-│   ├── next.svg
-│   ├── vercel.svg
-│   └── window.svg
-│
-├── src/                       # Source code
-│   ├── app/                   # Next.js App Router pages
-│   ├── components/            # React components
-│   ├── lib/                   # Utilities and data
-│   └── types/                 # TypeScript type definitions
-│
-└── README.md
+└── astiglow/                  # Project root
+    ├── Configuration Files
+    │   ├── .gitignore
+    │   ├── eslint.config.mjs
+    │   ├── next.config.ts
+    │   ├── package.json
+    │   ├── package-lock.json
+    │   ├── postcss.config.mjs
+    │   ├── tailwind.config.ts
+    │   ├── tsconfig.json
+    │   └── next-env.d.ts
+    │
+    ├── public/                # Static assets
+    │   ├── file.svg
+    │   ├── globe.svg
+    │   ├── next.svg
+    │   ├── vercel.svg
+    │   └── window.svg
+    │
+    ├── src/                   # Source code
+    │   ├── app/               # Next.js App Router pages
+    │   ├── components/        # React components
+    │   ├── lib/               # Utilities and data
+    │   └── types/             # TypeScript type definitions
+    │
+    ├── README.md
+    └── LAYOUT_SUMMARY.md
+
+README.md                      # Workspace-level README
 ```
 
 ---
@@ -77,6 +84,8 @@ app/
 layout/
 ├── navbar.tsx                 # Navigation bar component
 ├── footer.tsx                 # Footer component
+├── minimal-layout.tsx         # Minimal layout wrapper
+├── mobile-menu.tsx            # Mobile navigation menu
 └── index.ts                   # Layout exports
 ```
 
@@ -87,6 +96,7 @@ sections/
 ├── about-preview.tsx          # About preview section
 ├── services-preview.tsx       # Services preview section
 ├── cta-section.tsx            # Call-to-action section
+├── testimonials.tsx           # Testimonials section component
 └── index.ts                   # Section exports
 ```
 
@@ -101,10 +111,13 @@ ui/
 ├── section-header.tsx         # Section header component
 ├── step-indicator.tsx         # Step indicator (for booking flow)
 ├── testimonial-carousel.tsx   # Testimonial carousel component
+├── accordion.tsx              # Accordion component
+├── icons.tsx                  # Icon components
+├── toast.tsx                  # Toast notification component
 └── index.ts                   # UI component exports
 ```
 
-**Total Components:** 15 components across 3 categories
+**Total Components:** 20 components across 3 categories
 
 ---
 
@@ -171,22 +184,21 @@ types/
 | Category | Count |
 |----------|-------|
 | **Pages** | 6 |
-| **Layout Components** | 3 |
-| **Section Components** | 4 |
-| **UI Components** | 8 |
+| **Layout Components** | 4 |
+| **Section Components** | 5 |
+| **UI Components** | 11 |
 | **Data Files** | 5 |
 | **Type Definitions** | 1 |
 | **Configuration Files** | 8 |
 | **Static Assets** | 5 |
-| **Total Source Files** | ~40+ |
+| **Total Source Files** | ~45+ |
 
 ---
 
 ## Notes
-- There's a duplicate `next.config.ts` in the root (may need cleanup)
-- There's a duplicate `globals.css` in the app directory (may need cleanup)
-- There's a `componenets/` folder (typo) that appears empty - likely should be `components/`
 - All pages follow Next.js App Router conventions with `page.tsx` files
+- Workspace includes `.vscode/settings.json` for VS Code configuration
+- Component organization follows a clear hierarchy: layout → sections → UI
 
 ---
 
