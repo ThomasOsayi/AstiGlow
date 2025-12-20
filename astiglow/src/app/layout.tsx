@@ -2,9 +2,7 @@
 
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
-import { Navbar, NavbarSpacer } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { ToastProvider } from "@/components/ui";
+import { ToastWrapper } from "@/components/layout";
 import "./globals.css";
 
 // ===========================================
@@ -106,7 +104,7 @@ export const viewport: Viewport = {
 };
 
 // ===========================================
-// Root Layout
+// Root Layout (Minimal - shared by all routes)
 // ===========================================
 
 export default function RootLayout({
@@ -117,7 +115,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
       <body className="font-body bg-cream text-charcoal antialiased min-h-screen flex flex-col">
-        <ToastProvider position="bottom-right">
+        <ToastWrapper>
           {/* Skip to main content link for accessibility */}
           <a
             href="#main-content"
@@ -126,25 +124,9 @@ export default function RootLayout({
             Skip to main content
           </a>
 
-          {/* Navigation */}
-          <Navbar />
-
-          {/* Main Content */}
-          <main id="main-content" className="flex-1">
-            {children}
-          </main>
-
-          {/* Footer */}
-          <Footer />
-        </ToastProvider>
+          {children}
+        </ToastWrapper>
       </body>
     </html>
   );
 }
-
-// ===========================================
-// Alternate Layout: Minimal (for booking, checkout)
-// ===========================================
-
-// Use this in specific pages that need a minimal layout:
-// export { MinimalLayout } from "@/components/layout/minimal-layout";

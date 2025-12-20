@@ -25,6 +25,8 @@ AstiGlow/                      # Workspace root
     │   └── next-env.d.ts
     │
     ├── public/                # Static assets
+    │   ├── images/            # Image assets
+    │   │   └── aster-portrait.jpeg
     │   ├── file.svg
     │   ├── globe.svg
     │   ├── next.svg
@@ -63,6 +65,12 @@ app/
 ├── book/
 │   └── page.tsx               # Booking page
 │
+├── cart/
+│   └── page.tsx               # Shopping cart page
+│
+├── checkout/
+│   └── page.tsx               # Checkout page
+│
 ├── contact/
 │   └── page.tsx               # Contact page
 │
@@ -73,7 +81,7 @@ app/
     └── page.tsx               # Services page
 ```
 
-**Total Pages:** 6 routes (home, about, book, contact, packages, services)
+**Total Pages:** 8 routes (home, about, book, cart, checkout, contact, packages, services)
 
 ---
 
@@ -173,9 +181,9 @@ types/
 
 ### Business Domain
 - **Business Type:** Premium waxing studio
-- **Location:** Los Angeles
+- **Location:** Los Angeles (Westwood)
 - **Services:** Face, body, and Brazilian waxing services
-- **Features:** Booking system, service packages, reviews/testimonials
+- **Features:** Booking system, shopping cart, checkout, service packages, reviews/testimonials
 
 ---
 
@@ -183,15 +191,15 @@ types/
 
 | Category | Count |
 |----------|-------|
-| **Pages** | 6 |
+| **Pages** | 8 |
 | **Layout Components** | 4 |
 | **Section Components** | 5 |
 | **UI Components** | 11 |
 | **Data Files** | 5 |
 | **Type Definitions** | 1 |
 | **Configuration Files** | 8 |
-| **Static Assets** | 5 |
-| **Total Source Files** | ~45+ |
+| **Static Assets** | 6 (5 SVGs + 1 image) |
+| **Total Source Files** | ~50+ |
 
 ---
 
@@ -199,6 +207,8 @@ types/
 - All pages follow Next.js App Router conventions with `page.tsx` files
 - Workspace includes `.vscode/settings.json` for VS Code configuration
 - Component organization follows a clear hierarchy: layout → sections → UI
+- E-commerce flow: Services/Packages → Cart → Checkout
+- Real portrait image of Aster is stored in `public/images/aster-portrait.jpeg`
 
 ---
 

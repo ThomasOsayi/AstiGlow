@@ -21,3 +21,4 @@ export {
   CheckoutLayout,
   ConfirmationLayout,
 } from "./minimal-layout";
+export { ToastWrapper } from "./toast-wrapper";
