@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { services } from "@/lib/data";
 import type { Service } from "@/types";
 
@@ -103,7 +104,9 @@ const CheckCircleIcon = () => (
   </svg>
 );
 
-export default function BookPage() {
+// Main booking content component that uses useSearchParams
+function BookingContent() {
+  const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedServices, setSelectedServices] = useState<Service[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -122,6 +125,24 @@ export default function BookPage() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
+
+  // Handle pre-selected service from URL parameter
+  useEffect(() => {
+    if (hasInitialized) return;
+    
+    const serviceId = searchParams.get("service");
+    if (serviceId) {
+      const service = services.find((s) => s.id === serviceId);
+      if (service) {
+        setSelectedServices([service]);
+        setCurrentStep(2); // Jump directly to date/time selection
+        // Set the category filter to match the selected service
+        setActiveCategory(service.category);
+      }
+    }
+    setHasInitialized(true);
+  }, [searchParams, hasInitialized]);
 
   // Generate next 28 days for calendar
   const calendarDays = useMemo(() => {
@@ -1201,5 +1222,32 @@ export default function BookPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function BookingLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#FAFAF8" }}>
+      <div className="text-center">
+        <div 
+          className="w-8 h-8 rounded-full animate-spin mx-auto mb-4"
+          style={{ 
+            border: "2px solid #E5DED6",
+            borderTopColor: "#C4A484"
+          }}
+        />
+        <p style={{ color: "#6B6560" }}>Loading...</p>
+      </div>
+    </div>
+  );
+}
+
+// Main export wraps content in Suspense for useSearchParams
+export default function BookPage() {
+  return (
+    <Suspense fallback={<BookingLoading />}>
+      <BookingContent />
+    </Suspense>
   );
 }
