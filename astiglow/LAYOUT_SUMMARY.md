@@ -36,6 +36,7 @@ AstiGlow/                      # Workspace root
     ├── src/                   # Source code
     │   ├── app/               # Next.js App Router pages
     │   ├── components/        # React components
+    │   ├── hooks/             # Custom React hooks
     │   ├── lib/               # Utilities and data
     │   └── types/             # TypeScript type definitions
     │
@@ -50,38 +51,43 @@ README.md                      # Workspace-level README
 ## Source Code Structure (`src/`)
 
 ### 📄 App Directory (`src/app/`)
-Next.js App Router structure with page routes:
+Next.js App Router structure with route groups:
 
 ```
 app/
 ├── layout.tsx                 # Root layout with fonts (Cormorant Garamond, DM Sans)
-├── page.tsx                   # Home page
 ├── globals.css                # Global styles and Tailwind CSS
 ├── favicon.ico                # Site favicon
 │
-├── about/
-│   └── page.tsx               # About page
+├── (main)/                    # Route group: Main pages with navbar/footer
+│   ├── layout.tsx             # Main layout (Navbar + Footer)
+│   ├── page.tsx               # Home page
+│   │
+│   ├── about/
+│   │   └── page.tsx           # About page
+│   │
+│   ├── book/
+│   │   └── page.tsx           # Booking page
+│   │
+│   ├── contact/
+│   │   └── page.tsx           # Contact page
+│   │
+│   ├── packages/
+│   │   └── page.tsx           # Packages page
+│   │
+│   └── services/
+│       └── page.tsx           # Services page
 │
-├── book/
-│   └── page.tsx               # Booking page
-│
-├── cart/
-│   └── page.tsx               # Shopping cart page
-│
-├── checkout/
-│   └── page.tsx               # Checkout page
-│
-├── contact/
-│   └── page.tsx               # Contact page
-│
-├── packages/
-│   └── page.tsx               # Packages page
-│
-└── services/
-    └── page.tsx               # Services page
+└── (checkout)/                # Route group: Checkout flow (minimal layout)
+    ├── layout.tsx             # Checkout layout (minimal, no navbar/footer)
+    ├── cart/
+    │   └── page.tsx           # Shopping cart page
+    └── checkout/
+        └── page.tsx           # Checkout page
 ```
 
 **Total Pages:** 8 routes (home, about, book, cart, checkout, contact, packages, services)
+**Route Groups:** 2 groups `(main)` and `(checkout)` for different layout strategies
 
 ---
 
@@ -94,6 +100,7 @@ layout/
 ├── footer.tsx                 # Footer component
 ├── minimal-layout.tsx         # Minimal layout wrapper
 ├── mobile-menu.tsx            # Mobile navigation menu
+├── toast-wrapper.tsx          # Toast provider wrapper (client component)
 └── index.ts                   # Layout exports
 ```
 
@@ -126,6 +133,22 @@ ui/
 ```
 
 **Total Components:** 20 components across 3 categories
+
+---
+
+### 🪝 Hooks Directory (`src/hooks/`)
+
+Custom React hooks for shared functionality:
+
+```
+hooks/
+├── use-cart.ts                # Cart state management hook with localStorage
+└── index.ts                   # Hooks exports
+```
+
+**Hooks:**
+- `useCart()` - Manages shopping cart state, localStorage persistence, and cross-tab synchronization
+- Exports `packagesData` - Package data for cart operations
 
 ---
 
@@ -173,11 +196,13 @@ types/
 - **Fonts:** Cormorant Garamond (headings), DM Sans (body)
 
 ### Project Structure Patterns
-1. **App Router:** Uses Next.js 13+ App Router with file-based routing
-2. **Component Organization:** Separated into layout, sections, and UI components
-3. **Data Management:** Centralized data in `lib/data/` with helper functions
-4. **Type Safety:** Comprehensive TypeScript types in `types/index.ts`
-5. **Modular Exports:** Index files for clean imports
+1. **App Router:** Uses Next.js 13+ App Router with file-based routing and route groups
+2. **Route Groups:** Organized into `(main)` for public pages and `(checkout)` for cart/checkout flow
+3. **Component Organization:** Separated into layout, sections, and UI components
+4. **State Management:** Custom hooks in `hooks/` for shared state (e.g., cart)
+5. **Data Management:** Centralized data in `lib/data/` with helper functions
+6. **Type Safety:** Comprehensive TypeScript types in `types/index.ts`
+7. **Modular Exports:** Index files for clean imports
 
 ### Business Domain
 - **Business Type:** Premium waxing studio
@@ -192,22 +217,28 @@ types/
 | Category | Count |
 |----------|-------|
 | **Pages** | 8 |
-| **Layout Components** | 4 |
+| **Route Groups** | 2 |
+| **Layout Components** | 5 |
 | **Section Components** | 5 |
 | **UI Components** | 11 |
+| **Custom Hooks** | 1 |
 | **Data Files** | 5 |
 | **Type Definitions** | 1 |
 | **Configuration Files** | 8 |
 | **Static Assets** | 6 (5 SVGs + 1 image) |
-| **Total Source Files** | ~50+ |
+| **Total Source Files** | ~55+ |
 
 ---
 
 ## Notes
 - All pages follow Next.js App Router conventions with `page.tsx` files
+- Route groups `(main)` and `(checkout)` provide different layout contexts
+- Main pages use full layout with navbar and footer
+- Checkout pages use minimal layout without navbar/footer
 - Workspace includes `.vscode/settings.json` for VS Code configuration
 - Component organization follows a clear hierarchy: layout → sections → UI
 - E-commerce flow: Services/Packages → Cart → Checkout
+- Cart state is managed via `useCart()` hook with localStorage persistence
 - Real portrait image of Aster is stored in `public/images/aster-portrait.jpeg`
 
 ---
