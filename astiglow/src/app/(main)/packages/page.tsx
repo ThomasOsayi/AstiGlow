@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout";
+import { useCart, packagesData } from "@/hooks";
 
 // ===========================================
 // Custom Hook for Scroll Animation
@@ -143,83 +144,60 @@ const faqs = [
   },
 ];
 
-// Extended packages data with badges
-const packagesData = [
-  {
-    id: "brazilian-pkg",
-    name: "Brazilian",
-    originalPrice: 75,
-    packagePrice: 61,
-    sessions: 9,
-    bonus: 2,
-    description: "Our signature Brazilian wax package. Gentle hard wax technique for sensitive areas.",
-    badge: "BEST VALUE",
-    badgeColor: "gold" as const,
-  },
-  {
-    id: "full-face-pkg",
-    name: "Full Face",
-    originalPrice: 64,
-    packagePrice: 52,
-    sessions: 9,
-    bonus: 2,
-    description: "Complete facial waxing including brows, lip, chin, and sideburns.",
-    badge: null,
-    badgeColor: null,
-  },
-  {
-    id: "full-legs-pkg",
-    name: "Full Legs",
-    originalPrice: 70,
-    packagePrice: 57,
-    sessions: 9,
-    bonus: 2,
-    description: "Full leg waxing from thigh to ankle for lasting smoothness.",
-    badge: null,
-    badgeColor: null,
-  },
-  {
-    id: "eyebrows-pkg",
-    name: "Eyebrows",
-    originalPrice: 28,
-    packagePrice: 23,
-    sessions: 9,
-    bonus: 2,
-    description: "Keep your brows perfectly shaped year-round with precision waxing.",
-    badge: "MOST POPULAR",
-    badgeColor: "charcoal" as const,
-  },
-  {
-    id: "underarms-pkg",
-    name: "Underarms",
-    originalPrice: 22,
-    packagePrice: 18,
-    sessions: 9,
-    bonus: 2,
-    description: "Smooth underarms all year with our gentle waxing treatment.",
-    badge: null,
-    badgeColor: null,
-  },
-];
+// Extended packages data with badges - merge base data with UI-specific properties
+type PackageWithUI = typeof packagesData[0] & {
+  description: string;
+  badge: string | null;
+  badgeColor: "gold" | "charcoal" | null;
+};
 
-// ===========================================
-// Constants
-// ===========================================
+const extendedPackagesData: PackageWithUI[] = packagesData.map((pkg) => {
+  let badge: string | null = null;
+  let badgeColor: "gold" | "charcoal" | null = null;
+  let description = "";
 
-const CART_STORAGE_KEY = "astiglow-cart";
+  switch (pkg.id) {
+    case "brazilian-pkg":
+      description = "Our signature Brazilian wax package. Gentle hard wax technique for sensitive areas.";
+      badge = "BEST VALUE";
+      badgeColor = "gold";
+      break;
+    case "full-face-pkg":
+      description = "Complete facial waxing including brows, lip, chin, and sideburns.";
+      break;
+    case "full-legs-pkg":
+      description = "Full leg waxing from thigh to ankle for lasting smoothness.";
+      break;
+    case "eyebrows-pkg":
+      description = "Keep your brows perfectly shaped year-round with precision waxing.";
+      badge = "MOST POPULAR";
+      badgeColor = "charcoal";
+      break;
+    case "underarms-pkg":
+      description = "Smooth underarms all year with our gentle waxing treatment.";
+      break;
+  }
+
+  return {
+    ...pkg,
+    description,
+    badge,
+    badgeColor,
+  };
+});
 
 // ===========================================
 // Helper Functions
 // ===========================================
 
-function calculateSavings(pkg: typeof packagesData[0]) {
+function calculateSavings(pkg: PackageWithUI) {
   const totalSessions = pkg.sessions + pkg.bonus;
   const normalCost = totalSessions * pkg.originalPrice;
   const packageCost = pkg.sessions * pkg.packagePrice;
   return normalCost - packageCost;
 }
 
-function calculateTotal(pkg: typeof packagesData[0]) {
+function calculateTotal(pkg: PackageWithUI) {
   return pkg.sessions * pkg.packagePrice;
 }
 
@@ -228,7 +206,7 @@ function calculateTotal(pkg: typeof packagesData[0]) {
 // ===========================================
 
 interface PackageCardProps {
-  pkg: typeof packagesData[0];
+  pkg: PackageWithUI;
   isInCart: boolean;
   onAdd: () => void;
   onRemove: () => void;
@@ -348,7 +326,15 @@ function PackageCard({ pkg, isInCart, onAdd, onRemove }: PackageCardProps) {
 // ===========================================
 
 export default function PackagesPage() {
-  const [cart, setCart] = useState<string[]>([]);
+  const { 
+    cartIds: cart, 
+    cartItems: cartPackages, 
+    cartTotal, 
+    addToCart: addToCartHook, 
+    removeFromCart, 
+    isInCart 
+  } = useCart();
+  
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -362,42 +348,15 @@ export default function PackagesPage() {
   const faqAnimation = useScrollAnimation(0.2);
   const ctaAnimation = useScrollAnimation(0.3);
 
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-    if (savedCart) {
-      try {
-        const cartIds = JSON.parse(savedCart) as string[];
-        setCart(cartIds);
-      } catch (e) {
-        console.error("Failed to parse cart:", e);
-      }
-    }
-  }, []);
-
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-  }, [cart]);
-
-  const addToCart = (pkg: typeof packagesData[0]) => {
+  // Update addToCart to use the hook and show toast:
+  const addToCart = (pkg: PackageWithUI) => {
     if (!isInCart(pkg.id)) {
-      setCart([...cart, pkg.id]);
+      addToCartHook(pkg.id);
       setToastMessage(`${pkg.name} Package added to cart`);
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     }
   };
-
-  const removeFromCart = (pkgId: string) => {
-    setCart(cart.filter((id) => id !== pkgId));
-  };
-
-  const isInCart = (pkgId: string) => cart.includes(pkgId);
-
-  // Calculate cart total from package IDs
-  const cartPackages = packagesData.filter((pkg) => cart.includes(pkg.id));
-  const cartTotal = cartPackages.reduce((sum, pkg) => sum + calculateTotal(pkg), 0);
 
   return (
     <>
@@ -519,7 +478,7 @@ export default function PackagesPage() {
             ref={packagesTopAnimation.ref}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-[1200px] mx-auto mb-4 sm:mb-6"
           >
-            {packagesData.slice(0, 3).map((pkg, index) => (
+            {extendedPackagesData.slice(0, 3).map((pkg, index) => (
               <div
                 key={pkg.id}
                 className={`transition-all duration-700 ${
@@ -544,7 +503,7 @@ export default function PackagesPage() {
             ref={packagesBottomAnimation.ref}
             className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-[800px] mx-auto"
           >
-            {packagesData.slice(3).map((pkg, index) => (
+            {extendedPackagesData.slice(3).map((pkg, index) => (
               <div
                 key={pkg.id}
                 className={`transition-all duration-700 ${
