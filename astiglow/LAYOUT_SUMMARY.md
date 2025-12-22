@@ -40,6 +40,9 @@ AstiGlow/                      # Workspace root
     │   ├── lib/               # Utilities and data
     │   └── types/             # TypeScript type definitions
     │
+    ├── scripts/               # Utility scripts
+    │   └── create-cal-event-types.ts  # Script to create Cal.com event types
+    │
     ├── README.md
     └── LAYOUT_SUMMARY.md
 
@@ -67,7 +70,11 @@ app/
 │   │   └── page.tsx           # About page
 │   │
 │   ├── book/
-│   │   └── page.tsx           # Booking page
+│   │   └── page.tsx           # Booking page (with Cal.com integration)
+│   │
+│   ├── checkout/
+│   │   └── success/
+│   │       └── page.tsx       # Checkout success page
 │   │
 │   ├── contact/
 │   │   └── page.tsx           # Contact page
@@ -78,16 +85,26 @@ app/
 │   └── services/
 │       └── page.tsx           # Services page
 │
-└── (checkout)/                # Route group: Checkout flow (minimal layout)
-    ├── layout.tsx             # Checkout layout (minimal, no navbar/footer)
-    ├── cart/
-    │   └── page.tsx           # Shopping cart page
-    └── checkout/
-        └── page.tsx           # Checkout page
+├── (checkout)/                # Route group: Checkout flow (minimal layout)
+│   ├── layout.tsx             # Checkout layout (minimal, no navbar/footer)
+│   ├── cart/
+│   │   └── page.tsx           # Shopping cart page
+│   └── checkout/
+│       └── page.tsx           # Checkout page
+│
+└── api/                       # API routes
+    ├── checkout/
+    │   └── route.ts           # Stripe checkout session creation endpoint
+    └── webhooks/
+        ├── cal/
+        │   └── route.ts       # Cal.com webhook handler
+        └── stripe/
+            └── route.ts      # Stripe webhook handler
 ```
 
-**Total Pages:** 8 routes (home, about, book, cart, checkout, contact, packages, services)
+**Total Pages:** 9 routes (home, about, book, cart, checkout, checkout/success, contact, packages, services)
 **Route Groups:** 2 groups `(main)` and `(checkout)` for different layout strategies
+**API Routes:** 3 endpoints (checkout, webhooks/cal, webhooks/stripe)
 
 ---
 
@@ -167,6 +184,7 @@ data/
 #### Utilities (`lib/`)
 ```
 lib/
+├── stripe.ts                  # Stripe integration utilities (client-side)
 └── utils.ts                   # Utility functions
 ```
 
@@ -194,6 +212,8 @@ types/
 - **TypeScript:** 5.x
 - **Styling:** Tailwind CSS 4
 - **Fonts:** Cormorant Garamond (headings), DM Sans (body)
+- **Payment Processing:** Stripe (stripe, @stripe/stripe-js)
+- **Booking Integration:** Cal.com (@calcom/embed-react)
 
 ### Project Structure Patterns
 1. **App Router:** Uses Next.js 13+ App Router with file-based routing and route groups
@@ -208,7 +228,13 @@ types/
 - **Business Type:** Premium waxing studio
 - **Location:** Los Angeles (Westwood)
 - **Services:** Face, body, and Brazilian waxing services
-- **Features:** Booking system, shopping cart, checkout, service packages, reviews/testimonials
+- **Features:** 
+  - Booking system (Cal.com integration)
+  - Shopping cart with localStorage persistence
+  - Stripe checkout integration
+  - Service packages
+  - Reviews/testimonials
+  - Webhook handlers for Cal.com and Stripe events
 
 ---
 
@@ -216,17 +242,20 @@ types/
 
 | Category | Count |
 |----------|-------|
-| **Pages** | 8 |
+| **Pages** | 9 |
+| **API Routes** | 3 |
 | **Route Groups** | 2 |
 | **Layout Components** | 5 |
 | **Section Components** | 5 |
 | **UI Components** | 11 |
 | **Custom Hooks** | 1 |
 | **Data Files** | 5 |
+| **Utility Files** | 2 (stripe.ts, utils.ts) |
 | **Type Definitions** | 1 |
+| **Scripts** | 1 |
 | **Configuration Files** | 8 |
 | **Static Assets** | 6 (5 SVGs + 1 image) |
-| **Total Source Files** | ~55+ |
+| **Total Source Files** | ~60+ |
 
 ---
 
@@ -237,9 +266,22 @@ types/
 - Checkout pages use minimal layout without navbar/footer
 - Workspace includes `.vscode/settings.json` for VS Code configuration
 - Component organization follows a clear hierarchy: layout → sections → UI
-- E-commerce flow: Services/Packages → Cart → Checkout
+- E-commerce flow: Services/Packages → Cart → Checkout → Success
 - Cart state is managed via `useCart()` hook with localStorage persistence
 - Real portrait image of Aster is stored in `public/images/aster-portrait.jpeg`
+
+### Integrations
+- **Cal.com:** Embedded booking widget on `/book` page with event type mapping
+- **Stripe:** Payment processing with checkout sessions and webhook handlers
+- **Environment Variables:** 
+  - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe public key
+  - `STRIPE_SECRET_KEY` - Stripe secret key (server-side)
+  - `CAL_API_KEY` - Cal.com API key for event type creation
+  - `CAL_USERNAME` - Cal.com username (defaults to 'astiglow')
+  - `NEXT_PUBLIC_CAL_USERNAME` - Exposed to client via next.config.ts
+
+### Scripts
+- `scripts/create-cal-event-types.ts` - Utility script to programmatically create Cal.com event types from service data
 
 ---
 

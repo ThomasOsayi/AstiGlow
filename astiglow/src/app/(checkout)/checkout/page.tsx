@@ -1,10 +1,12 @@
-// src/app/checkout/page.tsx
+// src/app/(checkout)/checkout/page.tsx
 
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { Button } from "@/components/ui";
 import {
   Check,
@@ -13,7 +15,6 @@ import {
   ChevronUp,
   ChevronDown,
   ArrowLeft,
-  ShoppingBag,
   Spinner,
 } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
@@ -23,9 +24,13 @@ import {
   calculateCartTotals,
 } from "@/lib/data/packages";
 import type { Package } from "@/types";
+import { StripeCardForm } from "@/components/checkout/stripe-card-form";
+
+// Initialize Stripe
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 // ===========================================
-// Custom Icons (not in shared icons file)
+// Custom Icons
 // ===========================================
 
 const LockIcon = ({ size = 14 }: { size?: number }) => (
@@ -140,6 +145,7 @@ const paymentMethods: PaymentMethod[] = [
 
 function CheckoutContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [cartPackages, setCartPackages] = useState<Package[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -156,6 +162,13 @@ function CheckoutContent() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
   const [showMobileSummary, setShowMobileSummary] = useState(false);
+  
+  // Stripe-specific state
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [paymentIntentId, setPaymentIntentId] = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [triggerCardSubmit, setTriggerCardSubmit] = useState(false);
+  const [stripeFormReady, setStripeFormReady] = useState(false);
 
   // Load cart from localStorage
   useEffect(() => {
@@ -172,6 +185,14 @@ function CheckoutContent() {
     setIsLoaded(true);
   }, []);
 
+  // Check for canceled payment from BNPL
+  useEffect(() => {
+    if (searchParams.get('canceled') === 'true') {
+      setPaymentError('Payment was canceled. Please try again.');
+      setCurrentStep(2);
+    }
+  }, [searchParams]);
+
   // Redirect if cart is empty
   useEffect(() => {
     if (isLoaded && cartPackages.length === 0 && !isConfirmed) {
@@ -179,8 +200,41 @@ function CheckoutContent() {
     }
   }, [isLoaded, cartPackages.length, isConfirmed, router]);
 
+  // Create Payment Intent when entering step 2 with card selected
+  useEffect(() => {
+    if (currentStep === 2 && selectedPayment === 'card' && !clientSecret && cartPackages.length > 0) {
+      createPaymentIntent();
+    }
+  }, [currentStep, selectedPayment, cartPackages]);
+
   // Calculate totals
   const totals = calculateCartTotals(cartPackages);
+
+  const createPaymentIntent = async () => {
+    try {
+      const response = await fetch('/api/create-payment-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          packageIds: cartPackages.map(p => p.id),
+          customerEmail: formData.email,
+          customerName: `${formData.firstName} ${formData.lastName}`,
+          customerPhone: formData.phone,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create payment intent');
+      }
+
+      const data = await response.json();
+      setClientSecret(data.clientSecret);
+      setPaymentIntentId(data.paymentIntentId);
+    } catch (error) {
+      console.error('Payment intent error:', error);
+      setPaymentError('Failed to initialize payment. Please try again.');
+    }
+  };
 
   // Validation
   const validateField = (name: string, value: string) => {
@@ -220,7 +274,7 @@ function CheckoutContent() {
     });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep === 1) {
       const newErrors: Record<string, string> = {};
       ["firstName", "lastName", "email", "phone"].forEach((key) => {
@@ -237,40 +291,117 @@ function CheckoutContent() {
       if (Object.keys(newErrors).length === 0) {
         setCurrentStep(2);
       }
+    } else if (currentStep === 2) {
+      // Handle BNPL methods - redirect to Stripe Checkout
+      if (selectedPayment !== 'card') {
+        await handleBNPLCheckout();
+      } else {
+        // For card payments, go to review step
+        setCurrentStep(3);
+      }
     } else if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     }
   };
 
+  const handleBNPLCheckout = async () => {
+    setIsSubmitting(true);
+    setPaymentError(null);
+
+    try {
+      const response = await fetch('/api/create-bnpl-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          packageIds: cartPackages.map(p => p.id),
+          customerEmail: formData.email,
+          customerName: `${formData.firstName} ${formData.lastName}`,
+          paymentMethod: selectedPayment,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create checkout session');
+      }
+
+      const data = await response.json();
+      
+      // Redirect to Stripe Checkout for BNPL
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error: any) {
+      console.error('BNPL checkout error:', error);
+      setPaymentError(error.message || 'Failed to process payment. Please try again.');
+      setIsSubmitting(false);
+    }
+  };
+
   const handleBack = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1);
+    setPaymentError(null);
   };
 
   const goToStep = (step: number) => {
     if (step < currentStep) {
       setCurrentStep(step);
+      setPaymentError(null);
     }
   };
 
-  const handleConfirmPurchase = async () => {
-    setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
+  const handlePaymentSuccess = useCallback((intentId: string) => {
     // Generate order number
     const order = `AG-${Date.now().toString(36).toUpperCase()}`;
     setOrderNumber(order);
+    setPaymentIntentId(intentId);
 
     // Clear cart
     localStorage.removeItem("astiglow-cart");
 
     setIsSubmitting(false);
     setIsConfirmed(true);
+  }, []);
+
+  const handlePaymentError = useCallback((error: string) => {
+    setPaymentError(error);
+    setIsSubmitting(false);
+    setTriggerCardSubmit(false);
+  }, []);
+
+  const handleConfirmPurchase = async () => {
+    if (selectedPayment === 'card') {
+      setIsSubmitting(true);
+      setPaymentError(null);
+      setTriggerCardSubmit(true);
+    }
   };
 
   const canProceed = () => {
     if (currentStep === 1) return true;
-    if (currentStep === 2) return !!selectedPayment;
+    if (currentStep === 2) {
+      if (selectedPayment === 'card') {
+        return clientSecret && stripeFormReady;
+      }
+      return !!selectedPayment;
+    }
     return true;
+  };
+
+  // Stripe Elements options
+  const elementsOptions: StripeElementsOptions = {
+    clientSecret: clientSecret || undefined,
+    appearance: {
+      theme: 'stripe',
+      variables: {
+        colorPrimary: '#C9A27C',
+        colorBackground: '#FAFAF8',
+        colorText: '#2D2A26',
+        colorDanger: '#dc2626',
+        fontFamily: '"DM Sans", -apple-system, BlinkMacSystemFont, sans-serif',
+        borderRadius: '0px',
+      },
+    },
   };
 
   // Loading state
@@ -438,6 +569,13 @@ function CheckoutContent() {
       <main className="grid grid-cols-1 lg:grid-cols-[1fr_380px] min-h-[calc(100vh-160px)]">
         {/* Left - Form Area */}
         <div className="px-4 sm:px-6 md:px-12 lg:px-16 py-8 sm:py-12 pb-32 lg:pb-12 bg-cream">
+          {/* Payment Error Alert */}
+          {paymentError && (
+            <div className="max-w-[500px] mb-6 p-4 bg-red-50 border border-red-200 text-red-700 text-sm animate-fade-in">
+              {paymentError}
+            </div>
+          )}
+
           {/* Step 1: Your Details */}
           {currentStep === 1 && (
             <div className="animate-fade-in max-w-[500px]">
@@ -462,12 +600,12 @@ function CheckoutContent() {
                       className={cn(
                         "w-full p-3.5 sm:p-4 text-sm sm:text-[15px] bg-white border outline-none transition-colors duration-300 text-charcoal placeholder:text-charcoal-light/60",
                         errors.firstName && touched.firstName
-                          ? "border-error"
+                          ? "border-red-500"
                           : "border-border focus:border-gold"
                       )}
                     />
                     {errors.firstName && touched.firstName && (
-                      <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 text-error animate-fade-in">
+                      <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 text-red-500 animate-fade-in">
                         {errors.firstName}
                       </p>
                     )}
@@ -483,12 +621,12 @@ function CheckoutContent() {
                       className={cn(
                         "w-full p-3.5 sm:p-4 text-sm sm:text-[15px] bg-white border outline-none transition-colors duration-300 text-charcoal placeholder:text-charcoal-light/60",
                         errors.lastName && touched.lastName
-                          ? "border-error"
+                          ? "border-red-500"
                           : "border-border focus:border-gold"
                       )}
                     />
                     {errors.lastName && touched.lastName && (
-                      <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 text-error animate-fade-in">
+                      <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 text-red-500 animate-fade-in">
                         {errors.lastName}
                       </p>
                     )}
@@ -507,12 +645,12 @@ function CheckoutContent() {
                     className={cn(
                       "w-full p-3.5 sm:p-4 text-sm sm:text-[15px] bg-white border outline-none transition-colors duration-300 text-charcoal placeholder:text-charcoal-light/60",
                       errors.email && touched.email
-                        ? "border-error"
+                        ? "border-red-500"
                         : "border-border focus:border-gold"
                     )}
                   />
                   {errors.email && touched.email && (
-                    <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 text-error animate-fade-in">
+                    <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 text-red-500 animate-fade-in">
                       {errors.email}
                     </p>
                   )}
@@ -530,12 +668,12 @@ function CheckoutContent() {
                     className={cn(
                       "w-full p-3.5 sm:p-4 text-sm sm:text-[15px] bg-white border outline-none transition-colors duration-300 text-charcoal placeholder:text-charcoal-light/60",
                       errors.phone && touched.phone
-                        ? "border-error"
+                        ? "border-red-500"
                         : "border-border focus:border-gold"
                     )}
                   />
                   {errors.phone && touched.phone && (
-                    <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 text-error animate-fade-in">
+                    <p className="text-[11px] sm:text-xs mt-1 sm:mt-1.5 text-red-500 animate-fade-in">
                       {errors.phone}
                     </p>
                   )}
@@ -573,7 +711,10 @@ function CheckoutContent() {
                   return (
                     <div
                       key={method.id}
-                      onClick={() => setSelectedPayment(method.id)}
+                      onClick={() => {
+                        setSelectedPayment(method.id);
+                        setPaymentError(null);
+                      }}
                       className={cn(
                         "p-4 sm:p-5 flex items-center gap-4 cursor-pointer transition-all duration-300 bg-white border active:scale-[0.99] animate-fade-in-up",
                         isSelected
@@ -619,37 +760,27 @@ function CheckoutContent() {
                 })}
               </div>
 
-              {/* Card Details */}
-              {selectedPayment === "card" && (
-                <div className="mt-6 p-5 bg-white border border-border animate-scale-in">
-                  <p className="text-[10px] tracking-[0.1em] uppercase mb-4 text-gold">
-                    Card Details
-                  </p>
+              {/* Card Details - Stripe Elements */}
+              {selectedPayment === "card" && clientSecret && (
+                <Elements stripe={stripePromise} options={elementsOptions}>
+                  <StripeCardForm
+                    clientSecret={clientSecret}
+                    onSuccess={handlePaymentSuccess}
+                    onError={handlePaymentError}
+                    onProcessing={setIsSubmitting}
+                    customerEmail={formData.email}
+                    amount={totals.total}
+                    triggerSubmit={triggerCardSubmit}
+                    onReady={() => setStripeFormReady(true)}
+                  />
+                </Elements>
+              )}
 
-                  <div className="flex flex-col gap-4">
-                    <input
-                      type="text"
-                      placeholder="Card Number"
-                      className="w-full p-3.5 text-sm bg-cream border border-border text-charcoal outline-none focus:border-gold transition-colors"
-                    />
-                    <div className="grid grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        placeholder="MM / YY"
-                        className="w-full p-3.5 text-sm bg-cream border border-border text-charcoal outline-none focus:border-gold transition-colors"
-                      />
-                      <input
-                        type="text"
-                        placeholder="CVC"
-                        className="w-full p-3.5 text-sm bg-cream border border-border text-charcoal outline-none focus:border-gold transition-colors"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 mt-4 text-charcoal-light">
-                    <LockIcon size={14} />
-                    <span className="text-xs">Secured by Stripe</span>
-                  </div>
+              {/* Loading state for card form */}
+              {selectedPayment === "card" && !clientSecret && (
+                <div className="mt-6 p-5 bg-white border border-border flex items-center justify-center">
+                  <Spinner size={24} className="text-gold mr-3" />
+                  <span className="text-sm text-charcoal-light">Loading payment form...</span>
                 </div>
               )}
 
@@ -782,7 +913,8 @@ function CheckoutContent() {
             {currentStep > 1 && (
               <button
                 onClick={handleBack}
-                className="order-2 sm:order-1 px-6 py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium text-charcoal-light hover:text-charcoal transition-colors"
+                disabled={isSubmitting}
+                className="order-2 sm:order-1 px-6 py-3.5 sm:py-4 text-[11px] sm:text-xs tracking-[0.1em] uppercase font-medium text-charcoal-light hover:text-charcoal transition-colors disabled:opacity-50"
               >
                 ← Back
               </button>
@@ -791,7 +923,9 @@ function CheckoutContent() {
             {currentStep < 3 && (
               <Button
                 onClick={handleNext}
-                disabled={!canProceed()}
+                disabled={!canProceed() || isSubmitting}
+                isLoading={isSubmitting && selectedPayment !== 'card'}
+                loadingText="Redirecting..."
                 className="order-1 sm:order-2 w-full sm:w-auto"
                 size="lg"
               >
