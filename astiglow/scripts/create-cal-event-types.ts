@@ -126,7 +126,7 @@ async function createEventType(service: Service): Promise<{ success: boolean; id
     // Location: In-person at the studio
     locations: [
       {
-        type: 'attendeeInPerson',
+        type: 'address',
         address: '10880 Wilshire Blvd, Suite 402, Los Angeles, CA 90024',
         public: true
       }
