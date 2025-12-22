@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   useStripe,
   useElements,
@@ -77,37 +77,52 @@ export function StripeCardForm({
   const [cardExpiryError, setCardExpiryError] = useState<string | null>(null);
   const [cardCvcError, setCardCvcError] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Track previous triggerSubmit to detect changes
+  const prevTriggerSubmit = useRef(triggerSubmit);
 
   // Check if form is ready
   useEffect(() => {
     if (stripe && elements && !isReady) {
+      console.log('StripeCardForm: Stripe and Elements ready');
       setIsReady(true);
       onReady?.();
     }
   }, [stripe, elements, isReady, onReady]);
 
-  // Handle submit trigger from parent
-  useEffect(() => {
-    if (triggerSubmit && stripe && elements && clientSecret) {
-      handleSubmit();
-    }
-  }, [triggerSubmit]);
+  // Handle payment submission
+  const processPayment = useCallback(async () => {
+    console.log('StripeCardForm: processPayment called');
+    console.log('StripeCardForm: stripe available:', !!stripe);
+    console.log('StripeCardForm: elements available:', !!elements);
+    console.log('StripeCardForm: clientSecret available:', !!clientSecret);
 
-  const handleSubmit = async () => {
     if (!stripe || !elements) {
-      onError('Stripe has not loaded yet');
+      console.error('StripeCardForm: Stripe not loaded');
+      onError('Stripe has not loaded yet. Please refresh and try again.');
       return;
     }
 
     const cardNumber = elements.getElement(CardNumberElement);
+    console.log('StripeCardForm: cardNumber element:', !!cardNumber);
+    
     if (!cardNumber) {
-      onError('Card element not found');
+      console.error('StripeCardForm: Card element not found');
+      onError('Card form not found. Please refresh and try again.');
       return;
     }
 
+    if (isProcessing) {
+      console.log('StripeCardForm: Already processing, skipping');
+      return;
+    }
+
+    setIsProcessing(true);
     onProcessing(true);
 
     try {
+      console.log('StripeCardForm: Calling stripe.confirmCardPayment');
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: cardNumber,
@@ -117,20 +132,58 @@ export function StripeCardForm({
         },
       });
 
+      console.log('StripeCardForm: confirmCardPayment response:', { error, paymentIntent });
+
       if (error) {
-        onError(error.message || 'Payment failed');
+        console.error('StripeCardForm: Payment error:', error);
+        onError(error.message || 'Payment failed. Please try again.');
+        setIsProcessing(false);
         onProcessing(false);
-      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-        onSuccess(paymentIntent.id);
-      } else {
-        onError('Payment was not completed');
-        onProcessing(false);
+      } else if (paymentIntent) {
+        console.log('StripeCardForm: PaymentIntent status:', paymentIntent.status);
+        if (paymentIntent.status === 'succeeded') {
+          console.log('StripeCardForm: Payment succeeded!');
+          onSuccess(paymentIntent.id);
+        } else if (paymentIntent.status === 'requires_action') {
+          // 3D Secure or other authentication required
+          console.log('StripeCardForm: Payment requires additional action');
+          onError('Additional authentication required. Please try again.');
+          setIsProcessing(false);
+          onProcessing(false);
+        } else {
+          console.log('StripeCardForm: Payment not completed, status:', paymentIntent.status);
+          onError(`Payment not completed. Status: ${paymentIntent.status}`);
+          setIsProcessing(false);
+          onProcessing(false);
+        }
       }
     } catch (err: any) {
-      onError(err.message || 'An unexpected error occurred');
+      console.error('StripeCardForm: Exception:', err);
+      onError(err.message || 'An unexpected error occurred. Please try again.');
+      setIsProcessing(false);
       onProcessing(false);
     }
-  };
+  }, [stripe, elements, clientSecret, customerEmail, onSuccess, onError, onProcessing, isProcessing]);
+
+  // Handle submit trigger from parent - detect transition from false to true
+  useEffect(() => {
+    const wasNotTriggered = !prevTriggerSubmit.current;
+    const isNowTriggered = triggerSubmit;
+    
+    console.log('StripeCardForm: triggerSubmit effect', { 
+      wasNotTriggered, 
+      isNowTriggered, 
+      stripe: !!stripe, 
+      elements: !!elements 
+    });
+
+    if (wasNotTriggered && isNowTriggered && stripe && elements && clientSecret) {
+      console.log('StripeCardForm: Trigger detected, processing payment');
+      processPayment();
+    }
+    
+    prevTriggerSubmit.current = triggerSubmit;
+  }, [triggerSubmit, stripe, elements, clientSecret, processPayment]);
 
   const isFormComplete = cardNumberComplete && cardExpiryComplete && cardCvcComplete;
 

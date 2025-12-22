@@ -364,16 +364,21 @@ function CheckoutContent() {
   }, []);
 
   const handlePaymentError = useCallback((error: string) => {
+    console.error('Payment error:', error);
     setPaymentError(error);
     setIsSubmitting(false);
-    setTriggerCardSubmit(false);
+    setTriggerCardSubmit(false); // Reset so user can retry
   }, []);
 
   const handleConfirmPurchase = async () => {
     if (selectedPayment === 'card') {
+      console.log('Confirming card purchase, clientSecret exists:', !!clientSecret);
       setIsSubmitting(true);
       setPaymentError(null);
-      setTriggerCardSubmit(true);
+      // Small delay to ensure state updates propagate
+      setTimeout(() => {
+        setTriggerCardSubmit(true);
+      }, 100);
     }
   };
 
@@ -760,22 +765,6 @@ function CheckoutContent() {
                 })}
               </div>
 
-              {/* Card Details - Stripe Elements */}
-              {selectedPayment === "card" && clientSecret && (
-                <Elements stripe={stripePromise} options={elementsOptions}>
-                  <StripeCardForm
-                    clientSecret={clientSecret}
-                    onSuccess={handlePaymentSuccess}
-                    onError={handlePaymentError}
-                    onProcessing={setIsSubmitting}
-                    customerEmail={formData.email}
-                    amount={totals.total}
-                    triggerSubmit={triggerCardSubmit}
-                    onReady={() => setStripeFormReady(true)}
-                  />
-                </Elements>
-              )}
-
               {/* Loading state for card form */}
               {selectedPayment === "card" && !clientSecret && (
                 <div className="mt-6 p-5 bg-white border border-border flex items-center justify-center">
@@ -794,6 +783,24 @@ function CheckoutContent() {
                   </p>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Stripe Elements - Keep mounted across steps 2 and 3 for card payments */}
+          {selectedPayment === "card" && clientSecret && (currentStep === 2 || currentStep === 3) && (
+            <div className={cn(currentStep === 3 ? "hidden" : "max-w-[500px]")}>
+              <Elements stripe={stripePromise} options={elementsOptions}>
+                <StripeCardForm
+                  clientSecret={clientSecret}
+                  onSuccess={handlePaymentSuccess}
+                  onError={handlePaymentError}
+                  onProcessing={setIsSubmitting}
+                  customerEmail={formData.email}
+                  amount={totals.total}
+                  triggerSubmit={triggerCardSubmit}
+                  onReady={() => setStripeFormReady(true)}
+                />
+              </Elements>
             </div>
           )}
 
