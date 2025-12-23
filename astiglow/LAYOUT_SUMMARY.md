@@ -95,6 +95,10 @@ app/
 └── api/                       # API routes
     ├── checkout/
     │   └── route.ts           # Stripe checkout session creation endpoint
+    ├── create-payment-intent/
+    │   └── route.ts           # Stripe payment intent creation endpoint
+    ├── create-bnpl-session/
+    │   └── route.ts           # Buy Now Pay Later (BNPL) checkout session endpoint
     └── webhooks/
         ├── cal/
         │   └── route.ts       # Cal.com webhook handler
@@ -104,7 +108,7 @@ app/
 
 **Total Pages:** 9 routes (home, about, book, cart, checkout, checkout/success, contact, packages, services)
 **Route Groups:** 2 groups `(main)` and `(checkout)` for different layout strategies
-**API Routes:** 3 endpoints (checkout, webhooks/cal, webhooks/stripe)
+**API Routes:** 5 endpoints (checkout, create-payment-intent, create-bnpl-session, webhooks/cal, webhooks/stripe)
 
 ---
 
@@ -132,6 +136,13 @@ sections/
 └── index.ts                   # Section exports
 ```
 
+#### Checkout Components (`components/checkout/`)
+```
+checkout/
+├── stripe-card-form.tsx       # Stripe card payment form component
+└── index.ts                   # Checkout component exports
+```
+
 #### UI Components (`components/ui/`)
 ```
 ui/
@@ -149,7 +160,7 @@ ui/
 └── index.ts                   # UI component exports
 ```
 
-**Total Components:** 20 components across 3 categories
+**Total Components:** 22 components across 4 categories
 
 ---
 
@@ -212,7 +223,7 @@ types/
 - **TypeScript:** 5.x
 - **Styling:** Tailwind CSS 4
 - **Fonts:** Cormorant Garamond (headings), DM Sans (body)
-- **Payment Processing:** Stripe (stripe, @stripe/stripe-js)
+- **Payment Processing:** Stripe (stripe, @stripe/stripe-js, @stripe/react-stripe-js)
 - **Booking Integration:** Cal.com (@calcom/embed-react)
 
 ### Project Structure Patterns
@@ -243,10 +254,11 @@ types/
 | Category | Count |
 |----------|-------|
 | **Pages** | 9 |
-| **API Routes** | 3 |
+| **API Routes** | 5 |
 | **Route Groups** | 2 |
 | **Layout Components** | 5 |
 | **Section Components** | 5 |
+| **Checkout Components** | 1 |
 | **UI Components** | 11 |
 | **Custom Hooks** | 1 |
 | **Data Files** | 5 |
@@ -255,7 +267,7 @@ types/
 | **Scripts** | 1 |
 | **Configuration Files** | 8 |
 | **Static Assets** | 6 (5 SVGs + 1 image) |
-| **Total Source Files** | ~60+ |
+| **Total Source Files** | ~65+ |
 
 ---
 
@@ -265,20 +277,27 @@ types/
 - Main pages use full layout with navbar and footer
 - Checkout pages use minimal layout without navbar/footer
 - Workspace includes `.vscode/settings.json` for VS Code configuration
-- Component organization follows a clear hierarchy: layout → sections → UI
+- Component organization follows a clear hierarchy: layout → sections → checkout → UI
 - E-commerce flow: Services/Packages → Cart → Checkout → Success
 - Cart state is managed via `useCart()` hook with localStorage persistence
 - Real portrait image of Aster is stored in `public/images/aster-portrait.jpeg`
+- Payment options include traditional checkout, embedded card form, and BNPL options
+- Stripe Elements used for secure card input in checkout flow
 
 ### Integrations
 - **Cal.com:** Embedded booking widget on `/book` page with event type mapping
-- **Stripe:** Payment processing with checkout sessions and webhook handlers
+- **Stripe:** Payment processing with multiple integration methods:
+  - Checkout Sessions (redirect-based checkout)
+  - Payment Intents (embedded card form with Stripe Elements)
+  - Buy Now Pay Later (BNPL) support (Klarna, Affirm, Afterpay)
+  - Webhook handlers for payment events
 - **Environment Variables:** 
   - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe public key
   - `STRIPE_SECRET_KEY` - Stripe secret key (server-side)
   - `CAL_API_KEY` - Cal.com API key for event type creation
   - `CAL_USERNAME` - Cal.com username (defaults to 'astiglow')
   - `NEXT_PUBLIC_CAL_USERNAME` - Exposed to client via next.config.ts
+  - `NEXT_PUBLIC_SITE_URL` - Base URL for redirect URLs
 
 ### Scripts
 - `scripts/create-cal-event-types.ts` - Utility script to programmatically create Cal.com event types from service data
